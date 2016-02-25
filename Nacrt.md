@@ -6,7 +6,7 @@
 
 ## 3. in 4. teden
 * izdelava umetne inteligence (algoritem, ki igra proti cloveku)
-** Predvideni dve stopnji zahtevnosti in sicer lahka, ki bi bile kar naključne možne poteze, ter težja, ki bi bil kar pravi inteligentnejši algoritem
+Predvideni dve stopnji zahtevnosti in sicer lahka, ki bi bile kar naključne možne poteze, ter težja, ki bi bil kar pravi inteligentnejši algoritem.
 * Testiranje le-tega
 
 ## 5.teden
