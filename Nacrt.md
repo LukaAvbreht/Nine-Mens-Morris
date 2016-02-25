@@ -9,11 +9,11 @@
 Predvideni dve stopnji zahtevnosti in sicer lahka, ki bi bile kar naključne možne poteze, ter težja, ki bi bil kar pravi inteligentnejši algoritem.
 * Testiranje le-tega
 
-## 5.teden
+## 5. teden
 * dokumentacija 
 * ličenje kode
 
-## 6.teden
+## 6. teden
 * zadnji popravki
 * priprava na oddajo
 

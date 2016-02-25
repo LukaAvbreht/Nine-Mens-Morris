@@ -7,4 +7,3 @@ Hiter pregled igre lahko najdete na strani Wikipedie: [Nine-Mens-Morris] (https:
 # Pravila igre
 
 -- To be done -- 
-
