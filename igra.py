@@ -34,15 +34,17 @@ class Igra():
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
 
-    #samo za lažjo preverjanje programa
     def izpisi_plosco(self):
+        """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
         for vrstica in self.plosca:
             print(vrstica)
 
     def je_veljavna(self, i, j):
+        """Preveri, če je polje prazno"""
         return self.plosca[i][j] == None
 
     def postavljen_mlin(self, poteza):
+        """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False"""
         kombinacije = [
             #Vodoravne
             [(0,0),(0,3),(0,6)],
@@ -72,8 +74,22 @@ class Igra():
                 if trojica == [IGRALEC_BELI, IGRALEC_BELI, IGRALEC_BELI] or trojica == [IGRALEC_CRNI, IGRALEC_CRNI, IGRALEC_CRNI]:
                     return True
         return False
-            
-            
+
+    def veljavne_poteze(self):
+        """ Glede na trenutno fazo vrne mogoče možne poteze. """
+        if self.faza == 0:
+            mozne_poteze = []
+            for i in range(7):
+                for j in range(7):
+                    if self.je_veljavna(i,j):
+                        mozne_poteze.append((i,j))
+            return mozne_poteze
+
+        #faza premikanja figuric
+        #odvisno od tega kdo je na potezi in koliko figuric še ima
+        else:
+            pass
+
             
             
             
