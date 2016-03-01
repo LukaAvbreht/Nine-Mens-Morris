@@ -3,6 +3,13 @@ __author__ = 'LukaAvbreht, SamoKralj'
 IGRALEC_BELI = "B"
 IGRALEC_CRNI = "C"
 
+def nasprotnik(igralec):
+    """ Pove nasprotnega igralca. Koristno pri metodi poteza. """
+    if igralec == IGRALEC_BELI:
+        return IGRALEC_CRNI
+    else:
+        return IGRALEC_BELI
+
 
 class Igra():
     """Program namenjen logiki in pravilom igre"""
@@ -90,6 +97,19 @@ class Igra():
         else:
             pass
 
+    def poteza(self, i, j):
+        """Izvede potezo. """
+        if self.je_veljavna(i,j):
+            self.plosca[i][j] = self.na_potezi
+            self.zadnja_poteza = (i,j)
+            if self.postavljen_mlin((i,j)):
+                self.odstrani_figurico()
+            self.na_potezi = nasprotnik(self.na_potezi)
+        else:
+            print("Poteza ni mogoča")
+
+    def odstrani_figurico(self):
+        pass
             
             
             
