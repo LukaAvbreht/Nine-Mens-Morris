@@ -17,20 +17,65 @@ class Igra():
                       [None," "," ",None," "," ",None]]
         #None polja so prosta polja, " " so samo fillerji.
         self.na_potezi = IGRALEC_BELI
+        self.zadnja_poteza = None
         
         self.belih_figuric = 0
         self.crnih_figuric = 0
         #bi sproti spremljali koliko ima kdo figuric in v primeru, da je vrednost 2, 3 naredimo svoje
         #nam ni treba po vsaki potezi steti koliko ima kdo figuric
+
+        self.faza = 0
+
+        # self.faza = 0  --> Faza postavljanja figuric
+        # self.faza = 1  --> Faza premikanja figuric
+        
         self.zgodovina = []
         #Predlagam obliko: (pozicija, zadnja poteza, True - False, Pobrana figurica)
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
 
-        def je_veljavna(self, i, j):
-            return self.plosca[i][j] == None:
+    #samo za lažjo preverjanje programa
+    def izpisi_plosco(self):
+        for vrstica in self.plosca:
+            print(vrstica)
 
-        def postavljen_mlin(self, poteza):
+    def je_veljavna(self, i, j):
+        return self.plosca[i][j] == None
+
+    def postavljen_mlin(self, poteza):
+        kombinacije = [
+            #Vodoravne
+            [(0,0),(0,3),(0,6)],
+            [(6,0),(6,3),(6,6)],
+            [(1,1),(1,3),(1,5)],
+            [(5,1),(5,3),(5,5)],
+            [(2,2),(2,3),(2,4)],
+            [(4,2),(4,3),(4,4)],
+            [(3,0),(3,1),(3,2)],
+            [(3,4),(3,5),(3,6)],
+            #Navpične
+            [(0,0),(3,0),(6,0)],
+            [(0,6),(3,6),(6,6)],
+            [(1,1),(3,1),(5,1)],
+            [(1,5),(3,5),(5,5)],
+            [(2,2),(3,2),(4,2)],
+            [(2,4),(3,4),(4,4)],
+            [(0,0),(0,3),(0,6)],
+            [(0,3),(1,3),(2,6)],
+            [(4,3),(5,3),(6,3)]]
+
+        for trojka in kombinacije: #poteza oblike (i,j)
+            if poteza in trojka:
+                trojica = []
+                for polje in trojka:
+                    trojica.append(self.plosca[polje[0]][polje[1]])
+                if trojica == [IGRALEC_BELI, IGRALEC_BELI, IGRALEC_BELI] or trojica == [IGRALEC_CRNI, IGRALEC_CRNI, IGRALEC_CRNI]:
+                    return True
+        return False
+            
+            
+            
+            
             
                 
         
