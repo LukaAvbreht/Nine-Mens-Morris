@@ -72,7 +72,7 @@ class tkmlin:
     def naredi_figurico(self,kam,i,j,barva='Grey'): #none naredi neutralno polje
         kam.create_oval(i-25,j-25,i+25,j+25,fil=barva)
 
-    def klik(self):
+    def klik0(self):
         i = event.x // 50
         j = event.y // 50
         if self.igra.na_potezi == IGRALEC_BELI:
@@ -80,10 +80,19 @@ class tkmlin:
         else:
             self.naredi_figurico(plosca,i,j,self.barva1)
 
+    def klik1(self):
+        a = event.x // 50
+        b = event.y // 50
+
+
+
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
         # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
         # ce smo v drugi fazi usaka poteza zahteva 2 klika
-        pass
+        if self.igra.faza == 0:
+            self.klik0
+        elif self.igra.faza == 1:
+            self.klik1
 
     def zacni_igro(self,IGRALEC_BELI,IGRALEC_CRNI):
         self.igra = Igra()
@@ -97,8 +106,8 @@ class Igralec():
     def igraj(self):
         pass
 
-    def klik(self):
-        self.gui.poteza()
+    def klik2(self):
+        pass #nardit kako izgleda poteza ko se premikamo (figurice)
 
 
 
