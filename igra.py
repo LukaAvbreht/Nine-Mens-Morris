@@ -24,14 +24,15 @@ class Igra():
                       [None," "," ",None," "," ",None]]
         #None polja so prosta polja, " " so samo fillerji.
         self.na_potezi = IGRALEC_BELI
-        self.zadnja_poteza = None
-        
-        self.belih_figuric = 0
-        self.crnih_figuric = 0
+        self.zadnja_poteza = None  #to pomoje ne rabimo
+
+        self.figurice = {IGRALEC_BELI: 0 , IGRALEC_CRNI: 0}
         #bi sproti spremljali koliko ima kdo figuric in v primeru, da je vrednost 2, 3 naredimo svoje
         #nam ni treba po vsaki potezi steti koliko ima kdo figuric
 
         self.faza = 0
+
+        self.postavljenih = 0 #števec ki steje koliko figur je ze bilo postavljenih
 
         # self.faza = 0  --> Faza postavljanja figuric
         # self.faza = 1  --> Faza premikanja figuric
@@ -41,7 +42,7 @@ class Igra():
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
 
-    def izpisi_plosco(self):
+    def izpisi_plosco(self):  #to je funkcija namenjena programerju
         """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
         for vrstica in self.plosca:
             print(vrstica)
@@ -72,7 +73,6 @@ class Igra():
             [(0,0),(0,3),(0,6)],
             [(0,3),(1,3),(2,6)],
             [(4,3),(5,3),(6,3)]]
-
         for trojka in kombinacije: #poteza oblike (i,j)
             if poteza in trojka:
                 trojica = []
@@ -97,21 +97,32 @@ class Igra():
         else:
             pass
 
-    def poteza(self, i, j):
+    def poteza(self, i, j):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
         """Izvede potezo. """
         if self.je_veljavna(i,j):
             self.plosca[i][j] = self.na_potezi
             self.zadnja_poteza = (i,j)
             if self.postavljen_mlin((i,j)):
-                self.odstrani_figurico()
+                self.odstrani_figurico(i. j)
             self.na_potezi = nasprotnik(self.na_potezi)
         else:
             print("Poteza ni mogoča")
 
-    def odstrani_figurico(self):
-        pass
-            
-            
-            
-                
-        
+    def odstrani_figurico(self,i,j):
+        """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
+        trenutni_nasprotnik = nasprotnik(self.na_potezi)
+        if self.plosca[i][j] == trenutni_nasprotnik:
+            if self.postavljen_mlin((i,j)):
+                print("Ta figurica je del aktivnega mlina")
+            else:
+                self.plosca[i][j] = None
+                self.figurice[trenutni_nasprotnik] -=1
+                self.zmaga1()
+
+    def zmaga1(self):
+        """ preveri, ali smo z mlinom nasprotniku odstranili sedmo figuro"""
+        if self.faza == 1:
+            if self.figurice[nasprotnik(self.na_potezi)] < 3:
+                return True
+        else:
+            return False
