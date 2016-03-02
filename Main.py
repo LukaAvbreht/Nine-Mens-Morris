@@ -6,6 +6,10 @@ class tkmlin:
         self.master = master
         self.master.minsize(width=700, height=700)
 
+        #tuki si bos lahko zbiru kako barva tvoja polja
+        self.barva1 = 'Black'
+        self.barva2 = 'White'
+
         #Igralna plosca
         plosca = Canvas(master,width=700,height=700)
         plosca.grid(row = 0, column = 0, rowspan = 7, columnspan = 7, sticky=N+S+E+W)
@@ -32,6 +36,7 @@ class tkmlin:
         plosca.create_line(450,350,650,350)
 
         #Gumpki namenjeni za igro
+        self.naredi_figurico(plosca,50,50)
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame, height=2)
@@ -39,6 +44,10 @@ class tkmlin:
 
     def newgame(self):
         return "to do"
+
+    def naredi_figurico(self,kam,i,j,barva='Grey'): #none naredi neutralno polje
+        kam.create_oval(i-25,j-25,i+25,j+25,fil=barva)
+
 
 if __name__ == "__main__":
     root = Tk()
