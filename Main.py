@@ -4,11 +4,11 @@ from tkinter import *
 class tkmlin:
     def __init__(self,master):
         self.master = master
-        self.master.minsize(width=700, height=800)
+        self.master.minsize(width=700, height=700)
 
         #Igralna plosca
         plosca = Canvas(master,width=700,height=700)
-        plosca.grid(row = 1, column = 0, rowspan = 7, columnspan = 7, sticky=N+S+E+W)
+        plosca.grid(row = 0, column = 0, rowspan = 7, columnspan = 7, sticky=N+S+E+W)
 
         #crte za igralno plosco
         plosca.create_line(50,50,650,50)
@@ -35,7 +35,7 @@ class tkmlin:
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame, height=2)
-        gumb_novaigra.grid(row=0,column=0,sticky=N+S+E+W)
+        gumb_novaigra.grid(row=0,column=7,sticky=N+S+E+W)
 
     def newgame(self):
         return "to do"

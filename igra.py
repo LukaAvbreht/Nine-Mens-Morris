@@ -97,16 +97,34 @@ class Igra():
         else:
             pass
 
-    def poteza(self, i, j):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
-        """Izvede potezo. """
-        if self.je_veljavna(i,j):
-            self.plosca[i][j] = self.na_potezi
-            self.zadnja_poteza = (i,j)
-            if self.postavljen_mlin((i,j)):
-                self.odstrani_figurico()
-            self.na_potezi = nasprotnik(self.na_potezi)
+    def poteza(self, i, j, a=False, b=False):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
+        """Izvede potezo. kam (i,j) od kje (a,b)"""
+        if self.faza == 0:
+            if self.je_veljavna(i,j):
+                self.figurice[self.na_potezi] +=1
+                self.postavljenih += 1
+                self.plosca[i][j] = self.na_potezi
+                self.zadnja_poteza = (i,j)
+                if self.postavljen_mlin((i,j)):
+                    self.odstrani_figurico()
+                self.na_potezi = nasprotnik(self.na_potezi)
+            else:
+                print("Poteza ni mogoča")
         else:
-            print("Poteza ni mogoča")
+            if self.plosca[a][b] == self.na_potezi: #preveri da premikas svojo figurico
+                if self.je_veljavna(i,j):  #preveri ali lahko tja premaknes svojo figurico (napisati je potrebno se da
+                    # je mozno prestaviti figurico le na sosednja polja
+                    self.plosca[a][b] = None
+                    self.plosca[i][j] = self.na_potezi
+                    if self.postavljen_mlin((i,j)):
+                        self.odstrani_figurico()
+                    self.na_potezi = nasprotnik(self.na_potezi)
+                else:
+                    print('Polje '+str(i)+','+str(j)+' ni prosto')
+            else:
+                print('tole pa ni tvoja figurica, Izberi svojo figuro')
+
+
 
     def odstrani_figurico(self):
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
@@ -123,6 +141,7 @@ class Igra():
                 self.figurice[trenutni_nasprotnik] -=1
                 self.zmaga1()
         else:
+            print('Neveljavna poteza, izberi drugo polje')
             self.odstrani_figurico()
 
     def zmaga1(self):
