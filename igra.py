@@ -103,13 +103,17 @@ class Igra():
             self.plosca[i][j] = self.na_potezi
             self.zadnja_poteza = (i,j)
             if self.postavljen_mlin((i,j)):
-                self.odstrani_figurico(i. j)
+                self.odstrani_figurico()
             self.na_potezi = nasprotnik(self.na_potezi)
         else:
             print("Poteza ni mogoča")
 
-    def odstrani_figurico(self,i,j):
+    def odstrani_figurico(self):
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
+        i = input('Prva koordinata: ')
+        j = input('Druga koordinata: ')
+        i = int(i)
+        j = int(j)
         trenutni_nasprotnik = nasprotnik(self.na_potezi)
         if self.plosca[i][j] == trenutni_nasprotnik:
             if self.postavljen_mlin((i,j)):
@@ -118,6 +122,8 @@ class Igra():
                 self.plosca[i][j] = None
                 self.figurice[trenutni_nasprotnik] -=1
                 self.zmaga1()
+        else:
+            self.odstrani_figurico()
 
     def zmaga1(self):
         """ preveri, ali smo z mlinom nasprotniku odstranili sedmo figuro"""
