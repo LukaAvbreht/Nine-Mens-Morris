@@ -47,12 +47,43 @@ class Igra():
         for vrstica in self.plosca:
             print(vrstica)
 
-    def je_veljavna(self, i, j):
-        """Preveri, če je polje prazno"""
-        return self.plosca[i][j] == None
+    def je_veljavna(self, i, j, a = False, b = False):
+        """Preveri, če je poteza veljavna."""
+        sosedi = {(0,0) : [(0,3),(3,0)],
+                  (0,3) : [(0,0),(0,6),(1,3)],
+                  (0,6) : [(0,3),(3,6)],
+                  (1,1) : [(1,3),(3,1)],
+                  (1,3) : [(1,1),(1,5),(2,3),(0,3)],
+                  (1,5) : [(1,3),(3,5)],
+                  (2,2) : [(2,3),(3,2)],
+                  (2,3) : [(2,2),(2,4),(1,3)],
+                  (2,4) : [(2,3),(3,4)],
+                  (3,0) : [(0,0),(6,0),(3,1)],
+                  (3,1) : [(3,0),(3,2),(1,1),(5,1)],
+                  (3,2) : [(3,1),(2,2),(4,2)],
+                  (3,4) : [(2,4),(4,4),(3,5)],
+                  (3,5) : [(3,4),(3,6),(1,5),(5,5)],
+                  (3,6) : [(0,6),(6,6),(3,5)],
+                  (4,2) : [(3,2),(4,3)],
+                  (4,3) : [(4,2),(4,4),(5,3)],
+                  (4,4) : [(4,3),(3,4)],
+                  (5,1) : [(5,3),(3,1)],
+                  (5,3) : [(5,1),(5,5),(4,3),(6,3)],
+                  (5,5) : [(5,3),(3,5)],
+                  (6,0) : [(3,0),(6,3)],
+                  (6,3) : [(6,0),(6,6),(5,3)],
+                  (6,6) : [(6,3),(3,6)],
+                  }
+        if self.faza == 0:
+            return self.plosca[i][j] == None
+        else:
+            if self.plosca[i][j] == None:
+                return (i,j) in sosedi[(a,b)]
+            else:
+                return False
 
     def postavljen_mlin(self, poteza):
-        """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False"""
+        """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False."""
         kombinacije = [
             #Vodoravne
             [(0,0),(0,3),(0,6)],
@@ -103,6 +134,8 @@ class Igra():
             if self.je_veljavna(i,j):
                 self.figurice[self.na_potezi] +=1
                 self.postavljenih += 1
+                if self.postavljenih >= 18: #V primeru, da je konec faze postavljanja
+                    self.faza = 1
                 self.plosca[i][j] = self.na_potezi
                 self.zadnja_poteza = (i,j)
                 if self.postavljen_mlin((i,j)):
@@ -112,7 +145,7 @@ class Igra():
                 print("Poteza ni mogoča")
         else:
             if self.plosca[a][b] == self.na_potezi: #preveri da premikas svojo figurico
-                if self.je_veljavna(i,j):  #preveri ali lahko tja premaknes svojo figurico (napisati je potrebno se da
+                if self.je_veljavna(i, j, a, b):  #preveri ali lahko tja premaknes svojo figurico (napisati je potrebno se da
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
@@ -120,7 +153,7 @@ class Igra():
                         self.odstrani_figurico()
                     self.na_potezi = nasprotnik(self.na_potezi)
                 else:
-                    print('Polje '+str(i)+','+str(j)+' ni prosto')
+                    print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
             else:
                 print('tole pa ni tvoja figurica, Izberi svojo figuro')
 
