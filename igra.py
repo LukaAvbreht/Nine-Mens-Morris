@@ -74,6 +74,17 @@ class Igra():
                   (6,3) : [(6,0),(6,6),(5,3)],
                   (6,6) : [(6,3),(3,6)],
                   }
+        #################3### test za sosedi
+        def test(slovar):
+            for key in slovar.keys():
+                for value in slovar[key]:
+                    if key not in slovar[value]:
+                        print(key, value)
+                        return False
+            return True
+        #print(test(sosedi))
+        ##################### test ni našel napake
+        
         if self.faza == 0:
             return self.plosca[i][j] == None
         else:
@@ -174,7 +185,7 @@ class Igra():
                 self.figurice[trenutni_nasprotnik] -=1
                 self.zmaga1()
         else:
-            print('Neveljavna poteza, izberi drugo polje')
+            print('Neveljavna poteza, izberi drugo figurico!')
             self.odstrani_figurico()
 
     def zmaga1(self):
