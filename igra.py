@@ -43,6 +43,9 @@ class Igra():
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
 
+        self.stanje = "Ni konec"
+        #moznosti tega stanja so : ni konec, zmaga igralec beli, zmaga igralec crni, neodloceno
+
     def izpisi_plosco(self):  #to je funkcija namenjena programerju
         """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
         for vrstica in self.plosca:
@@ -140,6 +143,8 @@ class Igra():
         else:
             pass
 
+    # funkcijo poteza je treba popravit na nacin da dodava se dva argumenta ( se kateri kamen uzamemo, ce dosezemo mlin)
+    # ki bo sta po defoltu enaka none
     def poteza(self, i, j, a=False, b=False):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
         """Izvede potezo. kam (i,j) od kje (a,b)"""
         if self.faza == 0:
