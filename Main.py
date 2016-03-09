@@ -37,30 +37,30 @@ class tkmlin:
         plosca.create_line(450, 350, 650, 350)
 
         #Gumpki namenjeni za igro
-        self.naredi_figurico(plosca, 50, 50)
-        self.naredi_figurico(plosca, 350, 50)
-        self.naredi_figurico(plosca, 650, 50)
-        self.naredi_figurico(plosca, 150, 150)
-        self.naredi_figurico(plosca, 350, 150)
-        self.naredi_figurico(plosca, 550, 150)
-        self.naredi_figurico(plosca, 250, 250)
-        self.naredi_figurico(plosca, 350, 250)
-        self.naredi_figurico(plosca, 450, 250)
-        self.naredi_figurico(plosca, 50, 350)
-        self.naredi_figurico(plosca, 150, 350)
-        self.naredi_figurico(plosca, 250, 350)
-        self.naredi_figurico(plosca, 450, 350)
-        self.naredi_figurico(plosca, 550, 350)
-        self.naredi_figurico(plosca, 650, 350)
-        self.naredi_figurico(plosca, 250, 450)
-        self.naredi_figurico(plosca, 350, 450)
-        self.naredi_figurico(plosca, 450, 450)
-        self.naredi_figurico(plosca, 150, 550)
-        self.naredi_figurico(plosca, 350, 550)
-        self.naredi_figurico(plosca, 550, 550)
-        self.naredi_figurico(plosca, 50, 650)
-        self.naredi_figurico(plosca, 350, 650)
-        self.naredi_figurico(plosca, 650, 650)
+        gumb0_0 = self.naredi_figurico(plosca, 50, 50)
+        gumb0_3 = self.naredi_figurico(plosca, 350, 50)
+        gumb0_6 = self.naredi_figurico(plosca, 650, 50)
+        gumb1_1 = self.naredi_figurico(plosca, 150, 150)
+        gumb1_3 = self.naredi_figurico(plosca, 350, 150)
+        gumb1_5 = self.naredi_figurico(plosca, 550, 150)
+        gumb2_2 = self.naredi_figurico(plosca, 250, 250)
+        gumb2_3 = self.naredi_figurico(plosca, 350, 250)
+        gumb2_4 = self.naredi_figurico(plosca, 450, 250)
+        gumb3_0 = self.naredi_figurico(plosca, 50, 350)
+        gumb3_1 = self.naredi_figurico(plosca, 150, 350)
+        gumb3_2 = self.naredi_figurico(plosca, 250, 350)
+        gumb3_4 = self.naredi_figurico(plosca, 450, 350)
+        gumb3_5 = self.naredi_figurico(plosca, 550, 350)
+        gumb3_6 = self.naredi_figurico(plosca, 650, 350)
+        gumb4_2 = self.naredi_figurico(plosca, 250, 450)
+        gumb4_3 = self.naredi_figurico(plosca, 350, 450)
+        gumb4_4 = self.naredi_figurico(plosca, 450, 450)
+        gumb5_1 = self.naredi_figurico(plosca, 150, 550)
+        gumb5_3 = self.naredi_figurico(plosca, 350, 550)
+        gumb5_5 = self.naredi_figurico(plosca, 550, 550)
+        gumb6_0 = self.naredi_figurico(plosca, 50, 650)
+        gumb6_3 = self.naredi_figurico(plosca, 350, 650)
+        gumb6_6 = self.naredi_figurico(plosca, 650, 650)
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
@@ -70,7 +70,7 @@ class tkmlin:
         return "to do"
 
     def naredi_figurico(self, kam, i, j, barva='Grey'): #none naredi neutralno polje
-        kam.create_oval(i-25, j-25, i+25, j+25, fil=barva)
+        kam.create_oval(i-25, j-25, i+25, j+25, fil=barva, tags=)
 
     def klik0(self):
         i = event.x // 50
@@ -113,6 +113,6 @@ class Igralec():
 
 if __name__ == "__main__":
     root = Tk()
-    root.wm_title('Nine Man\'s Morris')
+    root.wm_title('Nine Men\'s Morris')
     okno = tkmlin(root)
     root.mainloop()

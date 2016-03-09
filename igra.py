@@ -1,4 +1,5 @@
 __author__ = 'LukaAvbreht, SamoKralj'
+import logging
 
 IGRALEC_BELI = "B"
 IGRALEC_CRNI = "C"
@@ -88,7 +89,7 @@ class Igra():
         if self.faza == 0:
             return self.plosca[i][j] == None
         else:
-            if self.plosca[i][j] == None:
+            if self.plosca[i][j] == None and self.plosca[a][b] == self.na_potezi:
                 return (i,j) in sosedi[(a,b)]
             else:
                 return False
