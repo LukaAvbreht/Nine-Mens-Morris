@@ -178,7 +178,7 @@ class Igra():
 
     def odstrani_figurico(self):
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
-        i = input('Prva koordinata: ')
+        i = input('Prva koordinata: ')  #namenjeno testiranju programerja
         j = input('Druga koordinata: ')
         i = int(i)
         j = int(j)
