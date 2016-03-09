@@ -7,6 +7,8 @@ class tkmlin:
         self.master = master
         self.master.minsize(width=900, height=700)
 
+        self.igra = Igra()
+
         #tuki si bos lahko zbiru kako barva tvoja polja
         self.barva1 = 'Black'
         self.barva2 = 'White'
@@ -62,6 +64,14 @@ class tkmlin:
         gumb6_3 = self.naredi_figurico(plosca, 350, 650)
         gumb6_6 = self.naredi_figurico(plosca, 650, 650)
 
+        self.matrikagumbov = [[gumb0_0," "," ",gumb0_3," "," ",gumb0_6],
+                             [" ",gumb1_1," ",gumb1_3," ",gumb1_5," "],
+                             [" "," ",gumb2_2,gumb2_3,gumb2_4," "," "],
+                             [gumb3_0,gumb3_1,gumb3_2," ",gumb3_4,gumb3_5,gumb3_6],
+                             [" "," ",gumb4_2,gumb4_3,gumb4_4," "," "],
+                             [" ",gumb5_1," ",gumb5_3," ",gumb5_5," "],
+                             [gumb6_0," "," ",gumb6_3," "," ",gumb6_6]]
+
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
         gumb_novaigra.grid(row=0, column=9, columnspan=3)
@@ -70,9 +80,9 @@ class tkmlin:
         return "to do"
 
     def naredi_figurico(self, kam, i, j, barva='Grey'): #none naredi neutralno polje
-        kam.create_oval(i-25, j-25, i+25, j+25, fil=barva, tags=)
+        kam.create_oval(i-25, j-25, i+25, j+25, fil=barva)
 
-    def klik0(self):
+    def klik0(self): #ni smiselno
         i = event.x // 50
         j = event.y // 50
         if self.igra.na_potezi == IGRALEC_BELI:
@@ -80,11 +90,9 @@ class tkmlin:
         else:
             self.naredi_figurico(plosca, i, j, self.barva1)
 
-    def klik1(self):
+    def klik1(self): # prav tako ni smiselno
         a = event.x // 50
         b = event.y // 50
-
-
 
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
         # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
@@ -100,16 +108,12 @@ class tkmlin:
         self.igralec_crni = IGRALEC_CRNI
 
 class Igralec():
+    """cloveski igralec"""
     def __init__(self, tkmlin):
         self.gui = tkmlin
 
     def igraj(self):
         pass
-
-    def klik2(self):
-        pass #nardit kako izgleda poteza ko se premikamo (figurice)
-
-
 
 if __name__ == "__main__":
     root = Tk()
