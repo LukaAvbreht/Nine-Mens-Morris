@@ -15,7 +15,7 @@ def nasprotnik(igralec):
 class Igra():
     """Program namenjen logiki in pravilom igre"""
 
-    def __init__(self):
+    def __init__(self):  #remove nepotrebna polja
         self.plosca =[[None," "," ",None," "," ",None],
                       [" ",None," ",None," ",None," "],
                       [" "," ",None,None,None," "," "],

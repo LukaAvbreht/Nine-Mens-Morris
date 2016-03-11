@@ -80,7 +80,8 @@ class tkmlin:
         return "to do"
 
     def naredi_figurico(self, kam, i, j, barva='Grey'): #none naredi neutralno polje
-        kam.create_oval(i-25, j-25, i+25, j+25, fil=barva)
+        x = kam.create_oval(i-25, j-25, i+25, j+25)
+        print(x)
 
     def klik0(self): #ni smiselno
         i = event.x // 50
