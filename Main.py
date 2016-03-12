@@ -2,7 +2,7 @@ __author__ = 'LukaAvbreht,SamoKralj'
 from tkinter import *
 from igra import *
 
-class tkmlin:
+class tkmlin():
     def __init__(self,master):
         self.master = master
         self.master.minsize(width=900, height=700)
@@ -13,89 +13,55 @@ class tkmlin:
         self.barva1 = 'Black'
         self.barva2 = 'White'
 
-        #Igralna plosca
-        plosca = Canvas(master, width=700, height=700, bg='LemonChiffon')
-        plosca.grid(row=0, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
+        #Igralnaself.plosca
+        self.plosca = Canvas(master, width=700, height=700, bg='LemonChiffon')
+        self.plosca.grid(row=0, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
         self.id_polje = dict()
 
         #crte za igralno plosco
-        plosca.create_line(50, 50, 650, 50)
-        plosca.create_line(50, 650, 650, 650)
-        plosca.create_line(50, 50, 50, 650)
-        plosca.create_line(650, 50, 650, 650)
+        self.plosca.create_line(50, 50, 650, 50)
+        self.plosca.create_line(50, 650, 650, 650)
+        self.plosca.create_line(50, 50, 50, 650)
+        self.plosca.create_line(650, 50, 650, 650)
 
-        plosca.create_line(150, 150, 550, 150)
-        plosca.create_line(550, 150, 550, 550)
-        plosca.create_line(150, 150, 150, 550)
-        plosca.create_line(150, 550, 550, 550)
+        self.plosca.create_line(150, 150, 550, 150)
+        self.plosca.create_line(550, 150, 550, 550)
+        self.plosca.create_line(150, 150, 150, 550)
+        self.plosca.create_line(150, 550, 550, 550)
 
-        plosca.create_line(250, 250, 450, 250)
-        plosca.create_line(450, 250, 450, 450)
-        plosca.create_line(250, 250, 250, 450)
-        plosca.create_line(250, 450, 450, 450)
+        self.plosca.create_line(250, 250, 450, 250)
+        self.plosca.create_line(450, 250, 450, 450)
+        self.plosca.create_line(250, 250, 250, 450)
+        self.plosca.create_line(250, 450, 450, 450)
 
-        plosca.create_line(350, 50, 350, 250)
-        plosca.create_line(350, 450, 350, 650)
-        plosca.create_line(50, 350, 250, 350)
-        plosca.create_line(450, 350, 650, 350)
-        """
-        #Gumpki namenjeni za igro
-        gumb0_0 = self.naredi_figurico(plosca, 50, 50)
-        gumb0_3 = self.naredi_figurico(plosca, 350, 50)
-        gumb0_6 = self.naredi_figurico(plosca, 650, 50)
-        gumb1_1 = self.naredi_figurico(plosca, 150, 150)
-        gumb1_3 = self.naredi_figurico(plosca, 350, 150)
-        gumb1_5 = self.naredi_figurico(plosca, 550, 150)
-        gumb2_2 = self.naredi_figurico(plosca, 250, 250)
-        gumb2_3 = self.naredi_figurico(plosca, 350, 250)
-        gumb2_4 = self.naredi_figurico(plosca, 450, 250)
-        gumb3_0 = self.naredi_figurico(plosca, 50, 350)
-        gumb3_1 = self.naredi_figurico(plosca, 150, 350)
-        gumb3_2 = self.naredi_figurico(plosca, 250, 350)
-        gumb3_4 = self.naredi_figurico(plosca, 450, 350)
-        gumb3_5 = self.naredi_figurico(plosca, 550, 350)
-        gumb3_6 = self.naredi_figurico(plosca, 650, 350)
-        gumb4_2 = self.naredi_figurico(plosca, 250, 450)
-        gumb4_3 = self.naredi_figurico(plosca, 350, 450)
-        gumb4_4 = self.naredi_figurico(plosca, 450, 450)
-        gumb5_1 = self.naredi_figurico(plosca, 150, 550)
-        gumb5_3 = self.naredi_figurico(plosca, 350, 550)
-        gumb5_5 = self.naredi_figurico(plosca, 550, 550)
-        gumb6_0 = self.naredi_figurico(plosca, 50, 650)
-        gumb6_3 = self.naredi_figurico(plosca, 350, 650)
-        gumb6_6 = self.naredi_figurico(plosca, 650, 650)
-        """
+        self.plosca.create_line(350, 50, 350, 250)
+        self.plosca.create_line(350, 450, 350, 650)
+        self.plosca.create_line(50, 350, 250, 350)
+        self.plosca.create_line(450, 350, 650, 350)
+
 
         for i in range(7):
             for j in range(7):
-                if self.igra.plosca[i][j]==None:
-                    x = plosca.create_oval((100*i+50)-25, (100*j+50)-25, (100*i+50)+25, (100*j+50)+25)
+                if self.igra.plosca[j][i]==None:
+                    x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25)
                     self.id_polje[x] = (i,j)
+
+        self.plosca.bind("<Button-1>", self.klik)
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
         gumb_novaigra.grid(row=0, column=9, columnspan=3)
 
+    def klik(self,event):
+        x = event.x
+        y = event.y
+        kam =self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
+        print(kam)
+
     def newgame(self):
-        return "to do"
-
-    def naredi_figurico(self, kam, i, j, barva='Grey'): #none naredi neutralno polje
-        kam.create_oval(i-25, j-25, i+25, j+25)
-
-
-    def klik0(self): #ni smiselno
-        i = event.x // 50
-        j = event.y // 50
-        if self.igra.na_potezi == IGRALEC_BELI:
-            self.naredi_figurico(plosca, i, j, self.barva2)
-        else:
-            self.naredi_figurico(plosca, i, j, self.barva1)
-
-    def klik1(self): # prav tako ni smiselno
-        a = event.x // 50
-        b = event.y // 50
+        self.igra = Igra()
 
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
         # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
