@@ -14,9 +14,13 @@ class tkmlin():
         self.barva1 = 'Black'
         self.barva2 = 'White'
 
+        #igralca ki igrata igro
+        self.ime_igralec1 = 'Črni'
+        self.ime_igralec2 = 'Beli'
+
         #Igralnaself.plosca
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg)
-        self.plosca.grid(row=0, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
+        self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
         self.id_polje = dict()
@@ -41,6 +45,9 @@ class tkmlin():
 
         self.plosca.bind("<Button-1>", self.klik)
 
+        self.textbox = StringVar(master, value='Na potezi je {}.'.format(self.ime_igralec1))
+        Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=7)
+
         #stanja za igro
         self.DEFCON1 = 0 #stannje ko je na potezi igralec ter plosca caka na njegov odziv (klik)
         self.DEFCON2 = 0 #stanje ko igra caka na drugi igralcev klik
@@ -48,19 +55,21 @@ class tkmlin():
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
-        gumb_novaigra.grid(row=0, column=9)
+        gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
 
         gumbtest =  Button(master, text="TEST", command= self.test)
-        gumbtest.grid(row=1, column=9)
+        gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
 
     def test(self):
         if self.DEFCON1 == 0:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva1)
+            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec2))
             self.DEFCON1 = 1
         else:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva2)
+            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
             self.DEFCON1 = 0
 
 
@@ -76,6 +85,12 @@ class tkmlin():
 
     def newgame(self):
         self.igra = Igra()
+        for i in self.id_polje:
+            self.plosca.itemconfig(i, fill=None)
+        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
+        self.DEFCON1 = 0
+        self.DEFCON2 = 0
+        self.DEFCON3 = 0
 
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
         # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
@@ -116,5 +131,6 @@ class Igralec():
 if __name__ == "__main__":
     root = Tk()
     root.wm_title('Nine Men\'s Morris')
+    root.resizable(width=FALSE, height=FALSE)
     okno = tkmlin(root)
     root.mainloop()
