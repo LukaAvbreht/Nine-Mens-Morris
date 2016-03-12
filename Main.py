@@ -6,6 +6,7 @@ class tkmlin():
     def __init__(self,master):
         self.master = master
         self.master.minsize(width=900, height=700)
+        self.bg = 'LemonChiffon'
 
         self.igra = Igra()
 
@@ -14,27 +15,16 @@ class tkmlin():
         self.barva2 = 'White'
 
         #Igralnaself.plosca
-        self.plosca = Canvas(master, width=700, height=700, bg='LemonChiffon')
+        self.plosca = Canvas(master, width=700, height=700, bg=self.bg)
         self.plosca.grid(row=0, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
         self.id_polje = dict()
 
         #crte za igralno plosco
-        self.plosca.create_line(50, 50, 650, 50)
-        self.plosca.create_line(50, 650, 650, 650)
-        self.plosca.create_line(50, 50, 50, 650)
-        self.plosca.create_line(650, 50, 650, 650)
-
-        self.plosca.create_line(150, 150, 550, 150)
-        self.plosca.create_line(550, 150, 550, 550)
-        self.plosca.create_line(150, 150, 150, 550)
-        self.plosca.create_line(150, 550, 550, 550)
-
-        self.plosca.create_line(250, 250, 450, 250)
-        self.plosca.create_line(450, 250, 450, 450)
-        self.plosca.create_line(250, 250, 250, 450)
-        self.plosca.create_line(250, 450, 450, 450)
+        self.plosca.create_rectangle(50, 50, 650, 650)
+        self.plosca.create_rectangle(150, 150, 550, 550)
+        self.plosca.create_rectangle(250, 250, 450, 450)
 
         self.plosca.create_line(350, 50, 350, 250)
         self.plosca.create_line(350, 450, 350, 650)
@@ -45,7 +35,7 @@ class tkmlin():
         for i in range(7):
             for j in range(7):
                 if self.igra.plosca[j][i]==None:
-                    x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25)
+                    x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline=self.bg)
                     self.id_polje[x] = (i,j)
 
         self.plosca.bind("<Button-1>", self.klik)
