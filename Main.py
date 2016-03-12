@@ -55,10 +55,14 @@ class tkmlin():
         gumb_novaigra.grid(row=0, column=9, columnspan=3)
 
     def klik(self,event):
+        """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
         x = event.x
         y = event.y
-        kam =self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
-        print(kam)
+        kam = self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
+        for id in kam:
+            if id in self.id_polje:
+                print(id)
+                return id
 
     def newgame(self):
         self.igra = Igra()
@@ -79,10 +83,25 @@ class tkmlin():
 class Igralec():
     """cloveski igralec"""
     def __init__(self, tkmlin):
+        """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
         self.gui = tkmlin
+        self.prvi_klik = None
+        self.drugi_klik = None
+        self.tretji_klik = None
 
-    def igraj(self):
+    def ponastavi(self):
+        """resetira igrelcevo potezo na nevtralno pozicijo"""
+        self.prvi_klik = None
+        self.drugi_klik = None
+        self.tretji_klik = None
+
+    def uporabnikova_poteza(self, event):
+        """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
         pass
+        # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
+        # klike, ko bos kilke izvedu se bo pa poteza zapisala u igro
+
+
 
 if __name__ == "__main__":
     root = Tk()
