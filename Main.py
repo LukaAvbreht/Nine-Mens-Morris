@@ -31,18 +31,38 @@ class tkmlin():
         self.plosca.create_line(50, 350, 250, 350)
         self.plosca.create_line(450, 350, 650, 350)
 
-
+        # generira gumbke na polju in jim da svoj id
         for i in range(7):
             for j in range(7):
                 if self.igra.plosca[j][i]==None:
                     x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline=self.bg)
                     self.id_polje[x] = (i,j)
+        print(self.id_polje)
 
         self.plosca.bind("<Button-1>", self.klik)
 
+        #stanja za igro
+        self.DEFCON1 = 0 #stannje ko je na potezi igralec ter plosca caka na njegov odziv (klik)
+        self.DEFCON2 = 0 #stanje ko igra caka na drugi igralcev klik
+        self.DEFCON3 = 0 #stanje ko igra caka da igralec izbere zeton ki bi ga rad pobral
+
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
-        gumb_novaigra.grid(row=0, column=9, columnspan=3)
+        gumb_novaigra.grid(row=0, column=9)
+
+        gumbtest =  Button(master, text="TEST", command= self.test)
+        gumbtest.grid(row=1, column=9)
+
+    def test(self):
+        if self.DEFCON1 == 0:
+            for i in self.id_polje:
+                self.plosca.itemconfig(i,fill=self.barva1)
+            self.DEFCON1 = 1
+        else:
+            for i in self.id_polje:
+                self.plosca.itemconfig(i,fill=self.barva2)
+            self.DEFCON1 = 0
+
 
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
