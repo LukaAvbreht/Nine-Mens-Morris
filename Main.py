@@ -17,6 +17,9 @@ class tkmlin:
         plosca = Canvas(master, width=700, height=700, bg='LemonChiffon')
         plosca.grid(row=0, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
+        #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
+        self.id_polje = dict()
+
         #crte za igralno plosco
         plosca.create_line(50, 50, 650, 50)
         plosca.create_line(50, 650, 650, 650)
@@ -37,7 +40,7 @@ class tkmlin:
         plosca.create_line(350, 450, 350, 650)
         plosca.create_line(50, 350, 250, 350)
         plosca.create_line(450, 350, 650, 350)
-
+        """
         #Gumpki namenjeni za igro
         gumb0_0 = self.naredi_figurico(plosca, 50, 50)
         gumb0_3 = self.naredi_figurico(plosca, 350, 50)
@@ -63,14 +66,13 @@ class tkmlin:
         gumb6_0 = self.naredi_figurico(plosca, 50, 650)
         gumb6_3 = self.naredi_figurico(plosca, 350, 650)
         gumb6_6 = self.naredi_figurico(plosca, 650, 650)
+        """
 
-        self.matrikagumbov = [[gumb0_0," "," ",gumb0_3," "," ",gumb0_6],
-                             [" ",gumb1_1," ",gumb1_3," ",gumb1_5," "],
-                             [" "," ",gumb2_2,gumb2_3,gumb2_4," "," "],
-                             [gumb3_0,gumb3_1,gumb3_2," ",gumb3_4,gumb3_5,gumb3_6],
-                             [" "," ",gumb4_2,gumb4_3,gumb4_4," "," "],
-                             [" ",gumb5_1," ",gumb5_3," ",gumb5_5," "],
-                             [gumb6_0," "," ",gumb6_3," "," ",gumb6_6]]
+        for i in range(7):
+            for j in range(7):
+                if self.igra.plosca[i][j]==None:
+                    x = plosca.create_oval((100*i+50)-25, (100*j+50)-25, (100*i+50)+25, (100*j+50)+25)
+                    self.id_polje[x] = (i,j)
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
@@ -80,8 +82,8 @@ class tkmlin:
         return "to do"
 
     def naredi_figurico(self, kam, i, j, barva='Grey'): #none naredi neutralno polje
-        x = kam.create_oval(i-25, j-25, i+25, j+25)
-        print(x)
+        kam.create_oval(i-25, j-25, i+25, j+25)
+
 
     def klik0(self): #ni smiselno
         i = event.x // 50
