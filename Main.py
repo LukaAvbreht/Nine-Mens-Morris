@@ -130,9 +130,10 @@ class tkmlin():
             self.igra.poteza(prvopolje[0],prvopolje[1])
             print("sem tukaj")
             if self.na_potezi == self.igralec_crni:
-                self.na_potezi == self.igralec_beli
+                print("DA?")
+                self.na_potezi = self.igralec_beli
             else:
-                self.na_potezi == self.igralec_crni
+                self.na_potezi = self.igralec_crni
         elif id_3 == False:
             pass
         else:
