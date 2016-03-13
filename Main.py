@@ -18,6 +18,13 @@ class tkmlin():
         self.ime_igralec1 = 'Črni'
         self.ime_igralec2 = 'Beli'
 
+        #igralca
+        self.igralec_beli = Igralec(self, self.barva1)
+        self.igralec_crni = Igralec(self, self.barva2)
+
+        #kdo je na potezi
+        self.na_potezi = None
+
         #Igralnaself.plosca
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg)
         self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
@@ -49,9 +56,11 @@ class tkmlin():
         Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=7)
 
         #stanja za igro
-        self.DEFCON1 = 0 #stannje ko je na potezi igralec ter plosca caka na njegov odziv (klik)
-        self.DEFCON2 = 0 #stanje ko igra caka na drugi igralcev klik
-        self.DEFCON3 = 0 #stanje ko igra caka da igralec izbere zeton ki bi ga rad pobral
+        self.DEFCON = 0
+        #DEFCON 0 : nič, čakamo da začnemo igro
+        #DEFCON 1 : Igralec na potezi naj izbere polje
+        #DEFCON 2 : Igralec na potezi naj izbere drugo polje
+        #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
 
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
@@ -59,19 +68,19 @@ class tkmlin():
 
         gumbtest =  Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
-
+    
+    #trol
     def test(self):
-        if self.DEFCON1 == 0:
+        if self.DEFCON == 0:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva1)
             self.textbox.set('Na potezi je {}.'.format(self.ime_igralec2))
-            self.DEFCON1 = 1
+            self.DEFCON = 1
         else:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva2)
             self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
-            self.DEFCON1 = 0
-
+            self.DEFCON = 0
 
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
@@ -80,17 +89,29 @@ class tkmlin():
         kam = self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
         for id in kam:
             if id in self.id_polje:
-                print(id)
-                return id
+                if self.DEFCON == 0:
+                    self.textbox.set("Klikni gumb NOVA IGRA")
+                elif self.DEFCON == 1:
+                    self.na_potezi.prvi_klik = id
+                    self.na_potezi.uporabnikova_poteza()
+                    if self.na_potezi == self.igralec_beli:
+                        self.na_potezi = self.igralec_crni
+                    else:
+                        self.na_potezi = self.igralec_beli
+                elif self.DEFCON == 2:
+                    pass
+                elif self.DEFCON == 3:
+                    pass
+                else:
+                    pass
 
     def newgame(self):
         self.igra = Igra()
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill=None)
+        self.na_potezi = self.igralec_crni
         self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
-        self.DEFCON1 = 0
-        self.DEFCON2 = 0
-        self.DEFCON3 = 0
+        self.DEFCON = 1
 
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
         # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
@@ -107,12 +128,13 @@ class tkmlin():
 
 class Igralec():
     """cloveski igralec"""
-    def __init__(self, tkmlin):
+    def __init__(self, tkmlin, barva):
         """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
         self.gui = tkmlin
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
+        self.barva = barva
 
     def ponastavi(self):
         """resetira igrelcevo potezo na nevtralno pozicijo"""
@@ -120,9 +142,12 @@ class Igralec():
         self.drugi_klik = None
         self.tretji_klik = None
 
-    def uporabnikova_poteza(self, event):
+    def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
-        pass
+        if self.gui.igra.faza == 0:
+            self.gui.plosca.itemconfig(self.prvi_klik, fill = self.barva)
+        else:
+            pass
         # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
         # klike, ko bos kilke izvedu se bo pa poteza zapisala u igro
 
