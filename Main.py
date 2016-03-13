@@ -52,7 +52,7 @@ class tkmlin():
 
         self.plosca.bind("<Button-1>", self.klik)
 
-        self.textbox = StringVar(master, value='Na potezi je {}.'.format(self.ime_igralec1))
+        self.textbox = StringVar(master, value='Pozdravljeni!')
         Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=7)
 
         #stanja za igro
@@ -93,11 +93,13 @@ class tkmlin():
                     self.textbox.set("Klikni gumb NOVA IGRA")
                 elif self.DEFCON == 1:
                     self.na_potezi.prvi_klik = id
-                    self.na_potezi.uporabnikova_poteza()
-                    if self.na_potezi == self.igralec_beli:
-                        self.na_potezi = self.igralec_crni
-                    else:
-                        self.na_potezi = self.igralec_beli
+                    poteza = self.na_potezi.uporabnikova_poteza()
+                    if poteza:
+                        #Če je bila izvedena poteza igralca, zamenjaj kdo je na potezi
+                        if self.na_potezi == self.igralec_beli:
+                            self.na_potezi = self.igralec_crni
+                        else:
+                            self.na_potezi = self.igralec_beli
                 elif self.DEFCON == 2:
                     pass
                 elif self.DEFCON == 3:
@@ -121,10 +123,9 @@ class tkmlin():
         elif self.igra.faza == 1:
             self.klik1
 
-    def zacni_igro(self, IGRALEC_BELI, IGRALEC_CRNI):
-        self.igra = Igra()
-        self.igralec_beli = IGRALEC_BELI
-        self.igralec_crni = IGRALEC_CRNI
+    def izvedi_potezo(self, id, i, j):
+        self.plosca.itemconfig(id, fill = self.na_potezi.barva)
+        self.igra.poteza(i,j)
 
 class Igralec():
     """cloveski igralec"""
@@ -145,7 +146,13 @@ class Igralec():
     def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
         if self.gui.igra.faza == 0:
-            self.gui.plosca.itemconfig(self.prvi_klik, fill = self.barva)
+            koord_1 = self.gui.id_polje[self.prvi_klik][0]
+            koord_2 = self.gui.id_polje[self.prvi_klik][1]
+            if self.gui.igra.je_veljavna(koord_1, koord_2):
+                self.gui.izvedi_potezo(self.prvi_klik, koord_1, koord_2)
+                return True
+            else:
+                return False
         else:
             pass
         # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
