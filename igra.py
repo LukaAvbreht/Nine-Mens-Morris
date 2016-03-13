@@ -155,8 +155,6 @@ class Igra():
                     self.faza = 1
                 self.plosca[i][j] = self.na_potezi
                 self.zadnja_poteza = (i,j)
-                if self.postavljen_mlin((i,j)):
-                    self.odstrani_figurico()
                 self.na_potezi = nasprotnik(self.na_potezi)
             else:
                 print("Poteza ni mogoča")

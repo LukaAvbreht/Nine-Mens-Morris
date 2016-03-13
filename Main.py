@@ -117,28 +117,29 @@ class tkmlin():
         elif self.igra.faza == 1:
             self.klik1
 
-    def izvedi_potezo(self, id_1 = False, id_2 = False, id_3 = False):
+    def izvedi_potezo(self, id_1 = False, id_2 = False):
         print(self.na_potezi.barva)
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
             drugopolje = self.id_polje[id_2]
-        if id_3 != False:
-            tretjepolje = self.id_polje[id_3]
-        if id_1 != False and ((id_2, id_3) == (False, False)):
+        if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill = self.na_potezi.barva)
             self.igra.poteza(prvopolje[0],prvopolje[1])
-            print("sem tukaj")
+            """
+            if self.igra.postavljen_mlin(prvopolje):
+                self.DEFCON = 3
+                self.textbox.set("Izberi zeton, ki ga bos pobral")
+            """
             if self.na_potezi == self.igralec_crni:
-                print("DA?")
                 self.na_potezi = self.igralec_beli
             else:
                 self.na_potezi = self.igralec_crni
-        elif id_3 == False:
-            pass
         else:
-            #tudi poberemo zeton
             pass
+
+    def vzami_zeton(self, id_1):
+        self.plosca.itemconfig(id, fill = self.bg)
 
 class Igralec():
     """cloveski igralec"""
