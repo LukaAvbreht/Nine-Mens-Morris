@@ -19,8 +19,8 @@ class tkmlin():
         self.ime_igralec2 = 'Beli'
 
         #igralca
-        self.igralec_beli = Igralec(self, self.barva1)
-        self.igralec_crni = Igralec(self, self.barva2)
+        self.igralec_beli = Igralec(self, self.barva2)
+        self.igralec_crni = Igralec(self, self.barva1)
 
         #kdo je na potezi
         self.na_potezi = None
@@ -94,12 +94,6 @@ class tkmlin():
                 elif self.DEFCON == 1:
                     self.na_potezi.prvi_klik = id
                     poteza = self.na_potezi.uporabnikova_poteza()
-                    if poteza:
-                        #Če je bila izvedena poteza igralca, zamenjaj kdo je na potezi
-                        if self.na_potezi == self.igralec_beli:
-                            self.na_potezi = self.igralec_crni
-                        else:
-                            self.na_potezi = self.igralec_beli
                 elif self.DEFCON == 2:
                     pass
                 elif self.DEFCON == 3:
@@ -123,9 +117,27 @@ class tkmlin():
         elif self.igra.faza == 1:
             self.klik1
 
-    def izvedi_potezo(self, id, i, j):
-        self.plosca.itemconfig(id, fill = self.na_potezi.barva)
-        self.igra.poteza(i,j)
+    def izvedi_potezo(self, id_1 = False, id_2 = False, id_3 = False):
+        print(self.na_potezi.barva)
+        if id_1 != False:
+            prvopolje = self.id_polje[id_1]
+        if id_2 != False:
+            drugopolje = self.id_polje[id_2]
+        if id_3 != False:
+            tretjepolje = self.id_polje[id_3]
+        if id_1 != False and ((id_2, id_3) == (False, False)):
+            self.plosca.itemconfig(id_1, fill = self.na_potezi.barva)
+            self.igra.poteza(prvopolje[0],prvopolje[1])
+            print("sem tukaj")
+            if self.na_potezi == self.igralec_crni:
+                self.na_potezi == self.igralec_beli
+            else:
+                self.na_potezi == self.igralec_crni
+        elif id_3 == False:
+            pass
+        else:
+            #tudi poberemo zeton
+            pass
 
 class Igralec():
     """cloveski igralec"""
@@ -149,10 +161,7 @@ class Igralec():
             koord_1 = self.gui.id_polje[self.prvi_klik][0]
             koord_2 = self.gui.id_polje[self.prvi_klik][1]
             if self.gui.igra.je_veljavna(koord_1, koord_2):
-                self.gui.izvedi_potezo(self.prvi_klik, koord_1, koord_2)
-                return True
-            else:
-                return False
+                self.gui.izvedi_potezo(self.prvi_klik)
         else:
             pass
         # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu

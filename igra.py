@@ -166,8 +166,6 @@ class Igra():
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
-                    if self.postavljen_mlin((i,j)):
-                        self.odstrani_figurico()
                     self.na_potezi = nasprotnik(self.na_potezi)
                 else:
                     print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
@@ -176,12 +174,8 @@ class Igra():
 
 
 
-    def odstrani_figurico(self):
+    def odstrani_figurico(self, i, j):
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
-        i = input('Prva koordinata: ')  #namenjeno testiranju programerja
-        j = input('Druga koordinata: ')
-        i = int(i)
-        j = int(j)
         trenutni_nasprotnik = nasprotnik(self.na_potezi)
         if self.plosca[i][j] == trenutni_nasprotnik:
             if self.postavljen_mlin((i,j)):
