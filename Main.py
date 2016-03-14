@@ -15,13 +15,13 @@ class tkmlin():
         self.barva2 = 'White'
 
         #igralca ki igrata igro
-        self.ime_igralec1 = 'Črni'
-        self.ime_igralec2 = 'Beli'
+        self.ime_igralec_crni = 'Črni'
+        self.ime_igralec_beli = 'Beli'
 
         #igralca
-        self.igralec_beli = Igralec(self, self.barva2)
         self.igralec_crni = Igralec(self, self.barva1)
-
+        self.igralec_beli = Igralec(self, self.barva2)
+        
         #kdo je na potezi
         self.na_potezi = None
 
@@ -74,12 +74,12 @@ class tkmlin():
         if self.DEFCON == 0:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva1)
-            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec2))
+            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
             self.DEFCON = 1
         else:
             for i in self.id_polje:
                 self.plosca.itemconfig(i,fill=self.barva2)
-            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
+            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
             self.DEFCON = 0
 
     def klik(self,event):
@@ -107,7 +107,7 @@ class tkmlin():
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill=None)
         self.na_potezi = self.igralec_crni
-        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
+        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         self.DEFCON = 1
 
     def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
@@ -133,8 +133,10 @@ class tkmlin():
             """
             if self.na_potezi == self.igralec_crni:
                 self.na_potezi = self.igralec_beli
+                self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
             else:
                 self.na_potezi = self.igralec_crni
+                self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         else:
             self.plosca.itemconfig(id_1, fill = self.bg)
             self.plosca.itemconfig(id_2, fill = self.na_potezi.barva)
