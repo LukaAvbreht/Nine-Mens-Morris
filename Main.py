@@ -6,13 +6,13 @@ class tkmlin():
     def __init__(self,master):
         self.master = master
         self.master.minsize(width=900, height=700)
-        self.bg = 'LemonChiffon'
+        self.bg = 'LightYellow2'  #'LemonChiffon'
 
         self.igra = Igra()
 
         #tuki si bos lahko zbiru kako barva tvoja polja
-        self.barva1 = 'Black'
-        self.barva2 = 'White'
+        self.barva1 = 'forest green'
+        self.barva2 = 'chocolate1'
 
         #igralca ki igrata igro
         self.ime_igralec_crni = 'Črni'
@@ -26,7 +26,7 @@ class tkmlin():
         self.na_potezi = None
 
         #Igralnaself.plosca
-        self.plosca = Canvas(master, width=700, height=700, bg=self.bg)
+        self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10)
         self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
@@ -46,7 +46,7 @@ class tkmlin():
         for i in range(7):
             for j in range(7):
                 if self.igra.plosca[j][i]==None:
-                    x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline=self.bg)
+                    x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline="")
                     self.id_polje[x] = (i,j)
         print(self.id_polje)
 
@@ -66,10 +66,14 @@ class tkmlin():
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
         gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
 
+    #################################################################################
+    #trol
         gumbtest =  Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
-    
-    #trol
+
+        gumbtest2 =  Button(master, text="TEST2", command=self.vzami_zeton(31))
+        gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
+
     def test(self):
         if self.DEFCON == 0:
             for i in self.id_polje:
@@ -81,6 +85,7 @@ class tkmlin():
                 self.plosca.itemconfig(i,fill=self.barva2)
             self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
             self.DEFCON = 0
+    ##################################################################################
 
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
@@ -98,7 +103,8 @@ class tkmlin():
                     self.na_potezi.drugi_klik = id
                     self.na_potezi.uporabnikova_poteza()
                 elif self.DEFCON == 3:
-                    pass
+                    self.na_potezi.tretji_klik = id
+                    self.na_potezi.uporabnikova_poteza()
                 else:
                     pass
 
@@ -110,22 +116,15 @@ class tkmlin():
         self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         self.DEFCON = 1
 
-    def poteza(self, i, j, a=False, b=False): #najprej pogleda v keri fazi smo, pol pa nardi v odvisnosti od tega potezo
-        # ce smo v fazi 0 potem je prvi klik le postavljanje kamncka
-        # ce smo v drugi fazi usaka poteza zahteva 2 klika
-        if self.igra.faza == 0:
-            self.klik0
-        elif self.igra.faza == 1:
-            self.klik1
-
-    def izvedi_potezo(self, id_1 = False, id_2 = False):
+    def izvedi_potezo(self, id_1=False, id_2=False):
+        """Funcija ki izvede potezo ter premakne igralne figure"""
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
             drugopolje = self.id_polje[id_2]
         if id_1 != False and id_2 == False:
-            self.plosca.itemconfig(id_1, fill = self.na_potezi.barva)
-            self.igra.poteza(prvopolje[0],prvopolje[1])
+            self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
+            self.igra.poteza(prvopolje[0], prvopolje[1])
             """
             if self.igra.postavljen_mlin(prvopolje):
                 self.DEFCON = 3
@@ -138,8 +137,8 @@ class tkmlin():
                 self.na_potezi = self.igralec_crni
                 self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         else:
-            self.plosca.itemconfig(id_1, fill = self.bg)
-            self.plosca.itemconfig(id_2, fill = self.na_potezi.barva)
+            self.plosca.itemconfig(id_1, fill="")
+            self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
             self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
             self.DEFCON = 1
             self.textbox.set("Izberi polje")
@@ -150,7 +149,7 @@ class tkmlin():
             
 
     def vzami_zeton(self, id_1):
-        self.plosca.itemconfig(id, fill = self.bg)
+        self.plosca.itemconfig(id_1, fill="")
 
 class Igralec():
     """cloveski igralec"""
@@ -186,11 +185,12 @@ class Igralec():
             else:
                 self.gui.DEFCON = 2
                 self.gui.textbox.set("Izberi kam želiš ta žeton premakniti")
+                if self.gui.igra.je_veljavna(koord_1, koord_2):
+                    pass
+
                 #pricakujemo se en klik
         # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
         # klike, ko bos kilke izvedu se bo pa poteza zapisala u igro
-
-
 
 if __name__ == "__main__":
     root = Tk()

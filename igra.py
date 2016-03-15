@@ -52,7 +52,7 @@ class Igra():
             print(vrstica)
 
     def je_veljavna(self, i, j, a = False, b = False):
-        """Preveri, če je poteza veljavna."""
+        """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
         sosedi = {(0,0) : [(0,3),(3,0)],
                   (0,3) : [(0,0),(0,6),(1,3)],
                   (0,6) : [(0,3),(3,6)],
@@ -137,6 +137,8 @@ class Igra():
                     if self.je_veljavna(i,j):
                         mozne_poteze.append((i,j))
             return mozne_poteze
+        elif self.faza == 1:
+            pass #kle bi generiru slovar ki bi meu za kluce koorduinate tvojih figur
 
         #faza premikanja figuric
         #odvisno od tega kdo je na potezi in koliko figuric še ima
@@ -180,14 +182,14 @@ class Igra():
                 print("Ta figurica je del aktivnega mlina")
             else:
                 self.plosca[i][j] = None
-                self.figurice[trenutni_nasprotnik] -=1
+                self.figurice[trenutni_nasprotnik] -= 1
                 self.zmaga1()
         else:
             print('Neveljavna poteza, izberi drugo figurico!')
             self.odstrani_figurico()
 
     def zmaga1(self):
-        """ preveri, ali smo z mlinom nasprotniku odstranili sedmo figuro"""
+        """ preveri, ali smo z mlinom nasprotniku odstranili sedmo figuro, to je namrec eden izmed nacinov da se igra konca"""
         if self.faza == 1:
             if self.figurice[nasprotnik(self.na_potezi)] < 3:
                 return True
