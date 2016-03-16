@@ -173,6 +173,7 @@ class tkmlin():
                 else:
                     self.na_potezi = self.igralec_crni
                 self.textbox.set("Izberi polje {0}".format(self.na_potezi.barva))
+                self.na_potezi.ponastavi()
             
 
     def vzami_zeton(self, id_1, i, j):
