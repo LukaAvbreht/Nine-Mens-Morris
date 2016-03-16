@@ -69,12 +69,14 @@ class tkmlin():
 
     #################################################################################
     #trol
-        gumbtest =  Button(master, text="TEST", command= self.test)
+        gumbtest = Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
 
-        gumbtest2 =  Button(master, text="Kao Zmaga", command=self.zmagovalno_okno)
+        gumbtest2 = Button(master, text="Kao Zmaga", command=self.zmagovalno_okno)
         gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
 
+        gumbtest3 = Button(master, text="test2", command=self.test2())
+        gumbtest3.grid(row=0, column=12, sticky=N+W+E+S)
 
     def test(self):
         if self.DEFCON == 0:
@@ -87,6 +89,9 @@ class tkmlin():
                 self.plosca.itemconfig(i,fill=self.barva2)
             self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
             self.DEFCON = 0
+
+    def test2(self):
+        print(self.igra.veljavne_poteze())
     ##################################################################################
 
     def klik(self,event):

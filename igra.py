@@ -46,14 +46,7 @@ class Igra():
         self.stanje = "Ni konec"
         #moznosti tega stanja so : ni konec, zmaga igralec beli, zmaga igralec crni, neodloceno
 
-    def izpisi_plosco(self):  #to je funkcija namenjena programerju
-        """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
-        for vrstica in self.plosca:
-            print(vrstica)
-
-    def je_veljavna(self, i, j, a = False, b = False):
-        """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
-        sosedi = {(0,0) : [(0,3),(3,0)],
+        self.sosedi = {(0,0) : [(0,3),(3,0)],
                   (0,3) : [(0,0),(0,6),(1,3)],
                   (0,6) : [(0,3),(3,6)],
                   (1,1) : [(1,3),(3,1)],
@@ -78,6 +71,14 @@ class Igra():
                   (6,3) : [(6,0),(6,6),(5,3)],
                   (6,6) : [(6,3),(3,6)],
                   }
+
+    def izpisi_plosco(self):  #to je funkcija namenjena programerju
+        """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
+        for vrstica in self.plosca:
+            print(vrstica)
+
+    def je_veljavna(self, i, j, a = False, b = False):
+        """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
         #################3### test za sosedi
         def test(slovar):
             for key in slovar.keys():
@@ -86,14 +87,14 @@ class Igra():
                         print(key, value)
                         return False
             return True
-        #print(test(sosedi))
+        #print(test(self.sosedi))
         ##################### test ni našel napake
         
         if self.faza == 0:
             return self.plosca[i][j] == None
         else:
             if self.plosca[i][j] == None and self.plosca[a][b] == self.na_potezi:
-                return (i,j) in sosedi[(a,b)]
+                return (i,j) in self.sosedi[(a,b)]
             else:
                 return False
 
@@ -130,20 +131,26 @@ class Igra():
 
     def veljavne_poteze(self):
         """ Glede na trenutno fazo vrne mogoče možne poteze. """
-        if self.faza == 0:
+        if self.faza == 0:  #trenba preverit ce si naredu mlin in smiselno dodati to v potezo
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
                     if self.je_veljavna(i,j):
                         mozne_poteze.append((i,j))
             return mozne_poteze
-        elif self.faza == 1:
-            pass #kle bi generiru slovar ki bi meu za kluce koorduinate tvojih figur
-
+        elif self.faza == 1:  #treba se dodat da preveri ce si naredu mlin
+            mozne_poteze = []
+            for i in range(7):
+                for j in range(7):
+                    if self.plosca[i][j] == self.na_potezi:
+                        for sos in self.sosedi[(i,j)]:
+                            if self.plosca[sos[0]][sos[1]] == None:
+                                dod = (sos[0],sos[1],i,j)
+                                mozne_poteze.append(dod)
+            return mozne_poteze
         #faza premikanja figuric
         #odvisno od tega kdo je na potezi in koliko figuric še ima
-        else:
-            pass
+
 
     def lahko_jemljem(self, i, j):
         if self.plosca[i][j] == self.na_potezi:
