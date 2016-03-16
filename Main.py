@@ -92,8 +92,10 @@ class tkmlin():
         x = event.x
         y = event.y
         kam = self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
+        znacka = False
         for id in kam:
             if id in self.id_polje:
+                znacka = True #nam pove, da smo zadeli nekaj
                 if self.DEFCON == 0:
                     self.textbox.set("Klikni gumb NOVA IGRA")
                 elif self.DEFCON == 1:
@@ -107,7 +109,12 @@ class tkmlin():
                     self.na_potezi.uporabnikova_poteza()
                 else:
                     pass
-
+        if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
+            self.na_potezi.ponastavi()
+            self.DEFCON = 1
+            self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.barva))
+            
+        
     def newgame(self):
         self.igra = Igra()
         for i in self.id_polje:
@@ -141,11 +148,11 @@ class tkmlin():
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
             self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
             self.DEFCON = 1
-            self.textbox.set("Izberi polje")
             if self.na_potezi == self.igralec_crni:
                 self.na_potezi = self.igralec_beli
             else:
                 self.na_potezi = self.igralec_crni
+            self.textbox.set("Izberi polje {0}".format(self.na_potezi.barva))
             
 
     def vzami_zeton(self, id_1):
@@ -182,11 +189,14 @@ class Igralec():
                 koord_4 = self.gui.id_polje[self.drugi_klik][1]
                 if self.gui.igra.je_veljavna(koord_3, koord_4, koord_1, koord_2):
                     self.gui.izvedi_potezo(self.prvi_klik, self.drugi_klik)
+                else:
+                    self.ponastavi()
+                    self.gui.DEFCON = 1
+                    self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.barva))
+                    
             else:
                 self.gui.DEFCON = 2
                 self.gui.textbox.set("Izberi kam želiš ta žeton premakniti")
-                if self.gui.igra.je_veljavna(koord_1, koord_2):
-                    pass
 
                 #pricakujemo se en klik
         # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
