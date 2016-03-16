@@ -188,6 +188,7 @@ class tkmlin():
             self.na_potezi = self.igralec_beli
         else:
             self.na_potezi = self.igralec_crni
+        self.na_potezi.ponastavi()
         self.textbox.set("Na potezi je {0}".format(self.na_potezi.barva))
 
 
