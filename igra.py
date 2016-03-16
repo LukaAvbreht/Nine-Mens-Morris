@@ -146,7 +146,10 @@ class Igra():
             pass
 
     def lahko_jemljem(self, i, j):
-        return self.plosca[i][j] == self.na_potezi
+        if self.plosca[i][j] == self.na_potezi:
+            return self.postavljen_mlin((i, j)) == False
+        else:
+            return False
 
     # funkcijo poteza je treba popravit na nacin da dodava se dva argumenta ( se kateri kamen uzamemo, ce dosezemo mlin)
     # ki bo sta po defoltu enaka none
@@ -181,17 +184,6 @@ class Igra():
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
         trenutni_nasprotnik = nasprotnik(self.na_potezi)
         if self.lahko_jemljem(i,j):
-            if self.postavljen_mlin((i,j)):
-                print("Ta figurica je del aktivnega mlina")
-            else:
-                self.plosca[i][j] = None
-                self.figurice[trenutni_nasprotnik] -= 1
-                #self.zmaga1()
+            self.plosca[i][j] = None
+            self.figurice[trenutni_nasprotnik] -= 1
 
-    def zmaga1(self):
-        """ preveri, ali smo z mlinom nasprotniku odstranili sedmo figuro, to je namrec eden izmed nacinov da se igra konca"""
-        if self.faza == 1:
-            if self.figurice[nasprotnik(self.na_potezi)] < 3:
-                return True
-        else:
-            return False

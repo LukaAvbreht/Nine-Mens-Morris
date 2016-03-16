@@ -111,6 +111,7 @@ class tkmlin():
                     self.na_potezi.jemljem()
                 elif self.DEFCON == 4:
                     self.textbox.set("Igre je konec. Za novo igro pritisni gumb NOVA IGRA.")
+                    znacka = True #Ker so vsi kliki ignorirani!
                 else:
                     pass
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
@@ -179,7 +180,7 @@ class tkmlin():
         self.igra.odstrani_figurico(i, j)
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
-            for key, value in self.igra.figurice():
+            for key, value in self.igra.figurice.items():
                 if self.igra.figurice[key] < 3:
                     self.zmagovalno_okno(self.na_potezi)
         if self.na_potezi == self.igralec_crni:
