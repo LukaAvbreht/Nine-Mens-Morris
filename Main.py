@@ -48,12 +48,12 @@ class tkmlin():
                 if self.igra.plosca[j][i]==None:
                     x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline="")
                     self.id_polje[x] = (i,j)
-        print(self.id_polje)
 
         self.plosca.bind("<Button-1>", self.klik)
 
         self.textbox = StringVar(master, value='Pozdravljeni!')
         Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=7)
+
 
         #stanja za igro
         self.DEFCON = 0
@@ -61,7 +61,8 @@ class tkmlin():
         #DEFCON 1 : Igralec na potezi naj izbere polje
         #DEFCON 2 : Igralec na potezi naj izbere drugo polje
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
-
+        #DEFCON 4 : Igre je konec, polje je zablokirano,
+        
         #generira gumbe ki niso povezani z igro
         gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
         gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
@@ -71,8 +72,9 @@ class tkmlin():
         gumbtest =  Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
 
-        #gumbtest2 =  Button(master, text="TEST2", command=self.vzami_zeton(31))
-        #gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
+        gumbtest2 =  Button(master, text="Kao Zmaga", command=self.zmagovalno_okno)
+        gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
+
 
     def test(self):
         if self.DEFCON == 0:
@@ -107,13 +109,26 @@ class tkmlin():
                 elif self.DEFCON == 3:
                     self.na_potezi.tretji_klik = id
                     self.na_potezi.jemljem()
+                elif self.DEFCON == 4:
+                    self.textbox.set("Igre je konec. Za novo igro pritisni gumb NOVA IGRA.")
                 else:
                     pass
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
             self.na_potezi.ponastavi()
             self.DEFCON = 1
             self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.barva))
-            
+
+    #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
+    def zmagovalno_okno(self, zmagovalec = False):
+        self.DEFCON = 4
+        #zablokiramo polje
+        
+        pop_up = Toplevel(height = 500, width = 500)
+        pop_up.title("Zmagovalec")
+        
+
+        besedilo = Message(pop_up, text = str("Bravo! Zmagal je igralec " + str(zmagovalec) + "!"))
+        besedilo.pack()
         
     def newgame(self):
         self.igra = Igra()
@@ -163,6 +178,10 @@ class tkmlin():
         self.plosca.itemconfig(id_1, fill="")
         self.igra.odstrani_figurico(i, j)
         self.DEFCON = 1
+        if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
+            for key, value in self.igra.figurice():
+                if self.igra.figurice[key] < 3:
+                    self.zmagovalno_okno(self.na_potezi)
         if self.na_potezi == self.igralec_crni:
             self.na_potezi = self.igralec_beli
         else:
