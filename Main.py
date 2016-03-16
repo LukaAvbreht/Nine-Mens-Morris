@@ -71,8 +71,8 @@ class tkmlin():
         gumbtest =  Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
 
-        gumbtest2 =  Button(master, text="TEST2", command=self.vzami_zeton(31))
-        gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
+        #gumbtest2 =  Button(master, text="TEST2", command=self.vzami_zeton(31))
+        #gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
 
     def test(self):
         if self.DEFCON == 0:
@@ -106,7 +106,7 @@ class tkmlin():
                     self.na_potezi.uporabnikova_poteza()
                 elif self.DEFCON == 3:
                     self.na_potezi.tretji_klik = id
-                    self.na_potezi.uporabnikova_poteza()
+                    self.na_potezi.jemljem()
                 else:
                     pass
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
@@ -132,31 +132,43 @@ class tkmlin():
         if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
-            """
             if self.igra.postavljen_mlin(prvopolje):
                 self.DEFCON = 3
                 self.textbox.set("Izberi zeton, ki ga bos pobral")
-            """
-            if self.na_potezi == self.igralec_crni:
-                self.na_potezi = self.igralec_beli
-                self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
             else:
-                self.na_potezi = self.igralec_crni
-                self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
+                if self.na_potezi == self.igralec_crni:
+                    self.na_potezi = self.igralec_beli
+                    self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
+                else:
+                    self.na_potezi = self.igralec_crni
+                    self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
             self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
-            self.DEFCON = 1
-            if self.na_potezi == self.igralec_crni:
-                self.na_potezi = self.igralec_beli
+            if self.igra.postavljen_mlin(drugopolje): #zahtevamo, da pobere žeton
+                self.DEFCON = 3
+                self.textbox.set("Izberi žeton, ki ga boš pobral!")
             else:
-                self.na_potezi = self.igralec_crni
-            self.textbox.set("Izberi polje {0}".format(self.na_potezi.barva))
+                #se pripravimo na naslednjo potezo
+                self.DEFCON = 1
+                if self.na_potezi == self.igralec_crni:
+                    self.na_potezi = self.igralec_beli
+                else:
+                    self.na_potezi = self.igralec_crni
+                self.textbox.set("Izberi polje {0}".format(self.na_potezi.barva))
             
 
-    def vzami_zeton(self, id_1):
+    def vzami_zeton(self, id_1, i, j):
         self.plosca.itemconfig(id_1, fill="")
+        self.igra.odstrani_figurico(i, j)
+        self.DEFCON = 1
+        if self.na_potezi == self.igralec_crni:
+            self.na_potezi = self.igralec_beli
+        else:
+            self.na_potezi = self.igralec_crni
+        self.textbox.set("Na potezi je {0}".format(self.na_potezi.barva))
+
 
 class Igralec():
     """cloveski igralec"""
@@ -173,6 +185,17 @@ class Igralec():
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
+
+    def jemljem(self):
+        """Preveri, če lahko izbrani žeton odstranimo. """
+        koord_1 = self.gui.id_polje[self.tretji_klik][0]
+        koord_2 = self.gui.id_polje[self.tretji_klik][1]
+        if self.gui.igra.lahko_jemljem(koord_1, koord_2):
+            self.gui.vzami_zeton(self.tretji_klik, koord_1, koord_2)
+        else:
+            self.ponastavi()
+            self.gui.textbox.set("Izberi žeton, ki ga smeš vzeti!")
+            
 
     def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
