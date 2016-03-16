@@ -190,17 +190,23 @@ class Igralec():
                 if self.gui.igra.je_veljavna(koord_3, koord_4, koord_1, koord_2):
                     self.gui.izvedi_potezo(self.prvi_klik, self.drugi_klik)
                 else:
+                    #nismo izvedli veljavne poteze, vrnemo se na zacetek poteze!
                     self.ponastavi()
                     self.gui.DEFCON = 1
                     self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.barva))
                     
             else:
-                self.gui.DEFCON = 2
-                self.gui.textbox.set("Izberi kam želiš ta žeton premakniti")
+                #preveri ali je izbran zeton sploh nas
+                koord_1 = self.gui.id_polje[self.prvi_klik][0]
+                koord_2 = self.gui.id_polje[self.prvi_klik][1]
+                if self.gui.igra.plosca[koord_1][koord_2] == self.gui.igra.na_potezi:
+                    self.gui.DEFCON = 2
+                    self.gui.textbox.set("Izberi kam želiš ta žeton premakniti")
+                else:
+                    self.ponastavi()
+                    self.gui.DEFCON = 1
+                    self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.barva))
 
-                #pricakujemo se en klik
-        # tuki bos meu odvisno od tega u keri fazi si potezo in ti bo preverju ce jo lahko izvede in od tebe zahtevu
-        # klike, ko bos kilke izvedu se bo pa poteza zapisala u igro
 
 if __name__ == "__main__":
     root = Tk()
