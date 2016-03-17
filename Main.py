@@ -182,6 +182,7 @@ class tkmlin():
             
 
     def vzami_zeton(self, id_1, i, j):
+        """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
         self.igra.odstrani_figurico(i, j)
         self.DEFCON = 1
@@ -198,7 +199,7 @@ class tkmlin():
 
 
 class Igralec():
-    """cloveski igralec"""
+    """cloveski igralec. primer uporabe znotraj nase igre: self.igralec_crni = Igralec(self, 'Black', 'Marjan')"""
     def __init__(self, tkmlin, barva, ime):
         """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
         self.gui = tkmlin
