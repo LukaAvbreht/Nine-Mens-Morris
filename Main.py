@@ -68,7 +68,6 @@ class tkmlin():
         gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
 
     #################################################################################
-    #trol
         gumbtest = Button(master, text="TEST", command= self.test)
         gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
 
