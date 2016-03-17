@@ -15,18 +15,18 @@ class tkmlin():
         self.barva2 = 'chocolate1'
 
         #igralca ki igrata igro
-        self.ime_igralec_crni = 'Črni'
-        self.ime_igralec_beli = 'Beli'
+        self.ime_igralec_crni = 'Zeleni'
+        self.ime_igralec_beli = 'Oranžni'
 
         #igralca
-        self.igralec_crni = Igralec(self, self.barva1)
-        self.igralec_beli = Igralec(self, self.barva2)
+        self.igralec_crni = Igralec(self, self.barva1,self.ime_igralec_crni)
+        self.igralec_beli = Igralec(self, self.barva2,self.ime_igralec_beli)
         
         #kdo je na potezi
         self.na_potezi = None
 
         #Igralnaself.plosca
-        self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10)
+        self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10, relief=SUNKEN)  #SUNKEN,RAISED
         self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
@@ -122,7 +122,7 @@ class tkmlin():
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
             self.na_potezi.ponastavi()
             self.DEFCON = 1
-            self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.barva))
+            self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.ime))
 
     #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
     def zmagovalno_okno(self, zmagovalec = False):
@@ -177,7 +177,7 @@ class tkmlin():
                     self.na_potezi = self.igralec_beli
                 else:
                     self.na_potezi = self.igralec_crni
-                self.textbox.set("Izberi polje {0}".format(self.na_potezi.barva))
+                self.textbox.set("Izberi polje {0}".format(self.na_potezi.ime))
                 self.na_potezi.ponastavi()
             
 
@@ -194,18 +194,19 @@ class tkmlin():
         else:
             self.na_potezi = self.igralec_crni
         self.na_potezi.ponastavi()
-        self.textbox.set("Na potezi je {0}".format(self.na_potezi.barva))
+        self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
 
 
 class Igralec():
     """cloveski igralec"""
-    def __init__(self, tkmlin, barva):
+    def __init__(self, tkmlin, barva, ime):
         """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
         self.gui = tkmlin
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
         self.barva = barva
+        self.ime = ime
 
     def ponastavi(self):
         """resetira igrelcevo potezo na nevtralno pozicijo"""
@@ -243,7 +244,7 @@ class Igralec():
                     #nismo izvedli veljavne poteze, vrnemo se na zacetek poteze!
                     self.ponastavi()
                     self.gui.DEFCON = 1
-                    self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.barva))
+                    self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.ime))
                     
             else:
                 #preveri ali je izbran zeton sploh nas
@@ -255,7 +256,7 @@ class Igralec():
                 else:
                     self.ponastavi()
                     self.gui.DEFCON = 1
-                    self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.barva))
+                    self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.ime))
 
 
 if __name__ == "__main__":
