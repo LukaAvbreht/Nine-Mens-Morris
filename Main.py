@@ -17,10 +17,6 @@ class tkmlin():
         #igralca ki igrata igro
         self.ime_igralec_crni = 'Zeleni'
         self.ime_igralec_beli = 'Oranžni'
-
-        #igralca
-        self.igralec_crni = Igralec(self, self.barva1,self.ime_igralec_crni)
-        self.igralec_beli = Igralec(self, self.barva2,self.ime_igralec_beli)
         
         #kdo je na potezi
         self.na_potezi = None
@@ -129,7 +125,10 @@ class tkmlin():
             if self.DEFCON in [1,2]: #V primeru, da lahko resetiramo klik
                 self.na_potezi.ponastavi()
                 self.DEFCON = 1
-                self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.ime))
+                if self.igra.faza == 0:
+                    self.textbox.set("{0}: Izberi polje kamor želiš postaviti svoj žeton!".format(self.na_potezi.ime))
+                else:
+                    self.textbox.set("{0}: Izberi svoj žeton!".format(self.na_potezi.ime))
             elif self.DEFCON == 3:
                 self.textbox.set("{0}: Vzami nasprotnikov žeton!".format(self.na_potezi.ime))
             else:
@@ -150,7 +149,11 @@ class tkmlin():
         besedilo.pack()
         
     def newgame(self):
+        """ Nastavi novo igro. """
         self.igra = Igra()
+        #igralca
+        self.igralec_crni = Igralec(self, self.barva1,self.ime_igralec_crni)
+        self.igralec_beli = Igralec(self, self.barva2,self.ime_igralec_beli)
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill="")
         self.na_potezi = self.igralec_crni
