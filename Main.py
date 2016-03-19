@@ -165,12 +165,8 @@ class tkmlin():
                 self.DEFCON = 3
                 self.textbox.set("Izberi zeton, ki ga bos pobral")
             else:
-                if self.na_potezi == self.igralec_crni:
-                    self.na_potezi = self.igralec_beli
-                    self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
-                else:
-                    self.na_potezi = self.igralec_crni
-                    self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
+                self.na_potezi = self.nasprotnik()
+                self.textbox.set('Na potezi je {}.'.format(self.na_potezi.ime))
                 if len(self.igra.veljavne_poteze()) == 0:
                     return self.zmagovalno_okno(self.nasprotnik())
         else:
@@ -183,10 +179,7 @@ class tkmlin():
             else:
                 #se pripravimo na naslednjo potezo
                 self.DEFCON = 1
-                if self.na_potezi == self.igralec_crni:
-                    self.na_potezi = self.igralec_beli
-                else:
-                    self.na_potezi = self.igralec_crni
+                self.na_potezi = self.nasprotnik()
                 self.textbox.set("Izberi polje {0}".format(self.na_potezi.ime))
                 self.na_potezi.ponastavi()
                 if len(self.igra.veljavne_poteze()) == 0:
@@ -202,10 +195,7 @@ class tkmlin():
             for key, value in self.igra.figurice.items():
                 if self.igra.figurice[key] < 3:
                     self.zmagovalno_okno(self.na_potezi)
-        if self.na_potezi == self.igralec_crni:
-            self.na_potezi = self.igralec_beli
-        else:
-            self.na_potezi = self.igralec_crni
+        self.na_potezi = self.nasprotnik()
         self.na_potezi.ponastavi()
         self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
         if len(self.igra.veljavne_poteze()) == 0:
