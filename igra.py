@@ -79,22 +79,14 @@ class Igra():
 
     def je_veljavna(self, i, j, a = False, b = False):
         """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
-        #################3### test za sosedi
-        def test(slovar):
-            for key in slovar.keys():
-                for value in slovar[key]:
-                    if key not in slovar[value]:
-                        print(key, value)
-                        return False
-            return True
-        #print(test(self.sosedi))
-        ##################### test ni našel napake
-        
         if self.faza == 0:
             return self.plosca[i][j] == None
         else:
             if self.plosca[i][j] == None and self.plosca[a][b] == self.na_potezi:
-                return (i,j) in self.sosedi[(a,b)]
+                if self.figurice[self.na_potezi] == 3:
+                    return True
+                else:
+                    return (i,j) in self.sosedi[(a,b)]
             else:
                 return False
 
@@ -192,4 +184,5 @@ class Igra():
         if self.lahko_jemljem(i,j):
             self.plosca[i][j] = None
             self.figurice[trenutni_nasprotnik] -= 1
+            print(self.na_potezi, self.figurice[trenutni_nasprotnik],self.figurice)
 

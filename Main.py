@@ -1,4 +1,4 @@
-__author__ = 'LukaAvbreht,SamoKralj'
+__author__ = 'LukaAvbreht, SamoKralj'
 from tkinter import *
 from igra import *
 
@@ -130,9 +130,11 @@ class tkmlin():
         
         pop_up = Toplevel(height = 500, width = 500)
         pop_up.title("Zmagovalec")
-        
-
-        besedilo = Message(pop_up, text = str("Bravo! Zmagal je igralec " + str(zmagovalec) + "!"))
+        if zmagovalec != False:
+            message = str("Bravo! Zmagal je igralec " + str(zmagovalec.ime) + "!")
+        else:
+            message = "Igra ni končana!"
+        besedilo = Message(pop_up, text = message)
         besedilo.pack()
         
     def newgame(self):
