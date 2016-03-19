@@ -155,22 +155,30 @@ class Igra():
                             poteza = (prva, druga, i, j)
                             mozne_poteze.append(poteza)
             return mozne_poteze
-                            
-                    
-            
 
-
-
+    def veljavna_jemanja(self):
+        """Funkcija vrne vse žetone, ki jih lahko pojemo. """
+        lahko_vzamemo = [] #zetoni, ki jih lahko jemljemo
+        vsi_naspr_zetoni = [] #vsi zetoni
+        for i in range(7):
+            for j in range(7):
+                if self.plosca[i][j] == self.na_potezi:
+                    vsi_naspr_zetoni.append((i, j))
+                    if self.postavljen_mlin((i, j)) == False: #preverimo, ce je v mlinu
+                        lahko_vzamemo.append((i, j))
+        if len(lahko_vzamemo) == 0: #če zetonov ni ali so vsi zetoni v mlinu,
+                                    #lahko vzamemo karkoli. Situacija ko zetonov ni
+                                    #je seveda trivialna in ni mogoča.
+            return vsi_naspr_zetoni
+        else: #drugače vrnemo vse, ki jih lahko jemljemo!
+            return lahko_vzamemo
+                                            
     def lahko_jemljem(self, i, j):
-        if self.plosca[i][j] == self.na_potezi:
-            return self.postavljen_mlin((i, j)) == False
-        else:
-            return False
+        """Funkcija pove, ali izbrani zeton lahko pojemo."""
+        return (i, j) in self.veljavna_jemanja()
 
-    # funkcijo poteza je treba popravit na nacin da dodava se dva argumenta ( se kateri kamen uzamemo, ce dosezemo mlin)
-    # ki bo sta po defoltu enaka none
     def poteza(self, i, j, a=False, b=False):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
-        """Izvede potezo. kam (i,j) od kje (a,b)"""
+        """Izvede potezo. kam (i,j) od kje (a,b). """
         if self.faza == 0:
             if self.je_veljavna(i,j):
                 self.figurice[self.na_potezi] +=1
@@ -197,8 +205,7 @@ class Igra():
 
 
     def odstrani_figurico(self, i, j):
-        """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
-        #trenutni_nasprotnik = nasprotnik(self.na_potezi)
+        """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti."""
         if self.lahko_jemljem(i,j):
             polje = self.plosca[i][j]
             self.figurice[polje] -= 1
