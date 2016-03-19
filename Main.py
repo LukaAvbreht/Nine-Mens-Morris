@@ -126,12 +126,14 @@ class tkmlin():
                 else:
                     pass
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
-            if self.DEFCON in [1,2]:
+            if self.DEFCON in [1,2]: #V primeru, da lahko resetiramo klik
                 self.na_potezi.ponastavi()
                 self.DEFCON = 1
                 self.textbox.set("{0}: Izberi svoj žeton".format(self.na_potezi.ime))
-            else:
+            elif self.DEFCON == 3:
                 self.textbox.set("{0}: Vzami nasprotnikov žeton!".format(self.na_potezi.ime))
+            else:
+                pass
 
     #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
     def zmagovalno_okno(self, zmagovalec = False):
@@ -150,7 +152,7 @@ class tkmlin():
     def newgame(self):
         self.igra = Igra()
         for i in self.id_polje:
-            self.plosca.itemconfig(i, fill=None)
+            self.plosca.itemconfig(i, fill="")
         self.na_potezi = self.igralec_crni
         self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
         self.DEFCON = 1

@@ -180,9 +180,10 @@ class Igra():
 
     def odstrani_figurico(self, i, j):
         """Odstrani nasprotnikovo figurico v primeru da jo je veljavno odstraniti"""
-        trenutni_nasprotnik = nasprotnik(self.na_potezi)
+        #trenutni_nasprotnik = nasprotnik(self.na_potezi)
         if self.lahko_jemljem(i,j):
+            polje = self.plosca[i][j]
+            self.figurice[polje] -= 1
             self.plosca[i][j] = None
-            self.figurice[trenutni_nasprotnik] -= 1
-            print(self.na_potezi, self.figurice[trenutni_nasprotnik],self.figurice)
+            print(self.na_potezi, self.figurice)
 
