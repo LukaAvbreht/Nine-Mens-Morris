@@ -129,7 +129,7 @@ class Igra():
                     if self.je_veljavna(i,j):
                         mozne_poteze.append((i,j))
             return mozne_poteze
-        elif self.faza == 1:  #treba se dodat da preveri ce si naredu mlin
+        elif self.faza == 1 and self.figurice[self.na_potezi] != 3:  #treba se dodat da preveri ce si naredu mlin
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
@@ -139,8 +139,26 @@ class Igra():
                                 dod = (sos[0],sos[1],i,j)
                                 mozne_poteze.append(dod)
             return mozne_poteze
-        #faza premikanja figuric
-        #odvisno od tega kdo je na potezi in koliko figuric še ima
+        else: #v primeru, da lahko letimo
+            mozne_poteze = []
+            prosta_polja = []
+            #poiscemo vsa prosta polja
+            for i in range(7):
+                for j in range(7):
+                    if self.plosca[i][j] == None:
+                        prosta_polja.append((i,j))
+            #poiscemo vse 3 nase zetone in jih povezemo s prostimi polji
+            for i in range(7):
+                for j in range(7):
+                    if self.plosca[i][j] == self.na_potezi:
+                        for (prva,druga) in prosta_polja:
+                            poteza = (prva, druga, i, j)
+                            mozne_poteze.append(poteza)
+            return mozne_poteze
+                            
+                    
+            
+
 
 
     def lahko_jemljem(self, i, j):
@@ -185,5 +203,4 @@ class Igra():
             polje = self.plosca[i][j]
             self.figurice[polje] -= 1
             self.plosca[i][j] = None
-            print(self.na_potezi, self.figurice)
 
