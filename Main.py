@@ -74,7 +74,7 @@ class tkmlin():
         gumbtest2 = Button(master, text="Kao Zmaga", command=self.zmagovalno_okno)
         gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
 
-        gumbtest3 = Button(master, text="test2", command=self.test2())
+        gumbtest3 = Button(master, text="test2", command=self.test2)
         gumbtest3.grid(row=0, column=12, sticky=N+W+E+S)
 
     def test(self):
