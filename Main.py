@@ -60,8 +60,11 @@ class tkmlin():
         #DEFCON 4 : Igre je konec, polje je zablokirano,
         
         #generira gumbe ki niso povezani z igro
-        gumb_novaigra = Button(master, text="Nova igra", command= self.newgame)
+        gumb_novaigra = Button(master, text="PvP", command= self.newgame)
         gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
+
+        gumb_racigra = Button(master, text="PvAI", command= self.newgamerac)
+        gumb_racigra.grid(row=1, column=9, sticky=N+W+E+S)
 
     #################################################################################
         gumbtest = Button(master, text="TEST", command= self.test)
@@ -147,7 +150,18 @@ class tkmlin():
             message = "Igra ni končana!"
         besedilo = Message(pop_up, text = message)
         besedilo.pack()
-        
+
+    def newgamerac(self):
+        self.igra = Igra()
+        self.igralec_crni = Igralec(self, self.barva1, self.ime_igralec_crni)
+        self.igralec_beli = Racunalnik(self, self.barva2,self.ime_igralec_beli)
+
+        for i in self.id_polje:
+            self.plosca.itemconfig(i, fill="")
+        self.na_potezi = self.igralec_crni
+        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
+        self.DEFCON = 1
+
     def newgame(self):
         """ Nastavi novo igro. """
         self.igra = Igra()
@@ -271,6 +285,30 @@ class Igralec():
                     self.gui.DEFCON = 1
                     self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.ime))
 
+class Racunalnik():
+    def __init__(self, gui, barva, ime):
+        self.gui = gui
+        self.ime = ime
+        self.barva = barva
+        self.poteza = None
+        self.jemljem = None
+
+        self.prvi_klik = None
+        self.drugi_klik = None
+        self.tretji_klik = None
+
+    def ponastavi(self):
+        self.prvi_klik = None
+        self.drugi_klik = None
+        self.tretji_klik = None
+
+    def jemlji(self):
+        #racunalnik vse ignorira
+        pass
+
+    def uporabnikova_poteza(self):
+        #racunalnik vse ignorira
+        pass
 
 if __name__ == "__main__":
     root = Tk()
