@@ -25,7 +25,6 @@ class Igra():
                       [None," "," ",None," "," ",None]]
         #None polja so prosta polja, " " so samo fillerji.
         self.na_potezi = IGRALEC_BELI
-        self.zadnja_poteza = None  #to pomoje ne rabimo
 
         self.figurice = {IGRALEC_BELI: 0 , IGRALEC_CRNI: 0}
         #bi sproti spremljali koliko ima kdo figuric in v primeru, da je vrednost 2, 3 naredimo svoje
@@ -123,6 +122,7 @@ class Igra():
     def veljavne_poteze(self):
         """ Glede na trenutno fazo vrne mogoče možne poteze. """
         if self.faza == 0:  #trenba preverit ce si naredu mlin in smiselno dodati to v potezo
+                            # Za potezo bi preverila le ce je mogoca, ce jemljes bi to stela kot svojo potezo
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):

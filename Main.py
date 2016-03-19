@@ -93,6 +93,13 @@ class tkmlin():
         print(self.igra.veljavne_poteze())
     ##################################################################################
 
+    def nasprotnik(self):
+        """Vrne nasprornika."""
+        if self.na_potezi == self.igralec_crni:
+            return self.igralec_beli
+        else:
+            return self.igralec_crni
+
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
         x = event.x
@@ -164,6 +171,8 @@ class tkmlin():
                 else:
                     self.na_potezi = self.igralec_crni
                     self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
+                if len(self.igra.veljavne_poteze()) == 0:
+                    return self.zmagovalno_okno(self.nasprotnik())
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
@@ -180,6 +189,8 @@ class tkmlin():
                     self.na_potezi = self.igralec_crni
                 self.textbox.set("Izberi polje {0}".format(self.na_potezi.ime))
                 self.na_potezi.ponastavi()
+                if len(self.igra.veljavne_poteze()) == 0:
+                    return self.zmagovalno_okno(self.nasprotnik())
             
 
     def vzami_zeton(self, id_1, i, j):
@@ -197,6 +208,8 @@ class tkmlin():
             self.na_potezi = self.igralec_crni
         self.na_potezi.ponastavi()
         self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
+        if len(self.igra.veljavne_poteze()) == 0:
+            return self.zmagovalno_okno(self.nasprotnik())
 
 
 class Igralec():
