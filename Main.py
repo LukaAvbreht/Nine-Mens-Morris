@@ -1,12 +1,16 @@
 __author__ = 'LukaAvbreht, SamoKralj'
 from tkinter import *
 from igra import *
+import PIL
+from PIL import ImageTk,Image
+
 
 class tkmlin():
     def __init__(self,master):
         self.master = master
         self.master.minsize(width=900, height=700)
         self.bg = 'LightYellow2'  #'LemonChiffon'
+        self.zmag_okno = None  #Zmagovalno okno
 
         self.igra = Igra()
 
@@ -139,17 +143,38 @@ class tkmlin():
 
     #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
     def zmagovalno_okno(self, zmagovalec = False):
+        """Napravi zmagovalno okno"""
+        def unici():
+            """Zapre pomozno okno z podatki o zmagi"""
+            self.zmag_okno.destroy()
+            self.zmag_okno = None
+
         self.DEFCON = 4
         #zablokiramo polje
-        
-        pop_up = Toplevel(height = 500, width = 500)
-        pop_up.title("Zmagovalec")
+        if self.zmag_okno != None:
+            self.zmag_okno.lift()
+            return
+        self.zmag_okno = Toplevel(width=400, height=300)
+        self.zmag_okno.title("Zmagovalec")
+        self.zmag_okno.resizable(width=False, height=False)
+        self.zmag_okno.protocol("WM_DELETE_WINDOW", unici)
+
+        self.zmag_okno.grid_columnconfigure(0, minsize=400)
+        #self.zmag_okno.grid_rowconfigure(0, minsize=80)
+        #self.zmag_okno.grid_rowconfigure(2, minsize=80)
+        besedilo = StringVar(self.zmag_okno)
+        Label(self.zmag_okno, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
         if zmagovalec != False:
             message = str("Bravo! Zmagal je igralec " + str(zmagovalec.ime) + "!")
         else:
             message = "Igra ni končana!"
-        besedilo = Message(pop_up, text = message)
-        besedilo.pack()
+        besedilo.set(message)
+        im = Image.open('pokal1.gif')
+        photo = ImageTk.PhotoImage(im)
+        label = Label(self.zmag_okno, image=photo)
+        label.image = photo
+        label.grid(row=1, column=0)
+
 
     def newgamerac(self):
         self.igra = Igra()
