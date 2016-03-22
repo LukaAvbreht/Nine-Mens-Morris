@@ -143,7 +143,7 @@ class tkmlin():
 
     #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
     def zmagovalno_okno(self, zmagovalec = False):
-        """Napravi zmagovalno okno"""
+        """Napravi zmagovalno okno, ko se igra zaključi"""
         def unici():
             """Zapre pomozno okno z podatki o zmagi"""
             self.zmag_okno.destroy()
