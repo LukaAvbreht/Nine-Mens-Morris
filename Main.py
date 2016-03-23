@@ -241,10 +241,10 @@ class tkmlin():
                 self.zamenjaj_na_potezi()
             
 
-    def vzami_zeton(self, id_1, i, j):
+    def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
-        self.igra.odstrani_figurico(i, j)
+        self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
             for key, value in self.igra.figurice.items():
@@ -275,7 +275,7 @@ class Igralec():
         koord_1 = self.gui.id_polje[self.tretji_klik][0]
         koord_2 = self.gui.id_polje[self.tretji_klik][1]
         if self.gui.igra.lahko_jemljem(koord_1, koord_2):
-            self.gui.vzami_zeton(self.tretji_klik, koord_1, koord_2)
+            self.gui.vzami_zeton(self.tretji_klik)
         else:
             self.ponastavi()
             self.gui.textbox.set("Izberi žeton, ki ga smeš vzeti!")
@@ -334,7 +334,7 @@ class Racunalnik():
         self.drugi_klik = None
         self.tretji_klik = None
 
-    def jemlji(self):
+    def jemljem(self):
         #racunalnik vse ignorira
         pass
 
@@ -359,8 +359,12 @@ class Racunalnik():
                 id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
                 self.gui.izvedi_potezo(id1,id2)
             self.mislec = None
+            if self.algoritem.jemljem != None:
+                id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
+                self.gui.vzami_zeton(id3)
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
+        self.gui.igra.izpisi_plosco()
 
 
 
@@ -370,11 +374,15 @@ class Alpha_betta():
         self.igra = None
         self.jaz = None
         self.poteza = None #sem algoritem shrani potezo ko jo naredi
+        self.jemljem = None
 
     def izracunaj_potezo(self,igra):
         self.igra = igra
         self.jaz = self.igra.na_potezi
         self.poteza = self.igra.veljavne_poteze()[0]
+        if self.igra.postavljen_mlin((self.poteza[0],self.poteza[1])):
+            self.jemljem = self.igra.veljavna_jemanja()[0]
+        print(self.poteza,self.jemljem,self.igra.postavljen_mlin((self.poteza[0],self.poteza[1])))
 
 
 if __name__ == "__main__":

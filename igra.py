@@ -71,6 +71,12 @@ class Igra():
                   (6,6) : [(6,3),(3,6)],
                   }
 
+    def kopiraj_plosco(self):
+        novaplosca = []
+        for vrstica in self.plosca:
+            novaplosca.append(vrstica[:])
+        return novaplosca
+
     def izpisi_plosco(self):  #to je funkcija namenjena programerju
         """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
         for vrstica in self.plosca:
