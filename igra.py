@@ -127,7 +127,7 @@ class Igra():
             for i in range(7):
                 for j in range(7):
                     if self.je_veljavna(i,j):
-                        mozne_poteze.append((i,j))
+                        mozne_poteze.append((i,j,False,False))
             return mozne_poteze
         elif self.faza == 1 and self.figurice[self.na_potezi] != 3:  #treba se dodat da preveri ce si naredu mlin
             mozne_poteze = []

@@ -3,6 +3,7 @@ from tkinter import *
 from igra import *
 import PIL
 from PIL import ImageTk,Image
+import threading
 
 
 class tkmlin():
@@ -31,6 +32,7 @@ class tkmlin():
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
         self.id_polje = dict()
+        self.polje_id = dict()
 
         #crte za igralno plosco
         self.plosca.create_rectangle(50, 50, 650, 650)
@@ -48,6 +50,7 @@ class tkmlin():
                 if self.igra.plosca[j][i]==None:
                     x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline="")
                     self.id_polje[x] = (i,j)
+                    self.polje_id[(i,j)] = x
 
         self.plosca.bind("<Button-1>", self.klik)
 
@@ -110,6 +113,8 @@ class tkmlin():
             self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
             if len(self.igra.veljavne_poteze()) == 0:
                 return self.zmagovalno_okno(self.nasprotnik())
+        if type(self.na_potezi) == Racunalnik:
+            self.na_potezi.igraj_potezo()
 
 
 
@@ -189,7 +194,7 @@ class tkmlin():
     def newgamerac(self):
         self.igra = Igra()
         self.igralec_crni = Igralec(self, self.barva1, self.ime_igralec_crni)
-        self.igralec_beli = Racunalnik(self, self.barva2,self.ime_igralec_beli)
+        self.igralec_beli = Racunalnik(self, self.barva2,self.ime_igralec_beli,Alpha_betta(1))
 
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill="")
@@ -210,7 +215,7 @@ class tkmlin():
         self.DEFCON = 1
 
     def izvedi_potezo(self, id_1=False, id_2=False):
-        """Funcija ki izvede potezo ter premakne igralne figure"""
+        """Funcija ki izvede potezo ter premakne igralne figure iz polja id_1 na polje id_2"""
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -310,7 +315,7 @@ class Igralec():
                     self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.ime))
 
 class Racunalnik():
-    def __init__(self, gui, barva, ime):
+    def __init__(self, gui, barva, ime, Algoritem):
         self.gui = gui
         self.ime = ime
         self.barva = barva
@@ -320,6 +325,9 @@ class Racunalnik():
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
+
+        self.algoritem = Algoritem
+        self.mislec = None
 
     def ponastavi(self):
         self.prvi_klik = None
@@ -333,6 +341,41 @@ class Racunalnik():
     def uporabnikova_poteza(self):
         #racunalnik vse ignorira
         pass
+
+    def igraj_potezo(self):
+        """Racunalnik izvede potezo ki jo pridobi s pomocjo algoritma"""
+        self.mislec = threading.Thread(target= lambda: self.algoritem.izracunaj_potezo(self.gui.igra))
+        self.mislec.start()
+        self.gui.plosca.after(100, self.preveri_potezo)
+
+    def preveri_potezo(self):
+        """Vsakih 100ms preveri ali je algoritem ze izracunal potezo"""
+        if self.algoritem.poteza != None:
+            if self.algoritem.poteza[2] == False:
+                id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                self.gui.izvedi_potezo(id2)
+            else:
+                id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
+                id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                self.gui.izvedi_potezo(id1,id2)
+            self.mislec = None
+        else:
+            self.gui.plosca.after(100, self.preveri_potezo)
+
+
+
+class Alpha_betta():
+    def __init__(self,globina):
+        self.globina = globina
+        self.igra = None
+        self.jaz = None
+        self.poteza = None #sem algoritem shrani potezo ko jo naredi
+
+    def izracunaj_potezo(self,igra):
+        self.igra = igra
+        self.jaz = self.igra.na_potezi
+        self.poteza = self.igra.veljavne_poteze()[0]
+
 
 if __name__ == "__main__":
     root = Tk()
