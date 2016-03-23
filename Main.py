@@ -103,6 +103,16 @@ class tkmlin():
         else:
             return self.igralec_crni
 
+    def zamenjaj_na_potezi(self):
+        self.na_potezi = self.nasprotnik()
+        if type(self.na_potezi) == Igralec:
+            self.na_potezi.ponastavi()
+            self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
+            if len(self.igra.veljavne_poteze()) == 0:
+                return self.zmagovalno_okno(self.nasprotnik())
+
+
+
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
         x = event.x
@@ -212,10 +222,7 @@ class tkmlin():
                 self.DEFCON = 3
                 self.textbox.set("Izberi zeton, ki ga bos pobral")
             else:
-                self.na_potezi = self.nasprotnik()
-                self.textbox.set('Na potezi je {}.'.format(self.na_potezi.ime))
-                if len(self.igra.veljavne_poteze()) == 0:
-                    return self.zmagovalno_okno(self.nasprotnik())
+                self.zamenjaj_na_potezi()
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
@@ -226,11 +233,7 @@ class tkmlin():
             else:
                 #se pripravimo na naslednjo potezo
                 self.DEFCON = 1
-                self.na_potezi = self.nasprotnik()
-                self.textbox.set("Izberi polje {0}".format(self.na_potezi.ime))
-                self.na_potezi.ponastavi()
-                if len(self.igra.veljavne_poteze()) == 0:
-                    return self.zmagovalno_okno(self.nasprotnik())
+                self.zamenjaj_na_potezi()
             
 
     def vzami_zeton(self, id_1, i, j):
@@ -242,11 +245,7 @@ class tkmlin():
             for key, value in self.igra.figurice.items():
                 if self.igra.figurice[key] < 3:
                     self.zmagovalno_okno(self.na_potezi)
-        self.na_potezi = self.nasprotnik()
-        self.na_potezi.ponastavi()
-        self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
-        if len(self.igra.veljavne_poteze()) == 0:
-            return self.zmagovalno_okno(self.nasprotnik())
+        self.zamenjaj_na_potezi()
 
 
 class Igralec():
