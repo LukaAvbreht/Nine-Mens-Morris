@@ -24,11 +24,11 @@ class tkmlin():
         self.barva2 = 'chocolate1'
 
         #igralca ki igrata igro
-        self.ime_igralec_crni = 'Zeleni'
-        self.ime_igralec_beli = 'Oranžni'
+        self.ime_igralec1 = 'Zeleni'
+        self.ime_igralec2 = 'Oranžni'
 
-        self.nastavitve_igralca(self.ime_igralec_crni, 1)
-        self.nastavitve_igralca(self.ime_igralec_beli, 2)
+        self.nastavitve_igralca(self.ime_igralec1, 1)
+        self.nastavitve_igralca(self.ime_igralec2, 2)
         
         #kdo je na potezi
         self.na_potezi = None
@@ -101,10 +101,10 @@ class tkmlin():
 
     def nasprotnik(self):
         """Vrne nasprornika."""
-        if self.na_potezi == self.igralec_crni:
-            return self.igralec_beli
+        if self.na_potezi == self.igralec1:
+            return self.igralec2
         else:
-            return self.igralec_crni
+            return self.igralec1
 
     def zamenjaj_na_potezi(self):
         self.na_potezi = self.nasprotnik()
@@ -193,25 +193,30 @@ class tkmlin():
 
     def newgamerac(self):
         self.igra = Igra()
-        self.igralec_crni = Igralec(self, self.barva1, self.ime_igralec_crni)
-        self.igralec_beli = Racunalnik(self, self.barva2,self.ime_igralec_beli,Alpha_betta(1))
-
-        for i in self.id_polje:
-            self.plosca.itemconfig(i, fill="")
-        self.na_potezi = self.igralec_crni
-        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
-        self.DEFCON = 1
+        igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
+        igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(1))
+        self.nova_igra(igralec1, igralec2)
 
     def newgame(self):
         """ Nastavi novo igro. """
         self.igra = Igra()
         #igralca
-        self.igralec_crni = Igralec(self, self.barva1,self.ime_igralec_crni)
-        self.igralec_beli = Igralec(self, self.barva2,self.ime_igralec_beli)
+        igralec1 = Igralec(self, self.barva1,self.ime_igralec1)
+        igralec2 = Igralec(self, self.barva2,self.ime_igralec2)
+        self.nova_igra(igralec1, igralec2)
+
+    def nova_igra(self, igralec1, igralec2):
+        self.igra = Igra()
+        self.igralec1 = igralec1
+        self.igralec2 = igralec2
+        self.ponastavi()
+
+    def ponastavi(self):
+        """pripravi polje za novo igro"""
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill="")
-        self.na_potezi = self.igralec_crni
-        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
+        self.na_potezi = self.igralec1
+        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
         self.DEFCON = 1
 
     def izvedi_potezo(self, id_1=False, id_2=False):
@@ -252,9 +257,8 @@ class tkmlin():
                     self.zmagovalno_okno(self.na_potezi)
         self.zamenjaj_na_potezi()
 
-
 class Igralec():
-    """cloveski igralec. primer uporabe znotraj nase igre: self.igralec_crni = Igralec(self, 'Black', 'Marjan')"""
+    """cloveski igralec. primer uporabe znotraj nase igre: self.igralec1 = Igralec(self, 'Black', 'Marjan')"""
     def __init__(self, tkmlin, barva, ime):
         """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
         self.gui = tkmlin
