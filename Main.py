@@ -1,7 +1,6 @@
 __author__ = 'LukaAvbreht, SamoKralj'
 from tkinter import *
 from igra import *
-import PIL
 from PIL import ImageTk,Image
 import threading
 
@@ -43,6 +42,7 @@ class tkmlin():
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="PvP", command=self.newgame)
         menu_igra.add_command(label="PvAi", command=self.newgamerac)
+        menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
 
         menu_test = Menu(menu)
         menu.add_cascade(label="Test", menu=menu_test)
@@ -213,6 +213,70 @@ class tkmlin():
         self.igralec1 = igralec1
         self.igralec2 = igralec2
         self.ponastavi()
+
+    def izbira_nove_igre(self):
+        """Napravi okno, kjer si lahko izberemo nastavitve za novo igro, ter jo tako zacnemo"""
+
+        def creategame():
+            """Pomozna funkcija ki naredi novo igro"""
+            self.ime_igralec1 = ime1.get()
+            self.ime_igralec2 = ime2.get()
+            if igralec1_clovek.get():
+                igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
+            else:
+                igralec1 = Racunalnik(self, self.barva1, self.ime_igralec1, Alpha_betta(1))
+            if igralec2_clovek.get():
+                igralec2 = Igralec(self, self.barva2, self.ime_igralec2)
+            else:
+                igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(1))
+            self.nova_igra(igralec1,igralec2)
+            nov_game.destroy()
+
+
+
+        #ustvari novo okno
+        nov_game = Toplevel()
+        nov_game.grab_set()
+        nov_game.title('Nine Men\'s Morris - nova igra')     #nastavi ime okna
+        nov_game.resizable(width=False, height=False)
+
+        for stolpec in range(4):
+            nov_game.grid_columnconfigure(stolpec, minsize=100)
+
+        Label(nov_game, text='Nastavitve nove igre', font=('Times',20)).grid(column=0, row=0, columnspan=5)
+
+        #nastavitve igralcev
+        Label(nov_game, text='Igralec 1', font=('Times',12)).grid(column=1, row=1)
+        Label(nov_game, text='Igralec 2', font=('Times',12)).grid(column=3, row=1)
+        Label(nov_game, text="Tip igralca:").grid(row=2, column=0, rowspan=2, sticky="E")
+        Label(nov_game, text="Tip igralca:").grid(row=2, column=2, rowspan=2, sticky="E")
+
+        igralec1_clovek = BooleanVar()
+        igralec1_clovek.set(True)
+        igralec2_clovek = BooleanVar()
+        igralec2_clovek.set(True)
+        igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik", False, igralec1_clovek, 4, 1),
+                   ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik", False, igralec2_clovek, 4, 3)]
+
+        for besedilo, vrednost, spremenljivka, vrstica, stolpec in igralci:
+            Radiobutton(nov_game, text=besedilo, variable=spremenljivka, value=vrednost, width=10, anchor="w")\
+                .grid(row=vrstica, column=stolpec)
+
+        Label(nov_game, text="Ime igralca:").grid(row=5, column=0, sticky="E")
+        Label(nov_game, text="Ime igralca:").grid(row=5, column=2, sticky="E")
+
+        ime1 = Entry(nov_game, font=('Times', 12), width=10)
+        ime1.grid(row=5, column=1)
+        ime1.insert(0, self.ime_igralec1)
+
+        ime2 = Entry(nov_game, font=('Times', 12), width=10)
+        ime2.grid(row=5, column=3)
+        ime2.insert(0, self.ime_igralec2)
+
+        Button(nov_game, text="Prekliči", width=20, height=2,
+                  command=lambda: new_game.destroy()).grid(row=6, column=0, columnspan=2, sticky=N+W+E+S)
+        Button(nov_game, text="Zacni igro", width=20, height=2,
+                  command=lambda: creategame()).grid(row=6, column=2, columnspan=2, sticky=N+W+E+S)
 
     def ponastavi(self):
         """pripravi polje za novo igro"""
