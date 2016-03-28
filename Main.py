@@ -21,14 +21,16 @@ class tkmlin():
 
         #tuki si bos lahko zbiru kako barva tvoja polja
         self.barva1 = 'forest green'
+        self.barva1hover = 'yellow green'
         self.barva2 = 'chocolate1'
+        self.barva2hover = 'tan1'
 
         #igralca ki igrata igro
         self.ime_igralec1 = 'Zeleni'
         self.ime_igralec2 = 'Oranžni'
 
-        self.nastavitve_igralca(self.ime_igralec1, 1)
-        self.nastavitve_igralca(self.ime_igralec2, 2)
+        self.nastavitve_obstraneh(self.ime_igralec1, 1)
+        self.nastavitve_obstraneh(self.ime_igralec2, 2)
         
         #kdo je na potezi
         self.na_potezi = None
@@ -51,7 +53,7 @@ class tkmlin():
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10, relief=SUNKEN)  #SUNKEN,RAISED
         self.plosca.grid(row=1, column=2, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
-        #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
+        #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri ter obraten slovar
         self.id_polje = dict()
         self.polje_id = dict()
 
@@ -87,7 +89,7 @@ class tkmlin():
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
 
-    def nastavitve_igralca(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
+    def nastavitve_obstraneh(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
         """Funkcija ki naredi stranske nastavitve na plosci"""
         sprem = int()  #nastavi na katero stran plochs se generira zadeva
         if st == 1:
@@ -156,7 +158,6 @@ class tkmlin():
             else:
                 pass
 
-    #Trenutno zmagovalno okno odpre kar nekje in ni lepega izgleda!
     def zmagovalno_okno(self, zmagovalec = False):
         """Napravi zmagovalno okno, ko se igra zaključi"""
         def unici():
@@ -192,6 +193,7 @@ class tkmlin():
 
 
     def newgamerac(self):
+        """moznosti izbire igre proti racunalniku"""
         self.igra = Igra()
         igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
         igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(1))
@@ -206,6 +208,7 @@ class tkmlin():
         self.nova_igra(igralec1, igralec2)
 
     def nova_igra(self, igralec1, igralec2):
+        """zacne novo igro z dvema igralcema, ki mu jih nastavimo"""
         self.igra = Igra()
         self.igralec1 = igralec1
         self.igralec2 = igralec2
@@ -312,7 +315,12 @@ class Igralec():
                 koord_2 = self.gui.id_polje[self.prvi_klik][1]
                 if self.gui.igra.plosca[koord_1][koord_2] == self.gui.igra.na_potezi:
                     self.gui.DEFCON = 2
-                    self.gui.textbox.set("Izberi kam želiš ta žeton premakniti")
+                    id_1 = self.gui.polje_id[(koord_1,koord_2)]
+                    self.gui.textbox.set("{0}, izberi kam želiš ta žeton premakniti".format(self.ime))
+                    if self.gui.na_potezi.barva == self.gui.barva1:
+                        self.gui.plosca.itemconfig(id_1, fill=self.gui.barva1hover)
+                    elif self.gui.na_potezi.barva == self.gui.barva2:
+                        self.gui.plosca.itemconfig(id_1, fill=self.gui.barva2hover)
                 else:
                     self.ponastavi()
                     self.gui.DEFCON = 1
