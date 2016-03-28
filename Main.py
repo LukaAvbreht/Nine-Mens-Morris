@@ -9,9 +9,13 @@ import threading
 class tkmlin():
     def __init__(self,master):
         self.master = master
-        self.master.minsize(width=900, height=700)
+        self.master.minsize(width=1100, height=700)
         self.bg = 'LightYellow2'  #'LemonChiffon'
         self.zmag_okno = None  #Zmagovalno okno
+
+        #nastavi minimalne sirine stolpcev v polju
+        for stolpec in range(11):
+            self.master.grid_columnconfigure(stolpec, minsize=100)
 
         self.igra = Igra()
 
@@ -22,6 +26,9 @@ class tkmlin():
         #igralca ki igrata igro
         self.ime_igralec_crni = 'Zeleni'
         self.ime_igralec_beli = 'Oranžni'
+
+        self.nastavitve_igralca(self.ime_igralec_crni, 1)
+        self.nastavitve_igralca(self.ime_igralec_beli, 2)
         
         #kdo je na potezi
         self.na_potezi = None
@@ -37,14 +44,12 @@ class tkmlin():
 
         menu_test = Menu(menu)
         menu.add_cascade(label="Test", menu=menu_test)
-        menu_test.add_command(label="TEST",  command= self.test)
         menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
-        menu_test.add_command(label="TEST2", command=self.test2)
 
 
         #Igralnaself.plosca
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10, relief=SUNKEN)  #SUNKEN,RAISED
-        self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
+        self.plosca.grid(row=1, column=2, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
         #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri
         self.id_polje = dict()
@@ -71,7 +76,7 @@ class tkmlin():
         self.plosca.bind("<Button-1>", self.klik)
 
         self.textbox = StringVar(master, value='Pozdravljeni!')
-        Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=7)
+        Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=11)
 
 
         #stanja za igro
@@ -81,22 +86,18 @@ class tkmlin():
         #DEFCON 2 : Igralec na potezi naj izbere drugo polje
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
-        
-    def test(self):
-        if self.DEFCON == 0:
-            for i in self.id_polje:
-                self.plosca.itemconfig(i,fill=self.barva1)
-            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_beli))
-            self.DEFCON = 1
-        else:
-            for i in self.id_polje:
-                self.plosca.itemconfig(i,fill=self.barva2)
-            self.textbox.set('Na potezi je {}.'.format(self.ime_igralec_crni))
-            self.DEFCON = 0
 
-    def test2(self):
-        print(self.igra.veljavne_poteze())
-    ##################################################################################
+    def nastavitve_igralca(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
+        """Funkcija ki naredi stranske nastavitve na plosci"""
+        sprem = int()  #nastavi na katero stran plochs se generira zadeva
+        if st == 1:
+            sprem=0
+        elif st == 2:
+            sprem=9
+        self.strime = StringVar(self.master, value=ime)
+        Label(self.master, textvariable=self.strime, font=("Helvetica", 20)).grid(row=1, column=sprem, columnspan=2)
+        self.intzet = IntVar(self.master, value=9)
+        Label(self.master, textvariable=self.intzet, font=("Helvetica", 30)).grid(row=2, column=sprem, columnspan=2)
 
     def nasprotnik(self):
         """Vrne nasprornika."""
