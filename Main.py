@@ -354,6 +354,7 @@ class Igralec():
 
     def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
+        globid_1 = int()
         if self.gui.igra.faza == 0:
             koord_1 = self.gui.id_polje[self.prvi_klik][0]
             koord_2 = self.gui.id_polje[self.prvi_klik][1]
@@ -365,12 +366,15 @@ class Igralec():
                 koord_2 = self.gui.id_polje[self.prvi_klik][1]
                 koord_3 = self.gui.id_polje[self.drugi_klik][0]
                 koord_4 = self.gui.id_polje[self.drugi_klik][1]
+                kopija1 = self.gui.id_polje[self.prvi_klik][:]
+                globid_1 = self.gui.polje_id[(kopija1[0], kopija1[1])]
                 if self.gui.igra.je_veljavna(koord_3, koord_4, koord_1, koord_2):
                     self.gui.izvedi_potezo(self.prvi_klik, self.drugi_klik)
                 else:
                     #nismo izvedli veljavne poteze, vrnemo se na zacetek poteze!
                     self.ponastavi()
                     self.gui.DEFCON = 1
+                    self.gui.plosca.itemconfig(globid_1, fill=self.gui.na_potezi.barva)
                     self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.ime))
                     
             else:
