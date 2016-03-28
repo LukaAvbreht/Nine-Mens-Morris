@@ -26,6 +26,22 @@ class tkmlin():
         #kdo je na potezi
         self.na_potezi = None
 
+        #meni za gumbe
+        menu = Menu(master)
+        master.config(menu=menu)
+
+        menu_igra = Menu(menu)
+        menu.add_cascade(label="Igra", menu=menu_igra)
+        menu_igra.add_command(label="PvP", command=self.newgame)
+        menu_igra.add_command(label="PvAi", command=self.newgamerac)
+
+        menu_test = Menu(menu)
+        menu.add_cascade(label="Test", menu=menu_test)
+        menu_test.add_command(label="TEST",  command= self.test)
+        menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
+        menu_test.add_command(label="TEST2", command=self.test2)
+
+
         #Igralnaself.plosca
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10, relief=SUNKEN)  #SUNKEN,RAISED
         self.plosca.grid(row=1, column=0, rowspan=7, columnspan=7, sticky=N+S+E+W)
@@ -66,23 +82,6 @@ class tkmlin():
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
         
-        #generira gumbe ki niso povezani z igro
-        gumb_novaigra = Button(master, text="PvP", command= self.newgame)
-        gumb_novaigra.grid(row=0, column=9, sticky=N+W+E+S)
-
-        gumb_racigra = Button(master, text="PvAI", command= self.newgamerac)
-        gumb_racigra.grid(row=1, column=9, sticky=N+W+E+S)
-
-    #################################################################################
-        gumbtest = Button(master, text="TEST", command= self.test)
-        gumbtest.grid(row=0, column=10, sticky=N+W+E+S)
-
-        gumbtest2 = Button(master, text="Kao Zmaga", command=self.zmagovalno_okno)
-        gumbtest2.grid(row=0, column=11, sticky=N+W+E+S)
-
-        gumbtest3 = Button(master, text="test2", command=self.test2)
-        gumbtest3.grid(row=0, column=12, sticky=N+W+E+S)
-
     def test(self):
         if self.DEFCON == 0:
             for i in self.id_polje:
