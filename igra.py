@@ -75,9 +75,17 @@ class Igra():
                   (6,3) : [(6,0),(6,6),(5,3)],
                   (6,6) : [(6,3),(3,6)],
                   }
+
+    def kopija(self):
+        copy = Igra()
+        copy.plosca = [self.plosca[i][:] for i in range(7)]
+        copy.na_potezi = self.na_potezi
+        return copy
+
+        
     def razveljavi(self):
         i,j,a,b,c,d,kdonapotezi = self.zgodovina.pop(-1)
-        print(i,j,a,b,c,d,kdonapotezi)
+        #print(i,j,a,b,c,d,kdonapotezi)
         self.plosca[i][j] = None
         if a == False and b == False:
             self.postavljenih -= 1
@@ -94,12 +102,15 @@ class Igra():
     def razveljavi_jemanje(self):
         c = self.zgodovina[-1][4]
         d = self.zgodovina[-1][5]
-        igralec = self.zgodovina[-1][6]
-        self.plosca[c][d] = nasprotnik(igralec)
-        self.figurice[nasprotnik(igralec)] += 1
-        self.mlin = True
-        self.zgodovina[-1][4] = False
-        self.zgodovina[-1][5] = False
+        if c == False and d == False:
+            pass
+        else:
+            igralec = self.zgodovina[-1][6]
+            self.plosca[c][d] = nasprotnik(igralec)
+            self.figurice[nasprotnik(igralec)] += 1
+            self.mlin = True
+            self.zgodovina[-1][4] = False
+            self.zgodovina[-1][5] = False
     
     def kopiraj_plosco(self):
         novaplosca = []
@@ -180,7 +191,7 @@ class Igra():
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
-                    if self.je_veljavna(i,j):
+                    if self.je_veljavna(i,j, False, False):
                         mozne_poteze.append((i,j,False,False))
             return mozne_poteze
         elif self.faza == 1 and self.figurice[self.na_potezi] > 3:
@@ -293,4 +304,13 @@ class Igra():
                         self.stanje = ("ZMAGA", IGRALEC_DVA)
                     else:
                         self.stanje = ("ZMAGA", IGRALEC_ENA)
+
+test = Igra()
+test.poteza(0,3)
+test.poteza(0,0)
+test.poteza(3,6)
+test.poteza(6,6)
+test.poteza(6,0)
+test.poteza(1,3)
+test.poteza(3,0)
 

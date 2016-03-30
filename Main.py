@@ -46,6 +46,7 @@ class tkmlin():
         menu_igra.add_command(label="PvP", command=self.newgame)
         menu_igra.add_command(label="PvAi", command=self.newgamerac)
         menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
+        menu_igra.add_command(label="Izpisi_plosco", command = self.izpisi)
 
         menu_test = Menu(menu)
         menu.add_cascade(label="Test", menu=menu_test)
@@ -91,6 +92,9 @@ class tkmlin():
         #DEFCON 2 : Igralec na potezi naj izbere drugo polje
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
+
+    def izpisi(self):
+        self.igra.izpisi_plosco()
 
     def nastavitve_obstraneh(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
         """Funkcija ki naredi stranske nastavitve na plosci"""
@@ -371,7 +375,6 @@ class Igralec():
 
     def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
-        globid_1 = int()
         if self.gui.igra.faza == 0:
             koord_1 = self.gui.id_polje[self.prvi_klik][0]
             koord_2 = self.gui.id_polje[self.prvi_klik][1]
@@ -437,7 +440,7 @@ class Racunalnik():
 
     def igraj_potezo(self):
         """Racunalnik izvede potezo ki jo pridobi s pomocjo algoritma"""
-        self.mislec = threading.Thread(target= lambda: self.algoritem.izracunaj_potezo(self.gui.igra))
+        self.mislec = threading.Thread(target= lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
         self.mislec.start()
         self.gui.plosca.after(100, self.preveri_potezo)
 
@@ -540,6 +543,7 @@ class Alpha_betta():
                                 if vrednost > vrednost_najboljse:
                                     vrednost_najboljse = vrednost
                                     najboljsa_poteza = p + q #sestevanje tuplov
+                            self.igra.mlin = False
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                             self.igra.razveljavi()
@@ -559,12 +563,15 @@ class Alpha_betta():
                                 if vrednost < vrednost_najboljse:
                                     vrednost_najboljse = vrednost
                                     najboljsa_poteza = p + q
+                            self.igra.mlin = False
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                             self.igra.razveljavi()
                             if vrednost < vrednost_najboljse:
                                 vrednost_najboljse = vrednost
                                 najboljsa_poteza = p + (False,False)
+
+                assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
                         
                                 
