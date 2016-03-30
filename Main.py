@@ -3,6 +3,7 @@ from tkinter import *
 from igra import *
 from PIL import ImageTk,Image
 import threading
+import random
 
 class tkmlin():
     def __init__(self,master):
@@ -380,15 +381,13 @@ class Igralec():
                 koord_2 = self.gui.id_polje[self.prvi_klik][1]
                 koord_3 = self.gui.id_polje[self.drugi_klik][0]
                 koord_4 = self.gui.id_polje[self.drugi_klik][1]
-                kopija1 = self.gui.id_polje[self.prvi_klik][:]
-                globid_1 = self.gui.polje_id[(kopija1[0], kopija1[1])]
                 if self.gui.igra.je_veljavna(koord_3, koord_4, koord_1, koord_2):
                     self.gui.izvedi_potezo(self.prvi_klik, self.drugi_klik)
                 else:
                     #nismo izvedli veljavne poteze, vrnemo se na zacetek poteze!
-                    self.ponastavi()
                     self.gui.DEFCON = 1
-                    self.gui.plosca.itemconfig(globid_1, fill=self.gui.na_potezi.barva)
+                    self.gui.plosca.itemconfig(self.prvi_klik, fill=self.gui.na_potezi.barva)
+                    self.ponastavi()
                     self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.ime))
                     
             else:
@@ -494,10 +493,12 @@ class Alpha_betta():
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije"""
-        pass
+        return random.randint(0,100)
 
     def alpha_betta(self, globina, a, b, maksimiziramo):
-        poteza = self.igra.veljavne_poteze()[0]
+        mozne = self.igra.veljavne_poteze()[:]
+        random.shuffle(mozne)
+        poteza = mozne[0]
         vrednost = 5
         jemljem = None
         return (poteza, jemljem, vrednost)

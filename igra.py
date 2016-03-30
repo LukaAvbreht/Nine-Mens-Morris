@@ -116,13 +116,17 @@ class Igra():
             [(2,4),(3,4),(4,4)],
             [(0,3),(1,3),(2,3)],
             [(4,3),(5,3),(6,3)]]
+        #shrani = self.plosca[poteza[0]][poteza[1]]
+        #self.plosca[poteza[0]][poteza[1]] = self.na_potezi
         for trojka in kombinacije: #poteza oblike (i,j)
             if poteza in trojka:
                 trojica = []
                 for polje in trojka:
                     trojica.append(self.plosca[polje[0]][polje[1]])
                 if trojica == [IGRALEC_ENA, IGRALEC_ENA, IGRALEC_ENA] or trojica == [IGRALEC_DVA, IGRALEC_DVA, IGRALEC_DVA]:
+                    #self.plosca[poteza[0]][poteza[1]] = shrani
                     return True
+        #self.plosca[poteza[0]][poteza[1]] = shrani
         return False
 
     def veljavne_poteze(self):
@@ -168,7 +172,7 @@ class Igra():
         vsi_naspr_zetoni = [] #vsi zetoni
         for i in range(7):
             for j in range(7):
-                if self.plosca[i][j] == self.na_potezi:
+                if self.plosca[i][j] == nasprotnik(self.na_potezi):
                     vsi_naspr_zetoni.append((i, j))
                     if self.postavljen_mlin((i, j)) == False: #preverimo, ce je v mlinu
                         lahko_vzamemo.append((i, j))
@@ -192,8 +196,8 @@ class Igra():
                 if self.postavljenih >= 18: #V primeru, da je konec faze postavljanja
                     self.faza = 1
                 self.plosca[i][j] = self.na_potezi
-                self.zadnja_poteza = (i,j)
-                self.na_potezi = nasprotnik(self.na_potezi)
+                if self.postavljen_mlin((i,j)) == False:
+                    self.na_potezi = nasprotnik(self.na_potezi)
             else:
                 print("Poteza ni mogoča")
         else:
@@ -202,7 +206,8 @@ class Igra():
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
-                    self.na_potezi = nasprotnik(self.na_potezi)
+                    if self.postavljen_mlin((i,j)) == False:
+                        self.na_potezi = nasprotnik(self.na_potezi)
                 else:
                     print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
             else:
@@ -216,4 +221,5 @@ class Igra():
             polje = self.plosca[i][j]
             self.figurice[polje] -= 1
             self.plosca[i][j] = None
+            self.na_potezi = nasprotnik(self.na_potezi)
 
