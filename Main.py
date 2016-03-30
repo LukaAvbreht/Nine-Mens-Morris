@@ -147,12 +147,14 @@ class tkmlin():
                     pass
         if znacka == False: #kliknili smo kar nekam, resetirajmo na zacetek poteze
             if self.DEFCON in [1,2]: #V primeru, da lahko resetiramo klik
-                self.na_potezi.ponastavi()
                 self.DEFCON = 1
                 if self.igra.faza == 0:
                     self.textbox.set("{0}: Izberi polje kamor želiš postaviti svoj žeton!".format(self.na_potezi.ime))
                 else:
                     self.textbox.set("{0}: Izberi svoj žeton!".format(self.na_potezi.ime))
+                    if self.na_potezi.prvi_klik != None:
+                        self.plosca.itemconfig(self.na_potezi.prvi_klik, fill=self.na_potezi.barva)
+                self.na_potezi.ponastavi()
             elif self.DEFCON == 3:
                 self.textbox.set("{0}: Vzami nasprotnikov žeton!".format(self.na_potezi.ime))
             else:
