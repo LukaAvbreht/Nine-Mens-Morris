@@ -42,16 +42,6 @@ class tkmlin():
         self.play1ids = []
         self.play2ids = []
 
-        slovarzanastran = [(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
-        for j in slovarzanastran:
-            x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
-            self.play1ids.append(x)
-
-        for j in slovarzanastran:
-            x = self.canvas2.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva2)
-            self.play2ids.append(x)
-
-        
         #kdo je na potezi
         self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
 
@@ -110,6 +100,15 @@ class tkmlin():
         #DEFCON 2 : Igralec na potezi naj izbere drugo polje
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
+
+    def postavi_stranske(self):
+        slovarzanastran = [(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
+        for j in slovarzanastran:
+            x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
+            self.play1ids.append(x)
+        for j in slovarzanastran:
+            x = self.canvas2.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva2)
+            self.play2ids.append(x)
 
     def izpisi(self):
         self.igra.izpisi_plosco()
@@ -240,6 +239,9 @@ class tkmlin():
         self.igralec1 = igralec1
         self.igralec2 = igralec2
         self.ponastavi()
+        self.play1ids = []
+        self.play2ids = []
+        self.postavi_stranske()
 
     def izbira_nove_igre(self):
         """Napravi okno, kjer si lahko izberemo nastavitve za novo igro, ter jo tako zacnemo"""
@@ -309,6 +311,8 @@ class tkmlin():
         """pripravi polje za novo igro"""
         for i in self.id_polje:
             self.plosca.itemconfig(i, fill="")
+        self.canvas1.delete(ALL)
+        self.canvas2.delete(ALL)
         self.na_potezi = self.igralec1
         self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
         self.DEFCON = 1
@@ -353,6 +357,12 @@ class tkmlin():
         if id_2==False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
+            if self.na_potezi.barva == self.barva1:
+                self.canvas1.itemconfig(self.play1ids[0], fill="")
+                del(self.play1ids[0])
+            else:
+                self.canvas2.itemconfig(self.play2ids[0], fill="")
+                del(self.play2ids[0])
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
