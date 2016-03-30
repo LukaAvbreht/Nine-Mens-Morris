@@ -445,7 +445,7 @@ class Racunalnik():
         """Vsakih 100ms preveri ali je algoritem ze izracunal potezo"""
         if self.algoritem.poteza != None:
             if self.algoritem.poteza[2] == False:
-                if self.algoritem.jemljem == None:
+                if self.algoritem.jemljem == (False,False):
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
                     self.gui.izvedi_potezo(id2)
                 else:
@@ -454,7 +454,7 @@ class Racunalnik():
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
                     self.gui.vzami_zeton(id3)
             else:
-                if self.algoritem.jemljem == None:
+                if self.algoritem.jemljem == (False,False):
                     id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
                     self.gui.izvedi_potezo(id1,id2)
@@ -477,21 +477,25 @@ class Alpha_betta():
         self.poteza = None #sem algoritem shrani potezo ko jo naredi
         self.jemljem = None
 
+    ZMAGA = 100000 # Mora biti vsaj 10^5
+    NESKONCNO = ZMAGA + 1 # Več kot zmaga
+
     def izracunaj_potezo(self,igra):
         self.igra = igra
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
-        (poteza, jemljem, vrednost) = self.alpha_betta(self.globina,-1000000000,1000000000,True)
+        (poteza, vrednost) = self.minimax(2, True)
         self.igra = None
         self.jaz= None
-        self.poteza = poteza
-        self.jemljem = jemljem
+        self.poteza = poteza[:4]
+        self.jemljem = poteza[4:]
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije"""
         return self.igra.figurice[self.igra.na_potezi] - self.igra.figurice[nasprotnik(self.igra.na_potezi)]
 
+    """
     def alpha_betta(self, globina, a, b, maksimiziramo):
         mozne = self.igra.veljavne_poteze()[:]
         random.shuffle(mozne)
@@ -508,9 +512,62 @@ class Alpha_betta():
             else:
                 jemljem = None
         return (poteza, jemljem, vrednost)
+    """
 
     def minimax(self, globina, maksimiziramo):
-        pass
+        (stanje, kdo) = self.igra.stanje
+        if stanje == "ZMAGA":
+            if kdo == self.jaz:
+                return (None, Alpha_betta.ZMAGA)
+            elif kdo == nasprotnik(self.jaz):
+                return (None, - Alpha_betta.ZMAGA)
+            else:
+                pass
+        elif stanje == "V TEKU":
+            if globina == 0:
+                return (None, self.vrednost_pozicije())
+            else:
+                if maksimiziramo:
+                    najboljsa_poteza = None #(i,j,a,b,c,d)
+                    vrednost_najboljse = - Alpha_betta.NESKONCNO
+                    for p in self.igra.veljavne_poteze():
+                        self.igra.poteza(p[0],p[1],p[2],p[3])
+                        if self.igra.mlin == True:
+                            for q in self.igra.veljavna_jemanja():
+                                self.igra.odstrani_figurico(q[0],q[1])
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                self.igra.razveljavi_jemanje()
+                                if vrednost > vrednost_najboljse:
+                                    vrednost_najboljse = vrednost
+                                    najboljsa_poteza = p + q #sestevanje tuplov
+                        else:
+                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                            self.igra.razveljavi()
+                            if vrednost > vrednost_najboljse:
+                                vrednost_najboljse = vrednost
+                                najboljsa_poteza = p + (False,False,)
+                else: #minimiziramo
+                    najboljsa_poteza = None
+                    vrednost_najboljse = Alpha_betta.NESKONCNO
+                    for p in self.igra.veljavne_poteze():
+                        self.igra.poteza(p[0],p[1],p[2],p[3])
+                        if self.igra.mlin == True:
+                            for q in self.igra.veljavna_jemanja():
+                                self.igra.odstrani_figurico(q[0],q[1])
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                self.igra.razveljavi_jemanje()
+                                if vrednost < vrednost_najboljse:
+                                    vrednost_najboljse = vrednost
+                                    najboljsa_poteza = p + q
+                        else:
+                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                            self.igra.razveljavi()
+                            if vrednost < vrednost_najboljse:
+                                vrednost_najboljse = vrednost
+                                najboljsa_poteza = p + (False,False)
+                return (najboljsa_poteza, vrednost_najboljse)
+                        
+                                
 
 if __name__ == "__main__":
     root = Tk()

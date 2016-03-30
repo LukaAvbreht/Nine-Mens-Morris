@@ -90,6 +90,16 @@ class Igra():
             self.plosca[c][d] = nasprotnik(kdonapotezi)
             self.figurice[nasprotnik(kdonapotezi)] += 1
         self.na_potezi = kdonapotezi
+
+    def razveljavi_jemanje(self):
+        c = self.zgodovina[-1][4]
+        d = self.zgodovina[-1][5]
+        igralec = self.zgodovina[-1][6]
+        self.plosca[c][d] = nasprotnik(igralec)
+        self.figurice[nasprotnik(igralec)] += 1
+        self.mlin = True
+        self.zgodovina[-1][4] = False
+        self.zgodovina[-1][5] = False
     
     def kopiraj_plosco(self):
         novaplosca = []
