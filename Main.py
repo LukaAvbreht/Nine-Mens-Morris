@@ -178,8 +178,6 @@ class tkmlin():
         self.zmag_okno.protocol("WM_DELETE_WINDOW", unici)
 
         self.zmag_okno.grid_columnconfigure(0, minsize=400)
-        #self.zmag_okno.grid_rowconfigure(0, minsize=80)
-        #self.zmag_okno.grid_rowconfigure(2, minsize=80)
         besedilo = StringVar(self.zmag_okno)
         Label(self.zmag_okno, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
         if zmagovalec != False:
@@ -461,11 +459,20 @@ class Alpha_betta():
     def izracunaj_potezo(self,igra):
         self.igra = igra
         self.jaz = self.igra.na_potezi
-        self.poteza = self.igra.veljavne_poteze()[0]
-        if self.igra.postavljen_mlin((self.poteza[0],self.poteza[1])):
-            self.jemljem = self.igra.veljavna_jemanja()[0]
-        print(self.poteza,self.jemljem,self.igra.postavljen_mlin((self.poteza[0],self.poteza[1])))
+        self.poteza = None
+        (poteza,vrednost) = self.alpha_betta(self.globina,-1000000000,1000000000,True)
+        self.igra = None
+        self.jaz= None
+        self.poteza = poteza
 
+    def vrednost_pozicije(self):
+        """Vrne oceno vrednosti pozicije"""
+        pass
+
+    def alpha_betta(self,globina, a, b, maksimiziramo):
+        poteza = self.igra.veljavne_poteze()[0]
+        vrednost = 5
+        return (poteza,vrednost)
 
 if __name__ == "__main__":
     root = Tk()
