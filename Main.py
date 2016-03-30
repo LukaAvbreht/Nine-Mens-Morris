@@ -161,6 +161,8 @@ class tkmlin():
                 self.na_potezi.ponastavi()
             elif self.DEFCON == 3:
                 self.textbox.set("{0}: Vzami nasprotnikov žeton!".format(self.na_potezi.ime))
+            elif self.DEFCON == 4:
+                pass
             else:
                 pass
 
@@ -298,7 +300,7 @@ class tkmlin():
         if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
-            if self.igra.postavljen_mlin(prvopolje):
+            if self.igra.mlin:
                 self.DEFCON = 3
                 self.textbox.set("Izberi zeton, ki ga bos pobral")
             else:
@@ -307,7 +309,7 @@ class tkmlin():
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
             self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
-            if self.igra.postavljen_mlin(drugopolje): #zahtevamo, da pobere žeton
+            if self.igra.mlin: #zahtevamo, da pobere žeton
                 self.DEFCON = 3
                 self.textbox.set("Izberi žeton, ki ga boš pobral!")
             else:
@@ -320,7 +322,7 @@ class tkmlin():
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
             drugopolje = self.id_polje[id_2]
-        if id2==False:
+        if id_2==False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
         else:
@@ -412,8 +414,6 @@ class Racunalnik():
         self.gui = gui
         self.ime = ime
         self.barva = barva
-        self.poteza = None
-        self.jemljem = None
 
         self.prvi_klik = None
         self.drugi_klik = None
@@ -485,6 +485,7 @@ class Alpha_betta():
         self.igra = igra
         self.jaz = self.igra.na_potezi
         self.poteza = None
+        self.jemljem = None
         (poteza, jemljem, vrednost) = self.alpha_betta(self.globina,-1000000000,1000000000,True)
         self.igra = None
         self.jaz= None
@@ -500,7 +501,16 @@ class Alpha_betta():
         random.shuffle(mozne)
         poteza = mozne[0]
         vrednost = 5
-        jemljem = None
+        if poteza[2] == False:
+            if self.igra.postavljen_mlin((poteza[0], poteza[1]), True):
+                jemljem = self.igra.veljavna_jemanja()[0]
+            else:
+                jemljem = None
+        else:
+            if self.igra.postavljen_mlin((poteza[0], poteza[1]), True, poteza[2], poteza[3]):
+                jemljem = self.igra.veljavna_jemanja()[0]
+            else:
+                jemljem = None
         return (poteza, jemljem, vrednost)
 
 if __name__ == "__main__":

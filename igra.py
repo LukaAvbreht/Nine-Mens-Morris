@@ -45,6 +45,8 @@ class Igra():
         self.stanje = "Ni konec"
         #moznosti tega stanja so : ni konec, zmaga igralec beli, zmaga igralec crni, neodloceno
 
+        self.mlin = False #pove ali smo postavili mlin
+
         self.sosedi = {(0,0) : [(0,3),(3,0)],
                   (0,3) : [(0,0),(0,6),(1,3)],
                   (0,6) : [(0,3),(3,6)],
@@ -95,7 +97,7 @@ class Igra():
             else:
                 return False
 
-    def postavljen_mlin(self, poteza):
+    def postavljen_mlin(self, poteza, pomni, a = False, b = False): #pomni doloci ali potezo namisljeno igramo ali ne
         """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False."""
         kombinacije = [
             #Vodoravne
@@ -116,18 +118,32 @@ class Igra():
             [(2,4),(3,4),(4,4)],
             [(0,3),(1,3),(2,3)],
             [(4,3),(5,3),(6,3)]]
-        #shrani = self.plosca[poteza[0]][poteza[1]]
-        #self.plosca[poteza[0]][poteza[1]] = self.na_potezi
-        for trojka in kombinacije: #poteza oblike (i,j)
-            if poteza in trojka:
-                trojica = []
-                for polje in trojka:
-                    trojica.append(self.plosca[polje[0]][polje[1]])
-                if trojica == [IGRALEC_ENA, IGRALEC_ENA, IGRALEC_ENA] or trojica == [IGRALEC_DVA, IGRALEC_DVA, IGRALEC_DVA]:
-                    #self.plosca[poteza[0]][poteza[1]] = shrani
-                    return True
-        #self.plosca[poteza[0]][poteza[1]] = shrani
-        return False
+        if pomni:
+            shrani1 = self.plosca[poteza[0]][poteza[1]]
+            self.plosca[poteza[0]][poteza[1]] = self.na_potezi
+            shrani2 = self.plosca[a][b]
+            self.plosca[a][b] = None
+            for trojka in kombinacije: #poteza oblike (i,j)
+                if poteza in trojka:
+                    trojica = []
+                    for polje in trojka:
+                        trojica.append(self.plosca[polje[0]][polje[1]])
+                    if trojica == [IGRALEC_ENA, IGRALEC_ENA, IGRALEC_ENA] or trojica == [IGRALEC_DVA, IGRALEC_DVA, IGRALEC_DVA]:
+                        self.plosca[poteza[0]][poteza[1]] = shrani1
+                        self.plosca[a][b] = shrani2
+                        return True
+            self.plosca[poteza[0]][poteza[1]] = shrani1
+            self.plosca[a][b] = shrani2
+            return False
+        else:
+            for trojka in kombinacije: #poteza oblike (i,j)
+                if poteza in trojka:
+                    trojica = []
+                    for polje in trojka:
+                        trojica.append(self.plosca[polje[0]][polje[1]])
+                    if trojica == [IGRALEC_ENA, IGRALEC_ENA, IGRALEC_ENA] or trojica == [IGRALEC_DVA, IGRALEC_DVA, IGRALEC_DVA]:
+                        return True
+            return False
 
     def veljavne_poteze(self):
         """ Glede na trenutno fazo vrne mogoče možne poteze. """
@@ -174,7 +190,7 @@ class Igra():
             for j in range(7):
                 if self.plosca[i][j] == nasprotnik(self.na_potezi):
                     vsi_naspr_zetoni.append((i, j))
-                    if self.postavljen_mlin((i, j)) == False: #preverimo, ce je v mlinu
+                    if self.postavljen_mlin((i, j), False) == False: #preverimo, ce je v mlinu
                         lahko_vzamemo.append((i, j))
         if len(lahko_vzamemo) == 0: #če zetonov ni ali so vsi zetoni v mlinu,
                                     #lahko vzamemo karkoli. Situacija ko zetonov ni
@@ -196,7 +212,9 @@ class Igra():
                 if self.postavljenih >= 18: #V primeru, da je konec faze postavljanja
                     self.faza = 1
                 self.plosca[i][j] = self.na_potezi
-                if self.postavljen_mlin((i,j)) == False:
+                if self.postavljen_mlin((i,j), False):
+                    self.mlin = True
+                else:
                     self.na_potezi = nasprotnik(self.na_potezi)
             else:
                 print("Poteza ni mogoča")
@@ -206,7 +224,9 @@ class Igra():
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
-                    if self.postavljen_mlin((i,j)) == False:
+                    if self.postavljen_mlin((i,j), False):
+                        self.mlin = True
+                    else:
                         self.na_potezi = nasprotnik(self.na_potezi)
                 else:
                     print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
@@ -222,4 +242,5 @@ class Igra():
             self.figurice[polje] -= 1
             self.plosca[i][j] = None
             self.na_potezi = nasprotnik(self.na_potezi)
+            self.mlin = False
 
