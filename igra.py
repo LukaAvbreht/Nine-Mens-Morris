@@ -1,15 +1,15 @@
 __author__ = 'LukaAvbreht, SamoKralj'
 import logging
 
-IGRALEC_BELI = "B"
-IGRALEC_CRNI = "C"
+IGRALEC_ENA = "B"
+IGRALEC_DVA = "C"
 
 def nasprotnik(igralec):
     """ Pove nasprotnega igralca. Koristno pri metodi poteza. """
-    if igralec == IGRALEC_BELI:
-        return IGRALEC_CRNI
+    if igralec == IGRALEC_ENA:
+        return IGRALEC_DVA
     else:
-        return IGRALEC_BELI
+        return IGRALEC_ENA
 
 
 class Igra():
@@ -24,9 +24,9 @@ class Igra():
                       [" ",None," ",None," ",None," "],
                       [None," "," ",None," "," ",None]]
         #None polja so prosta polja, " " so samo fillerji.
-        self.na_potezi = IGRALEC_BELI
+        self.na_potezi = IGRALEC_ENA
 
-        self.figurice = {IGRALEC_BELI: 0 , IGRALEC_CRNI: 0}
+        self.figurice = {IGRALEC_ENA: 0 , IGRALEC_DVA: 0}
         #bi sproti spremljali koliko ima kdo figuric in v primeru, da je vrednost 2, 3 naredimo svoje
         #nam ni treba po vsaki potezi steti koliko ima kdo figuric
 
@@ -121,7 +121,7 @@ class Igra():
                 trojica = []
                 for polje in trojka:
                     trojica.append(self.plosca[polje[0]][polje[1]])
-                if trojica == [IGRALEC_BELI, IGRALEC_BELI, IGRALEC_BELI] or trojica == [IGRALEC_CRNI, IGRALEC_CRNI, IGRALEC_CRNI]:
+                if trojica == [IGRALEC_ENA, IGRALEC_ENA, IGRALEC_ENA] or trojica == [IGRALEC_DVA, IGRALEC_DVA, IGRALEC_DVA]:
                     return True
         return False
 

@@ -4,7 +4,6 @@ from igra import *
 from PIL import ImageTk,Image
 import threading
 
-
 class tkmlin():
     def __init__(self,master):
         self.master = master
@@ -27,6 +26,9 @@ class tkmlin():
         #igralca ki igrata igro
         self.ime_igralec1 = 'Zeleni'
         self.ime_igralec2 = 'Oranžni'
+
+        self.igralec1 = None
+        self.igralec2 = None
 
         self.nastavitve_obstraneh(self.ime_igralec1, 1)
         self.nastavitve_obstraneh(self.ime_igralec2, 2)
@@ -109,13 +111,16 @@ class tkmlin():
             return self.igralec1
 
     def zamenjaj_na_potezi(self):  #to se mora zgodit v igri
-        self.na_potezi = self.nasprotnik()
+        if self.igra.na_potezi == IGRALEC_ENA:
+            self.na_potezi = self.igralec1
+        else:
+            self.na_potezi = self.igralec2
+        if len(self.igra.veljavne_poteze()) == 0:
+                return self.zmagovalno_okno(self.nasprotnik())
+        self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
         if type(self.na_potezi) == Igralec:
             self.na_potezi.ponastavi()
-            self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
-            if len(self.igra.veljavne_poteze()) == 0:
-                return self.zmagovalno_okno(self.nasprotnik())
-        if type(self.na_potezi) == Racunalnik:
+        elif type(self.na_potezi) == Racunalnik:
             self.na_potezi.igraj_potezo()
 
     def klik(self,event):
