@@ -33,6 +33,24 @@ class tkmlin():
 
         self.nastavitve_obstraneh(self.ime_igralec1, 1)
         self.nastavitve_obstraneh(self.ime_igralec2, 2)
+
+        self.canvas1 = Canvas(master, width=200, height=400)  #,bg=self.bg)
+        self.canvas2 = Canvas(master, width=200, height=400)  #,bg=self.bg)
+        self.canvas1.grid(row=3, column=0, columnspan=2, sticky=N+S+E+W)
+        self.canvas2.grid(row=3, column=9, columnspan=2, sticky=N+S+E+W)
+
+        self.play1ids = []
+        self.play2ids = []
+
+        slovarzanastran = [(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
+        for j in slovarzanastran:
+            x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
+            self.play1ids.append(x)
+
+        for j in slovarzanastran:
+            x = self.canvas2.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva2)
+            self.play2ids.append(x)
+
         
         #kdo je na potezi
         self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
@@ -105,8 +123,8 @@ class tkmlin():
             sprem=9
         self.strime = StringVar(self.master, value=ime)
         Label(self.master, textvariable=self.strime, font=("Helvetica", 20)).grid(row=1, column=sprem, columnspan=2)
-        self.intzet = IntVar(self.master, value=9)
-        Label(self.master, textvariable=self.intzet, font=("Helvetica", 30)).grid(row=2, column=sprem, columnspan=2)
+        #self.intzet = IntVar(self.master, value=9)
+        #Label(self.master, textvariable=self.intzet, font=("Helvetica", 30)).grid(row=2, column=sprem, columnspan=2)
 
     def nasprotnik(self):  #to ko popravma bo vrjent neuporabno
         """Vrne nasprornika."""
@@ -303,6 +321,12 @@ class tkmlin():
             drugopolje = self.id_polje[id_2]
         if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
+            if self.na_potezi.barva == self.barva1:
+                self.canvas1.itemconfig(self.play1ids[0], fill="")
+                del(self.play1ids[0])
+            else:
+                self.canvas2.itemconfig(self.play2ids[0], fill="")
+                del(self.play2ids[0])
             self.igra.poteza(prvopolje[0], prvopolje[1])
             if self.igra.mlin:
                 self.DEFCON = 3
