@@ -42,8 +42,8 @@ class Igra():
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
 
-        self.stanje = "Ni konec"
-        #moznosti tega stanja so : ni konec, zmaga igralec beli, zmaga igralec crni, neodloceno
+        self.stanje = ("V TEKU", None)
+        #moznosti tega stanja so : ni konec, zmaga
 
         self.mlin = False #pove ali smo postavili mlin
 
@@ -155,7 +155,7 @@ class Igra():
                     if self.je_veljavna(i,j):
                         mozne_poteze.append((i,j,False,False))
             return mozne_poteze
-        elif self.faza == 1 and self.figurice[self.na_potezi] != 3:  #treba se dodat da preveri ce si naredu mlin
+        elif self.faza == 1 and self.figurice[self.na_potezi] > 3:
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
@@ -216,8 +216,13 @@ class Igra():
                     self.mlin = True
                 else:
                     self.na_potezi = nasprotnik(self.na_potezi)
+                    if len(self.veljavne_poteze()) == 0:
+                        if self.na_potezi == IGRALEC_ENA:
+                            self.stanje = ("ZMAGA", IGRALEC_DVA)
+                        else:
+                            self.stanje = ("ZMAGA", IGRALEC_ENA)
             else:
-                print("Poteza ni mogoča")
+                print("Poteza ni mogoča",self.na_potezi,i,j)
         else:
             if self.plosca[a][b] == self.na_potezi: #preveri da premikas svojo figurico
                 if self.je_veljavna(i, j, a, b):  #preveri ali lahko tja premaknes svojo figurico (napisati je potrebno se da
@@ -228,10 +233,15 @@ class Igra():
                         self.mlin = True
                     else:
                         self.na_potezi = nasprotnik(self.na_potezi)
+                        if len(self.veljavne_poteze()) == 0:
+                            if self.na_potezi == IGRALEC_ENA:
+                                self.stanje = ("ZMAGA", IGRALEC_DVA)
+                            else:
+                                self.stanje = ("ZMAGA", IGRALEC_ENA)
                 else:
                     print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
             else:
-                print('tole pa ni tvoja figurica, Izberi svojo figuro')
+                print('tole pa ni tvoja figurica, Izberi svojo figuro',self.na_potezi,i,j)
 
 
 
@@ -243,4 +253,10 @@ class Igra():
             self.plosca[i][j] = None
             self.na_potezi = nasprotnik(self.na_potezi)
             self.mlin = False
+            if self.faza != 0:
+                if self.figurice[self.na_potezi] < 3 or len(self.veljavne_poteze()) == 0:
+                    if self.na_potezi == IGRALEC_ENA:
+                        self.stanje = ("ZMAGA", IGRALEC_DVA)
+                    else:
+                        self.stanje = ("ZMAGA", IGRALEC_ENA)
 

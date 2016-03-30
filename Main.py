@@ -494,7 +494,7 @@ class Alpha_betta():
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije"""
-        return random.randint(0,100)
+        return self.igra.figurice[self.igra.na_potezi] - self.igra.figurice[nasprotnik(self.igra.na_potezi)]
 
     def alpha_betta(self, globina, a, b, maksimiziramo):
         mozne = self.igra.veljavne_poteze()[:]
@@ -512,6 +512,9 @@ class Alpha_betta():
             else:
                 jemljem = None
         return (poteza, jemljem, vrednost)
+
+    def minimax(self, globina, maksimiziramo):
+        pass
 
 if __name__ == "__main__":
     root = Tk()
