@@ -16,13 +16,15 @@ class Igra():
     """Program namenjen logiki in pravilom igre"""
 
     def __init__(self):  #remove nepotrebna polja
-        self.plosca =[[None," "," ",None," "," ",None],
+        self.plosca =[
+                      [None," "," ",None," "," ",None],
                       [" ",None," ",None," ",None," "],
                       [" "," ",None,None,None," "," "],
                       [None,None,None," ",None,None,None],
                       [" "," ",None,None,None," "," "],
                       [" ",None," ",None," ",None," "],
-                      [None," "," ",None," "," ",None]]
+                      [None," "," ",None," "," ",None]
+                    ]
         #None polja so prosta polja, " " so samo fillerji.
         self.na_potezi = IGRALEC_ENA
 
@@ -38,6 +40,7 @@ class Igra():
         # self.faza = 1  --> Faza premikanja figuric
         
         self.zgodovina = []
+        #(kam, od kje, jemanje?, kdonapotezi)
         #Predlagam obliko: (pozicija, zadnja poteza, True - False, Pobrana figurica)
         #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
         #bi po vsaki potezi belega in črnega shranili pozicijo?
@@ -72,7 +75,22 @@ class Igra():
                   (6,3) : [(6,0),(6,6),(5,3)],
                   (6,6) : [(6,3),(3,6)],
                   }
-
+    def razveljavi(self):
+        i,j,a,b,c,d,kdonapotezi = self.zgodovina.pop(-1)
+        print(i,j,a,b,c,d,kdonapotezi)
+        self.plosca[i][j] = None
+        if a == False and b == False:
+            self.postavljenih -= 1
+            self.figurice[kdonapotezi] -= 1
+        else:
+            self.plosca[a][b] = kdonapotezi
+        if c == False and d == False:
+            pass
+        else:
+            self.plosca[c][d] = nasprotnik(kdonapotezi)
+            self.figurice[nasprotnik(kdonapotezi)] += 1
+        self.na_potezi = kdonapotezi
+    
     def kopiraj_plosco(self):
         novaplosca = []
         for vrstica in self.plosca:
@@ -161,7 +179,7 @@ class Igra():
                 for j in range(7):
                     if self.plosca[i][j] == self.na_potezi:
                         for sos in self.sosedi[(i,j)]:
-                            if self.plosca[sos[0]][sos[1]] == None:
+                            if self.je_veljavna(sos[0], sos[1], i, j):
                                 dod = (sos[0],sos[1],i,j)
                                 mozne_poteze.append(dod)
             return mozne_poteze
@@ -212,6 +230,7 @@ class Igra():
                 if self.postavljenih >= 18: #V primeru, da je konec faze postavljanja
                     self.faza = 1
                 self.plosca[i][j] = self.na_potezi
+                self.zgodovina.append([i, j, False, False, False, False, self.na_potezi])
                 if self.postavljen_mlin((i,j), False):
                     self.mlin = True
                 else:
@@ -222,13 +241,15 @@ class Igra():
                         else:
                             self.stanje = ("ZMAGA", IGRALEC_ENA)
             else:
-                print("Poteza ni mogoča",self.na_potezi,i,j)
+                self.izpisi_plosco()
+                print("Poteza ni mogoča",self.na_potezi,i,j,self.faza)
         else:
             if self.plosca[a][b] == self.na_potezi: #preveri da premikas svojo figurico
                 if self.je_veljavna(i, j, a, b):  #preveri ali lahko tja premaknes svojo figurico (napisati je potrebno se da
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
+                    self.zgodovina.append([i,j,a, b, False, False, self.na_potezi])
                     if self.postavljen_mlin((i,j), False):
                         self.mlin = True
                     else:
@@ -241,7 +262,8 @@ class Igra():
                 else:
                     print('Poteza iz ' + str((a,b)) + ' na polje ' + str((i,j)) + ' ni mogoča!' )
             else:
-                print('tole pa ni tvoja figurica, Izberi svojo figuro',self.na_potezi,i,j)
+                self.izpisi_plosco()
+                print('tole pa ni tvoja figurica, Izberi svojo figuro',self.na_potezi,i,j,a,b,self.faza)
 
 
 
@@ -251,6 +273,8 @@ class Igra():
             polje = self.plosca[i][j]
             self.figurice[polje] -= 1
             self.plosca[i][j] = None
+            self.zgodovina[-1][4] = i #samo pripisemo zadnji potezi, kaj smo vzeli
+            self.zgodovina[-1][5] = j
             self.na_potezi = nasprotnik(self.na_potezi)
             self.mlin = False
             if self.faza != 0:

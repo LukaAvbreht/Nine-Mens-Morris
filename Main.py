@@ -465,10 +465,6 @@ class Racunalnik():
                     self.gui.izvedi_posebno_potezo(id1,id2)
                     self.gui.vzami_zeton(id3)
             self.mislec = None
-            if self.algoritem.jemljem != None:
-                id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
-                self.gui.vzami_zeton(id3)
-
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
 
