@@ -32,7 +32,7 @@ class tkmlin():
         self.nastavitve_obstraneh(self.ime_igralec2, 2)
         
         #kdo je na potezi
-        self.na_potezi = None
+        self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
 
         #meni za gumbe
         menu = Menu(master)
@@ -101,14 +101,14 @@ class tkmlin():
         self.intzet = IntVar(self.master, value=9)
         Label(self.master, textvariable=self.intzet, font=("Helvetica", 30)).grid(row=2, column=sprem, columnspan=2)
 
-    def nasprotnik(self):
+    def nasprotnik(self):  #to ko popravma bo vrjent neuporabno
         """Vrne nasprornika."""
         if self.na_potezi == self.igralec1:
             return self.igralec2
         else:
             return self.igralec1
 
-    def zamenjaj_na_potezi(self):
+    def zamenjaj_na_potezi(self):  #to se mora zgodit v igri
         self.na_potezi = self.nasprotnik()
         if type(self.na_potezi) == Igralec:
             self.na_potezi.ponastavi()
@@ -117,8 +117,6 @@ class tkmlin():
                 return self.zmagovalno_okno(self.nasprotnik())
         if type(self.na_potezi) == Racunalnik:
             self.na_potezi.igraj_potezo()
-
-
 
     def klik(self,event):
         """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
@@ -190,7 +188,6 @@ class tkmlin():
         label = Label(self.zmag_okno, image=photo)
         label.image = photo
         label.grid(row=1, column=0)
-
 
     def newgamerac(self):
         """moznosti izbire igre proti racunalniku"""
@@ -311,7 +308,6 @@ class tkmlin():
                 #se pripravimo na naslednjo potezo
                 self.DEFCON = 1
                 self.zamenjaj_na_potezi()
-            
 
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
@@ -445,8 +441,6 @@ class Racunalnik():
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
         self.gui.igra.izpisi_plosco()
-
-
 
 class Alpha_betta():
     def __init__(self,globina):
