@@ -314,6 +314,19 @@ class tkmlin():
                 self.DEFCON = 1
                 self.zamenjaj_na_potezi()
 
+    def izvedi_posebno_potezo(self,id_1,id_2=False):
+        if id_1 != False:
+            prvopolje = self.id_polje[id_1]
+        if id_2 != False:
+            drugopolje = self.id_polje[id_2]
+        if id2==False:
+            self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
+            self.igra.poteza(prvopolje[0], prvopolje[1])
+        else:
+            self.plosca.itemconfig(id_1, fill="")
+            self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
+            self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
+
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
@@ -433,21 +446,35 @@ class Racunalnik():
         """Vsakih 100ms preveri ali je algoritem ze izracunal potezo"""
         if self.algoritem.poteza != None:
             if self.algoritem.poteza[2] == False:
-                id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
-                self.gui.izvedi_potezo(id2)
+                if self.algoritem.jemljem == None:
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                    self.gui.izvedi_potezo(id2)
+                else:
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
+                    self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
+                    self.gui.vzami_zeton(id3)
             else:
-                id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
-                id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
-                self.gui.izvedi_potezo(id1,id2)
+                if self.algoritem.jemljem == None:
+                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                    self.gui.izvedi_potezo(id1,id2)
+                else:
+                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
+                    self.gui.izvedi_posebno_potezo(id1,id2)
+                    self.gui.vzami_zeton(id3)
             self.mislec = None
             if self.algoritem.jemljem != None:
                 id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
                 self.gui.vzami_zeton(id3)
+
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
-        self.gui.igra.izpisi_plosco()
 
 class Alpha_betta():
+    """Vrne tri argumente (kam, od kje),(kaj jemljemo),vrednost poteze v obliki poteze"""
     def __init__(self,globina):
         self.globina = globina
         self.igra = None
@@ -459,19 +486,21 @@ class Alpha_betta():
         self.igra = igra
         self.jaz = self.igra.na_potezi
         self.poteza = None
-        (poteza,vrednost) = self.alpha_betta(self.globina,-1000000000,1000000000,True)
+        (poteza, jemljem, vrednost) = self.alpha_betta(self.globina,-1000000000,1000000000,True)
         self.igra = None
         self.jaz= None
         self.poteza = poteza
+        self.jemljem = jemljem
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije"""
         pass
 
-    def alpha_betta(self,globina, a, b, maksimiziramo):
+    def alpha_betta(self, globina, a, b, maksimiziramo):
         poteza = self.igra.veljavne_poteze()[0]
         vrednost = 5
-        return (poteza,vrednost)
+        jemljem = None
+        return (poteza, jemljem, vrednost)
 
 if __name__ == "__main__":
     root = Tk()
