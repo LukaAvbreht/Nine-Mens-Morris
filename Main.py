@@ -3,7 +3,7 @@ from tkinter import *
 from igra import *
 from PIL import ImageTk,Image
 import threading
-import random
+
 
 class tkmlin():
     def __init__(self,master):
@@ -31,9 +31,6 @@ class tkmlin():
         self.igralec1 = None
         self.igralec2 = None
 
-        self.nastavitve_obstraneh(self.ime_igralec1, 1)
-        self.nastavitve_obstraneh(self.ime_igralec2, 2)
-
         self.canvas1 = Canvas(master, width=300, height=600)  #,bg=self.bg)
         self.canvas2 = Canvas(master, width=300, height=600)  #,bg=self.bg)
         self.canvas1.grid(row=3, column=0, columnspan=2, sticky=N+S+E+W)
@@ -44,6 +41,11 @@ class tkmlin():
 
         self.play1mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
         self.play2mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
+
+        self.strime1 = StringVar(self.master, value=self.ime_igralec1)
+        Label(self.master, textvariable=self.strime1, font=("Helvetica", 20)).grid(row=1, column=0, columnspan=2)
+        self.strime2 = StringVar(self.master, value=self.ime_igralec2)
+        Label(self.master, textvariable=self.strime2, font=("Helvetica", 20)).grid(row=1, column=9, columnspan=2)
 
         #kdo je na potezi
         self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
@@ -103,12 +105,9 @@ class tkmlin():
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
 
-        self.canvas1.create_oval(((self.play1mrtvi[0][0])+300-25), ((self.play1mrtvi[0][1])+300-25), ((self.play1mrtvi[0][0])+300+25), ((self.play1mrtvi[0][1])+300+25), outline="", fill=self.barva1)
-        self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
-        self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300-25)
-
     def postavi_stranske(self):
-        slovarzanastran = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)] #[(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
+        """Na stranska polja postavi figure, ki jih mora igralec postaviti na ploskev"""
+        slovarzanastran = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
         for j in slovarzanastran:
             x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
             self.play1ids.append(x)
@@ -117,34 +116,31 @@ class tkmlin():
             self.play2ids.append(x)
 
     def postavi_stranske2(self,playerbarva):
+        """Funkcija ki postavi na polje ob straneh figuro, ko je ta odstranjena iz igre"""
         if playerbarva == self.barva1:
-            print(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
-            self.canvas1.create_oval(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
-            self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
-            self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300-25)
+            self.canvas1.create_oval(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
+            self.canvas1.create_line(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, width=4)
+            self.canvas1.create_line(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300-25, width=4)
             del(self.play1mrtvi[0])
         else:
-            print("creating",self.play2mrtvi)
-            x = self.canvas2.create_oval(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25, outline="", fill=self.barva2)
-            y = self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25)
-            z = self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300+25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300-25)
+            self.canvas2.create_oval(self.play2mrtvi[0][0]-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+25, self.play2mrtvi[0][1]+300+25, outline="", fill=self.barva2)
+            self.canvas2.create_line(self.play2mrtvi[0][0]-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+25, self.play2mrtvi[0][1]+300+25, width=4)
+            self.canvas2.create_line(self.play2mrtvi[0][0]-25, self.play2mrtvi[0][1]+300+25, self.play2mrtvi[0][0]+25, self.play2mrtvi[0][1]+300-25, width=4)
             del(self.play2mrtvi[0])
-            print(self.play2mrtvi)
 
     def izpisi(self):
         self.igra.izpisi_plosco()
 
-    def nastavitve_obstraneh(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
-        """Funkcija ki naredi stranske nastavitve na plosci"""
-        sprem = int()  #nastavi na katero stran plochs se generira zadeva
-        if st == 1:
-            sprem=0
-        elif st == 2:
-            sprem=9
-        self.strime = StringVar(self.master, value=ime)
-        Label(self.master, textvariable=self.strime, font=("Helvetica", 20)).grid(row=1, column=sprem, columnspan=2)
-        #self.intzet = IntVar(self.master, value=9)
-        #Label(self.master, textvariable=self.intzet, font=("Helvetica", 30)).grid(row=2, column=sprem, columnspan=2)
+    #def nastavitve_obstraneh(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
+    #    """Funkcija ki naredi stranske nastavitve na plosci"""
+    #
+    #    sprem = int()  #nastavi na katero stran plochs se generira zadeva
+     #   if st == 1:
+     #       sprem=0
+     #   elif st == 2:
+     #       sprem=9
+
+
 
     def nasprotnik(self):  #to ko popravma bo vrjent neuporabno
         """Vrne nasprornika."""
@@ -260,6 +256,8 @@ class tkmlin():
         self.igralec1 = igralec1
         self.igralec2 = igralec2
         self.ponastavi()
+        self.strime1.set(self.ime_igralec1)
+        self.strime2.set(self.ime_igralec2)
         self.play1ids = []
         self.play2ids = []
         self.postavi_stranske()
@@ -335,6 +333,8 @@ class tkmlin():
             self.plosca.itemconfig(i, fill="")
         self.canvas1.delete(ALL)
         self.canvas2.delete(ALL)
+        self.strime1.set('')
+        self.strime2.set('')
         self.na_potezi = self.igralec1
         self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
         self.DEFCON = 1
@@ -393,7 +393,7 @@ class tkmlin():
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
-        #self.postavi_stranske2(self.nasprotnik().barva)
+        self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3

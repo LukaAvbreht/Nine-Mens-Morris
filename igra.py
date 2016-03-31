@@ -50,7 +50,8 @@ class Igra():
 
         self.mlin = False #pove ali smo postavili mlin
 
-        self.sosedi = {(0,0) : [(0,3),(3,0)],
+        self.sosedi = {
+                  (0,0) : [(0,3),(3,0)],
                   (0,3) : [(0,0),(0,6),(1,3)],
                   (0,6) : [(0,3),(3,6)],
                   (1,1) : [(1,3),(3,1)],
