@@ -8,7 +8,7 @@ import random
 class tkmlin():
     def __init__(self,master):
         self.master = master
-        self.master.minsize(width=1100, height=700)
+        self.master.minsize(width=1300, height=700)
         self.bg = 'LightYellow2'  #'LemonChiffon'
         self.zmag_okno = None  #Zmagovalno okno
 
@@ -34,13 +34,16 @@ class tkmlin():
         self.nastavitve_obstraneh(self.ime_igralec1, 1)
         self.nastavitve_obstraneh(self.ime_igralec2, 2)
 
-        self.canvas1 = Canvas(master, width=200, height=400)  #,bg=self.bg)
-        self.canvas2 = Canvas(master, width=200, height=400)  #,bg=self.bg)
+        self.canvas1 = Canvas(master, width=300, height=600)  #,bg=self.bg)
+        self.canvas2 = Canvas(master, width=300, height=600)  #,bg=self.bg)
         self.canvas1.grid(row=3, column=0, columnspan=2, sticky=N+S+E+W)
         self.canvas2.grid(row=3, column=9, columnspan=2, sticky=N+S+E+W)
 
         self.play1ids = []
         self.play2ids = []
+
+        self.play1mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
+        self.play2mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
 
         #kdo je na potezi
         self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
@@ -102,13 +105,25 @@ class tkmlin():
         #DEFCON 4 : Igre je konec, polje je zablokirano,
 
     def postavi_stranske(self):
-        slovarzanastran = [(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
+        slovarzanastran = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)] #[(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
         for j in slovarzanastran:
             x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
             self.play1ids.append(x)
         for j in slovarzanastran:
             x = self.canvas2.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva2)
             self.play2ids.append(x)
+
+    def postavi_stranske2(self,player):
+        if player.barva == self.barva1:
+            self.canvas1.create_oval(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
+            self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
+            self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300-25)
+            del(self.play1mrtvi[0])
+        else:
+            self.canvas2.create_oval(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25, outline="", fill=self.barva2)
+            self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25)
+            self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300+25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300-25)
+            del(self.play2mrtvi[0])
 
     def izpisi(self):
         self.igra.izpisi_plosco()
