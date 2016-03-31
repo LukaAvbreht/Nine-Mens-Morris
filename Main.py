@@ -95,7 +95,6 @@ class tkmlin():
         self.textbox = StringVar(master, value='Pozdravljeni!')
         Label(self.master, textvariable=self.textbox, font=("Helvetica", 20)).grid(row=0, column=0, columnspan=11)
 
-
         #stanja za igro
         self.DEFCON = 0
         #DEFCON 0 : nič, čakamo da začnemo igro
@@ -103,6 +102,10 @@ class tkmlin():
         #DEFCON 2 : Igralec na potezi naj izbere drugo polje
         #DEFCON 3 : Igralec na potezi naj izbere zeton, ki ga bo odstranil
         #DEFCON 4 : Igre je konec, polje je zablokirano,
+
+        self.canvas1.create_oval(((self.play1mrtvi[0][0])+300-25), ((self.play1mrtvi[0][1])+300-25), ((self.play1mrtvi[0][0])+300+25), ((self.play1mrtvi[0][1])+300+25), outline="", fill=self.barva1)
+        self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
+        self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300-25)
 
     def postavi_stranske(self):
         slovarzanastran = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)] #[(134, 30), (66, 98), (134, 98), (66, 166), (134, 166), (66, 234), (134, 234), (66, 302), (134, 302)]
@@ -113,17 +116,20 @@ class tkmlin():
             x = self.canvas2.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva2)
             self.play2ids.append(x)
 
-    def postavi_stranske2(self,player):
-        if player.barva == self.barva1:
+    def postavi_stranske2(self,playerbarva):
+        if playerbarva == self.barva1:
+            print(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
             self.canvas1.create_oval(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
             self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300+25)
             self.canvas1.create_line(self.play1mrtvi[0][0]+300-25, self.play1mrtvi[0][1]+300+25, self.play1mrtvi[0][0]+300+25, self.play1mrtvi[0][1]+300-25)
             del(self.play1mrtvi[0])
         else:
-            self.canvas2.create_oval(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25, outline="", fill=self.barva2)
-            self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25)
-            self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300+25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300-25)
+            print("creating",self.play2mrtvi)
+            x = self.canvas2.create_oval(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25, outline="", fill=self.barva2)
+            y = self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300-25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300+25)
+            z = self.canvas2.create_line(self.play2mrtvi[0][0]+300-25, self.play2mrtvi[0][1]+300+25, self.play2mrtvi[0][0]+300+25, self.play2mrtvi[0][1]+300-25)
             del(self.play2mrtvi[0])
+            print(self.play2mrtvi)
 
     def izpisi(self):
         self.igra.izpisi_plosco()
@@ -386,6 +392,7 @@ class tkmlin():
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
+        self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
@@ -420,7 +427,6 @@ class Igralec():
         else:
             self.ponastavi()
             self.gui.textbox.set("Izberi žeton, ki ga smeš vzeti!")
-            
 
     def uporabnikova_poteza(self):
         """Metoda ki naredi potezo (preveri njeno veljavnost in naroci igralni plosci da jo zapise v igralno polje)"""
