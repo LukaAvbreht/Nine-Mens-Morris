@@ -129,18 +129,8 @@ class tkmlin():
             del(self.play2mrtvi[0])
 
     def izpisi(self):
+        """Namenjeno porogramerju"""
         self.igra.izpisi_plosco()
-
-    #def nastavitve_obstraneh(self, ime, st):  #st je lahko 1 ali dva in pomeni katerega igralca nastavljamo
-    #    """Funkcija ki naredi stranske nastavitve na plosci"""
-    #
-    #    sprem = int()  #nastavi na katero stran plochs se generira zadeva
-     #   if st == 1:
-     #       sprem=0
-     #   elif st == 2:
-     #       sprem=9
-
-
 
     def nasprotnik(self):  #to ko popravma bo vrjent neuporabno
         """Vrne nasprornika."""
@@ -281,8 +271,6 @@ class tkmlin():
             self.nova_igra(igralec1,igralec2)
             nov_game.destroy()
 
-
-
         #ustvari novo okno
         nov_game = Toplevel()
         nov_game.grab_set()
@@ -372,6 +360,9 @@ class tkmlin():
                 self.zamenjaj_na_potezi()
 
     def izvedi_posebno_potezo(self,id_1,id_2=False):
+        """Funkcija ki jo uporabi računalniški igralec v primeru da mora, po koncani potezi jemati zeton
+        Drugace enaka kot funkcija izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
+        funkcijo vzami zeton"""
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -469,6 +460,7 @@ class Igralec():
                     self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.ime))
 
 class Racunalnik():
+    """Racunalniski igralec, ki izracuna potezo ter jo odigra"""
     def __init__(self, gui, barva, ime, Algoritem):
         self.gui = gui
         self.ime = ime
