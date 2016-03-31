@@ -80,6 +80,7 @@ class Igra():
         copy = Igra()
         copy.plosca = [self.plosca[i][:] for i in range(7)]
         copy.na_potezi = self.na_potezi
+        copy.faza = self.faza
         return copy
 
         
@@ -89,6 +90,10 @@ class Igra():
         self.plosca[i][j] = None
         if a == False and b == False:
             self.postavljenih -= 1
+            if self.postavljenih < 18:
+                self.faza = 0
+            else:
+                self.faza = 1
             self.figurice[kdonapotezi] -= 1
         else:
             self.plosca[a][b] = kdonapotezi

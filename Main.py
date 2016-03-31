@@ -263,6 +263,7 @@ class tkmlin():
         self.play1ids = []
         self.play2ids = []
         self.postavi_stranske()
+        self.zamenjaj_na_potezi()
 
     def izbira_nove_igre(self):
         """Napravi okno, kjer si lahko izberemo nastavitve za novo igro, ter jo tako zacnemo"""
@@ -392,7 +393,7 @@ class tkmlin():
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
-        self.postavi_stranske2(self.nasprotnik().barva)
+        #self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
