@@ -493,27 +493,27 @@ class Racunalnik():
         self.gui.plosca.after(100, self.preveri_potezo)
 
     def preveri_potezo(self):
-        """Vsakih 100ms preveri ali je algoritem ze izracunal potezo"""
+        """Vsakih 100ms preveri ali je algoritem ze izracunal potezo, ter jo zapisal v spremenjlivko znotraj njegovega razreda"""
         if self.algoritem.poteza != None:
             if self.algoritem.poteza[2] == False:
-                if self.algoritem.jemljem == (False,False):
-                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
+                if self.algoritem.jemljem == (False, False):
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     self.gui.izvedi_potezo(id2)
                 else:
-                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
-                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
+                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
                     self.gui.vzami_zeton(id3)
             else:
-                if self.algoritem.jemljem == (False,False):
-                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
-                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
-                    self.gui.izvedi_potezo(id1,id2)
+                if self.algoritem.jemljem == (False, False):
+                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
+                    self.gui.izvedi_potezo(id1, id2)
                 else:
-                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]),(self.algoritem.poteza[3])]
-                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]),(self.algoritem.poteza[1])]
-                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]),(self.algoritem.jemljem[1])]
-                    self.gui.izvedi_posebno_potezo(id1,id2)
+                    id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
+                    id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
+                    id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
+                    self.gui.izvedi_posebno_potezo(id1, id2)
                     self.gui.vzami_zeton(id3)
             self.mislec = None
         else:
@@ -525,20 +525,19 @@ class Alpha_betta():
         self.globina = globina
         self.igra = None
         self.jaz = None
-        self.poteza = None #sem algoritem shrani potezo ko jo naredi
+        self.poteza = None  #sem algoritem shrani potezo ko jo naredi
         self.jemljem = None
+        self.ZMAGA = 100000  # Mora biti vsaj 10^5
+        self.NESKONCNO = ZMAGA + 1  # Več kot zmaga
 
-    ZMAGA = 100000 # Mora biti vsaj 10^5
-    NESKONCNO = ZMAGA + 1 # Več kot zmaga
-
-    def izracunaj_potezo(self,igra):
+    def izracunaj_potezo(self, igra):
         self.igra = igra
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
         (poteza, vrednost) = self.minimax(2, True)
         self.igra = None
-        self.jaz= None
+        self.jaz = None
         self.poteza = poteza[:4]
         self.jemljem = poteza[4:]
 
@@ -569,9 +568,9 @@ class Alpha_betta():
         (stanje, kdo) = self.igra.stanje
         if stanje == "ZMAGA":
             if kdo == self.jaz:
-                return (None, Alpha_betta.ZMAGA)
+                return (None, self.ZMAGA)
             elif kdo == nasprotnik(self.jaz):
-                return (None, - Alpha_betta.ZMAGA)
+                return (None, - self.ZMAGA)
             else:
                 pass
         elif stanje == "V TEKU":
@@ -629,4 +628,5 @@ if __name__ == "__main__":
     root.wm_title('Nine Men\'s Morris')
     root.resizable(width=FALSE, height=FALSE)
     okno = tkmlin(root)
+    okno.newgame()  #zane igro
     root.mainloop()
