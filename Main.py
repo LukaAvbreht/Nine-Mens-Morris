@@ -11,6 +11,8 @@ class tkmlin():
         self.master.minsize(width=1300, height=700)
         self.bg = 'LightYellow2'  #'LemonChiffon'
         self.zmag_okno = None  #Zmagovalno okno
+        self.about = None  #okno o igri
+        self.help = None  #okno za pomoč
 
         #nastavi minimalne sirine stolpcev v polju
         for stolpec in range(11):
@@ -59,11 +61,13 @@ class tkmlin():
         menu_igra.add_command(label="PvP", command=self.newgame)
         menu_igra.add_command(label="PvAi", command=self.newgamerac)
         menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
-        menu_igra.add_command(label="Izpisi_plosco", command = self.izpisi)
+        menu_igra.add_command(label="About", command=self.about_okno)
+
 
         menu_test = Menu(menu)
         menu.add_cascade(label="Test", menu=menu_test)
         menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
+        menu_test.add_command(label="Izpisi_plosco", command = self.izpisi)
 
 
         #Igralnaself.plosca
@@ -224,6 +228,53 @@ class tkmlin():
         label = Label(self.zmag_okno, image=photo)
         label.image = photo
         label.grid(row=1, column=0)
+
+    def about_okno(self,):
+        """Napravi about okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
+        def unici():
+            """Zapre pomozno okno z podatki o projektu"""
+            self.about.destroy()
+            self.about = None
+
+        self.DEFCON = 4
+        if self.about != None:
+            self.about.lift()
+            return
+        self.about = Toplevel()
+        self.about.title("About")
+        self.about.resizable(width=False, height=False)
+        self.about.protocol("WM_DELETE_WINDOW", unici)
+
+        self.about.grid_columnconfigure(0, minsize=400)
+        besedilo = StringVar(self.about)
+        Label(self.about, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
+        message = "Projekt pri predmetu programiranje 2"
+        besedilo.set(message)
+        besedilo2 = StringVar(self.about)
+        Label(self.about, textvariable=besedilo2, font=("Helvetica", 12)).grid(row=1, column=0)
+        message2 = "Avtorja projekta sta Samo Kralj in Luka Avbreht \n" \
+                   """
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Luka Avbreht, Samo Kralj
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+        besedilo2.set(message2)
+
+
 
     def newgamerac(self):
         """moznosti izbire igre proti racunalniku"""
