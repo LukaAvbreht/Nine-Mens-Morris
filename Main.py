@@ -11,6 +11,8 @@ class tkmlin():
         self.master.minsize(width=1300, height=700)
         self.bg = 'LightYellow2'  #'LemonChiffon'
         self.zmag_okno = None  #Zmagovalno okno
+        self.about = None  #okno o igri
+        self.help = None  #okno za pomoč
 
         #nastavi minimalne sirine stolpcev v polju
         for stolpec in range(11):
@@ -31,16 +33,16 @@ class tkmlin():
         self.igralec1 = None
         self.igralec2 = None
 
-        self.canvas1 = Canvas(master, width=300, height=600)  #,bg=self.bg)
-        self.canvas2 = Canvas(master, width=300, height=600)  #,bg=self.bg)
+        self.canvas1 = Canvas(master, width=300, height=600)  # ,bg=self.bg)
+        self.canvas2 = Canvas(master, width=300, height=600)  # ,bg=self.bg)
         self.canvas1.grid(row=3, column=0, columnspan=2, sticky=N+S+E+W)
         self.canvas2.grid(row=3, column=9, columnspan=2, sticky=N+S+E+W)
 
         self.play1ids = []
         self.play2ids = []
 
-        self.play1mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
-        self.play2mrtvi = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
+        self.play1mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
+        self.play2mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
 
         self.strime1 = StringVar(self.master, value=self.ime_igralec1)
         Label(self.master, textvariable=self.strime1, font=("Helvetica", 20)).grid(row=1, column=0, columnspan=2)
@@ -59,11 +61,13 @@ class tkmlin():
         menu_igra.add_command(label="PvP", command=self.newgame)
         menu_igra.add_command(label="PvAi", command=self.newgamerac)
         menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
-        menu_igra.add_command(label="Izpisi_plosco", command = self.izpisi)
+        menu_igra.add_command(label="About", command=self.about_okno)
+
 
         menu_test = Menu(menu)
         menu.add_cascade(label="Test", menu=menu_test)
         menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
+        menu_test.add_command(label="Izpisi_plosco", command = self.izpisi)
 
 
         #Igralnaself.plosca
@@ -107,7 +111,7 @@ class tkmlin():
 
     def postavi_stranske(self):
         """Na stranska polja postavi figure, ki jih mora igralec postaviti na ploskev"""
-        slovarzanastran = [(85, 85), (145, 85), (205, 85), (85, 145), (145, 145), (205, 145), (85, 205), (145, 205), (205, 205)]
+        slovarzanastran = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
         for j in slovarzanastran:
             x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
             self.play1ids.append(x)
@@ -228,6 +232,53 @@ class tkmlin():
         label.image = photo
         label.grid(row=1, column=0)
 
+    def about_okno(self):
+        """Napravi about okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
+        def unici():
+            """Zapre pomozno okno z podatki o projektu"""
+            self.about.destroy()
+            self.about = None
+
+        self.DEFCON = 4
+        if self.about != None:
+            self.about.lift()
+            return
+        self.about = Toplevel()
+        self.about.title("About")
+        self.about.resizable(width=False, height=False)
+        self.about.protocol("WM_DELETE_WINDOW", unici)
+
+        self.about.grid_columnconfigure(0, minsize=400)
+        besedilo = StringVar(self.about)
+        Label(self.about, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
+        message = "Projekt pri predmetu programiranje 2"
+        besedilo.set(message)
+        besedilo2 = StringVar(self.about)
+        Label(self.about, textvariable=besedilo2, font=("Helvetica", 12)).grid(row=1, column=0)
+        message2 = "Avtorja projekta sta Samo Kralj in Luka Avbreht \n" \
+                   """
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Luka Avbreht, Samo Kralj
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+        besedilo2.set(message2)
+
+
+
     def newgamerac(self):
         """moznosti izbire igre proti racunalniku"""
         self.igra = Igra()
@@ -266,11 +317,11 @@ class tkmlin():
             if igralec1_clovek.get():
                 igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
             else:
-                igralec1 = Racunalnik(self, self.barva1, self.ime_igralec1, Alpha_betta(1))
+                igralec1 = Racunalnik(self, self.barva1, self.ime_igralec1, Alpha_betta(var.get()))
             if igralec2_clovek.get():
                 igralec2 = Igralec(self, self.barva2, self.ime_igralec2)
             else:
-                igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(1))
+                igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(var.get()))
             self.nova_igra(igralec1,igralec2)
             nov_game.destroy()
 
@@ -290,33 +341,45 @@ class tkmlin():
         Label(nov_game, text='Igralec 2', font=('Times',12)).grid(column=3, row=1)
         Label(nov_game, text="Tip igralca:").grid(row=2, column=0, rowspan=2, sticky="E")
         Label(nov_game, text="Tip igralca:").grid(row=2, column=2, rowspan=2, sticky="E")
+        Label(nov_game, text="Težavnost:").grid(row=5, column=0, rowspan=2, sticky="E")
+        Label(nov_game, text="Težavnost:").grid(row=5, column=2, rowspan=2, sticky="E")
 
         igralec1_clovek = BooleanVar()
         igralec1_clovek.set(True)
         igralec2_clovek = BooleanVar()
         igralec2_clovek.set(True)
-        igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik", False, igralec1_clovek, 4, 1),
-                   ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik", False, igralec2_clovek, 4, 3)]
+        igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik1", False, igralec1_clovek, 4, 1),
+                   ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik1", False, igralec2_clovek, 4, 3),]
+
+        var = StringVar(nov_game)
+        var.set(3)
+        option = OptionMenu(nov_game, var, 1, 2, 3, 4, 5)
+        option.grid(row=5, column=1)
+
+        var2 = StringVar(nov_game)
+        var2.set(3)
+        option2 = OptionMenu(nov_game, var2, 1, 2, 3, 4, 5)
+        option2.grid(row=5, column=3)
 
         for besedilo, vrednost, spremenljivka, vrstica, stolpec in igralci:
             Radiobutton(nov_game, text=besedilo, variable=spremenljivka, value=vrednost, width=10, anchor="w")\
                 .grid(row=vrstica, column=stolpec)
 
-        Label(nov_game, text="Ime igralca:").grid(row=5, column=0, sticky="E")
-        Label(nov_game, text="Ime igralca:").grid(row=5, column=2, sticky="E")
+        Label(nov_game, text="Ime igralca:").grid(row=7, column=0, sticky="E")
+        Label(nov_game, text="Ime igralca:").grid(row=7, column=2, sticky="E")
 
         ime1 = Entry(nov_game, font=('Times', 12), width=10)
-        ime1.grid(row=5, column=1)
+        ime1.grid(row=7, column=1)
         ime1.insert(0, self.ime_igralec1)
 
         ime2 = Entry(nov_game, font=('Times', 12), width=10)
-        ime2.grid(row=5, column=3)
+        ime2.grid(row=7, column=3)
         ime2.insert(0, self.ime_igralec2)
 
         Button(nov_game, text="Prekliči", width=20, height=2,
-                  command=lambda: nov_game.destroy()).grid(row=6, column=0, columnspan=2, sticky=N+W+E+S)
+                  command=lambda: nov_game.destroy()).grid(row=8, column=0, columnspan=2, sticky=N+W+E+S)
         Button(nov_game, text="Zacni igro", width=20, height=2,
-                  command=lambda: creategame()).grid(row=6, column=2, columnspan=2, sticky=N+W+E+S)
+                  command=lambda: creategame()).grid(row=8, column=2, columnspan=2, sticky=N+W+E+S)
 
     def ponastavi(self):
         """pripravi polje za novo igro"""
