@@ -89,8 +89,8 @@ class tkmlin():
             for j in range(7):
                 if self.igra.plosca[i][j]==None:
                     x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline="")
-                    self.id_polje[x] = (i,j)
-                    self.polje_id[(i,j)] = x
+                    self.id_polje[x] = (i, j)
+                    self.polje_id[(i, j)] = x
 
         self.plosca.bind("<Button-1>", self.klik)
 
@@ -311,7 +311,7 @@ class tkmlin():
         ime2.insert(0, self.ime_igralec2)
 
         Button(nov_game, text="Prekliči", width=20, height=2,
-                  command=lambda: new_game.destroy()).grid(row=6, column=0, columnspan=2, sticky=N+W+E+S)
+                  command=lambda: nov_game.destroy()).grid(row=6, column=0, columnspan=2, sticky=N+W+E+S)
         Button(nov_game, text="Zacni igro", width=20, height=2,
                   command=lambda: creategame()).grid(row=6, column=2, columnspan=2, sticky=N+W+E+S)
 
