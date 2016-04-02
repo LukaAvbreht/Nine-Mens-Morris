@@ -597,6 +597,7 @@ class Alpha_betta():
                                         vrednost_najboljse = vrednost
                                         najboljsa_poteza = p + q #sestevanje tuplov
                                 self.igra.mlin = False
+                                self.igra.razveljavi()
                             else:
                                 vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                                 self.igra.razveljavi()
@@ -620,6 +621,7 @@ class Alpha_betta():
                                         vrednost_najboljse = vrednost
                                         najboljsa_poteza = p + q
                                 self.igra.mlin = False
+                                self.igra.razveljavi()
                             else:
                                 vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                                 self.igra.razveljavi()
