@@ -122,6 +122,7 @@ class Igra():
             self.mlin = True
             self.zgodovina[-1][4] = False
             self.zgodovina[-1][5] = False
+            self.na_potezi = nasprotnik(self.na_potezi)
     
     def kopiraj_plosco(self):
         novaplosca = []
@@ -246,6 +247,8 @@ class Igra():
                 self.plosca[i][j] = self.na_potezi
                 self.zgodovina.append([i, j, False, False, False, False, self.na_potezi])
                 if self.postavljen_mlin((i,j)):
+                    self.izpisi_plosco()
+                    print(self.postavljen_mlin((i,j)))
                     self.mlin = True
                 else:
                     self.na_potezi = nasprotnik(self.na_potezi)
@@ -265,6 +268,8 @@ class Igra():
                     self.plosca[i][j] = self.na_potezi
                     self.zgodovina.append([i,j,a, b, False, False, self.na_potezi])
                     if self.postavljen_mlin((i,j)):
+                        self.izpisi_plosco()
+                        print(self.postavljen_mlin((i,j)))
                         self.mlin = True
                     else:
                         self.na_potezi = nasprotnik(self.na_potezi)

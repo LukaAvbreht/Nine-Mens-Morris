@@ -503,7 +503,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
-                    self.gui.vzami_zeton(id3)
+                    self.gui.plosca.after(500,  self.gui.vzami_zeton(id3))
             else:
                 if self.algoritem.jemljem == (False, False):
                     id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
@@ -514,7 +514,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id1, id2)
-                    self.gui.vzami_zeton(id3)
+                    self.gui.plosca.after(500,  self.gui.vzami_zeton(id3))
             self.mislec = None
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
@@ -527,8 +527,8 @@ class Alpha_betta():
         self.jaz = None
         self.poteza = None  #sem algoritem shrani potezo ko jo naredi
         self.jemljem = None
-        self.ZMAGA = 100000  # Mora biti vsaj 10^5
-        self.NESKONCNO = ZMAGA + 1  # Več kot zmaga
+    ZMAGA = 100000  # Mora biti vsaj 10^5
+    NESKONCNO = ZMAGA + 1  # Več kot zmaga
 
     def izracunaj_potezo(self, igra):
         self.igra = igra
