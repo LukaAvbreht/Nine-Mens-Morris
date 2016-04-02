@@ -26,6 +26,7 @@ Namenjen je postavljanju graficnega umesnika glede na izbrane nastavitve za novo
 * `zamenjaj_na_potezi(self)` spremeni stanje igre, ter od nasprotnika pricakuje igranje poteze, ter nastavi vse potrebno na plošči
 * `klik(self,event)` metoda ki vrne id polja, na katerega je pritisnil uporabnik(event), ce je uporabnik pritisnil na katerokoli polje
 * `zmagovalno_okno(self,zmagovalec)` metoda namenjena generiranju zmagovalnega okna ki se odpre, ko kateri izmed igralcev zmaga, ter ga tako o tem obvesti
+* `about_okno(self)` metoda ki odpre okno z podatki o projektu
 * `nova_igra(self, igralec1, igralec2)` je metoda ki gledena podane nastavitve o igralcih generira novo igro (uporabljamo jo v metodah `newgame` in `newgamerac` ki sta le bliznici (nekaksni privzeti nastavitvi dveh najpogostejsih opciji)
 * `izbira_nove_igre(self)` je metoda, ki odpre novo okno, kjer si uporabnik lahko izbere, s kaksnimi nastavitvami zeli igrati igro
 * `ponastavi(self)` metoda namenjena resetiranju vseh nastavitev, za zacetek nove igre
@@ -57,6 +58,7 @@ Namenjen je izracunu optimalne poteze glede na trenutno stanje igre
 * `izracunaj_potezo(self,igra)` je metoda ki pozene algoritem, da le ta zacne racunati optimalno potezo v igri, ki jo igramo
 * `vrednost_pozicije(self)` je metoda ki po tem ko `minimax` doseše želeno globino oceni vrednost igralne plošče 
 * `minimax(self, globina, maksimiziramo)` metoda, ki "odigra" igro za globina potez naprej, ter nato vrne optimalno potezo, ki jo kasneje racunalnik odigra (ce maksimiziramo iščemo čimolšo potezo za igralca na potezi, cene zanj najslabšo)
+* `alpha_betta(self, globina, a, b, maksimiziramo)`  metoda ki prav tako odigra igro, ter izracuna potezo, le da to stori bolj optimalno ker določenih "slabih" vej v drevesu ne preverja
 
 ### Razred logike igre `Igra`
 

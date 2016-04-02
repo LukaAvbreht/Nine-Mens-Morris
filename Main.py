@@ -229,7 +229,7 @@ class tkmlin():
         label.image = photo
         label.grid(row=1, column=0)
 
-    def about_okno(self,):
+    def about_okno(self):
         """Napravi about okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
         def unici():
             """Zapre pomozno okno z podatki o projektu"""
