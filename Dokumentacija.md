@@ -2,8 +2,8 @@
 
 ## O programu
 
-Program ob zagonu pozene igralno ploščo z privzetimi nastavitvami za igranje clovek vs racunalnik
-V primeru da uporabnik zeli igro igrati kako drugace si le to lahko izbere v meniju o igri z klikom na opcijo 'Nova igra' si izbrene zelene nastavitve med ponujenimi.
+Program ob zagonu požene igralno ploščo z privzetimi nastavitvami za igranje človek vs računalnik
+V primeru da uporabnik želi igro igrati kako drugace, si le to lahko izbere v meniju o igri z klikom na opcijo `Nova igra`, kjer si izbrene želene nastavitve med ponujenimi.
 
 ## Struktura kode
 
