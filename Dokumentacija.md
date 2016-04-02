@@ -58,3 +58,18 @@ Namenjen je izracunu optimalne poteze glede na trenutno stanje igre
 * `vrednost_pozicije(self)` je metoda ki po tem ko `minimax` doseše želeno globino oceni vrednost igralne plošče 
 * `minimax(self, globina, maksimiziramo)` metoda, ki "odigra" igro za globina potez naprej, ter nato vrne optimalno potezo, ki jo kasneje racunalnik odigra (ce maksimiziramo iščemo čimolšo potezo za igralca na potezi, cene zanj najslabšo)
 
+### Razred logike igre `Igra`
+
+Namenjen je preverjanu veljavnosti potez in pa sledenju pravilom igre
+
+* `kopija(self)` je metoda ki skopira igro ter jo pripravi, da lahko na njej racunalnik izvaja algoritem ter izracuna optimalno potezo
+* `razveljavi(self)` metoda ki razveljavi zadnjo potezo
+* `razveljavi_jemanje(self)` metoda ki razveljavi zadnje jemanje
+* `kopiraj_plosco(self)` naredi hard-copy nase igralne plošče
+* `je_veljavna(self,i, j, a = "PRAZNO", b = "PRAZNO")` metoda preveri, ali je poteza ki jo zelimo izvesti veljavna 
+* `postavljen_mlin(self,poteza)` je metoda, ki glede na zadnjo potezo ugotovi, ali je poteza pripeljala do tega da je postavljen nov mlin
+* `veljavne_poteze(self)` metoda ki vrne seznam vseh veljavnih potez gledena to kdo je napotezi in v kateri fazi je igra
+* `veljavna_jemanja(self)` metoda ki vrne seznam vseh žetonov, ki jih je dovoljeno pojesti
+* `lahko_jemljem(self, i, j)` metoda preveri, ali lahko izbrani zeton vzamemo
+* `poteza(self, i, j, a="PRAZNO", b="PRAZNO")` metoda ki izvede potezo iz poja (a,b) na polje (i,j), oz le postavi figuro na polje (i,j) (odvisno od faze igre)
+* `odstrani_figurico(self, i, j)` metoda ki odstrani nasprotnikovo figuricao na koordinatah (i,j) ce je to dovoljeno
