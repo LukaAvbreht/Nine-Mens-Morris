@@ -90,7 +90,7 @@ class Igra():
         copy.na_potezi = self.na_potezi
         copy.faza = self.faza
         copy.postavljenih = self.postavljenih
-        copy.figurice = self.figurice
+        copy.figurice = self.figurice.copy() #hard copy
         return copy
 
         
