@@ -8,8 +8,10 @@ def nasprotnik(igralec):
     """ Pove nasprotnega igralca. Koristno pri metodi poteza. """
     if igralec == IGRALEC_ENA:
         return IGRALEC_DVA
-    else:
+    elif igralec == IGRALEC_DVA:
         return IGRALEC_ENA
+    else:
+        1/0
 
 
 class Igra():
@@ -87,6 +89,8 @@ class Igra():
         copy.plosca = [self.plosca[i][:] for i in range(7)]
         copy.na_potezi = self.na_potezi
         copy.faza = self.faza
+        copy.postavljenih = self.postavljenih
+        copy.figurice = self.figurice
         return copy
 
         
@@ -247,8 +251,6 @@ class Igra():
                 self.plosca[i][j] = self.na_potezi
                 self.zgodovina.append([i, j, False, False, False, False, self.na_potezi])
                 if self.postavljen_mlin((i,j)):
-                    self.izpisi_plosco()
-                    print(self.postavljen_mlin((i,j)))
                     self.mlin = True
                 else:
                     self.na_potezi = nasprotnik(self.na_potezi)
@@ -268,8 +270,6 @@ class Igra():
                     self.plosca[i][j] = self.na_potezi
                     self.zgodovina.append([i,j,a, b, False, False, self.na_potezi])
                     if self.postavljen_mlin((i,j)):
-                        self.izpisi_plosco()
-                        print(self.postavljen_mlin((i,j)))
                         self.mlin = True
                     else:
                         self.na_potezi = nasprotnik(self.na_potezi)
