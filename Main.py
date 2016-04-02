@@ -335,14 +335,12 @@ class tkmlin():
             drugopolje = self.id_polje[id_2]
         if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
-            """
             if self.na_potezi.barva == self.barva1:
                 self.canvas1.itemconfig(self.play1ids[0], fill="")
                 del(self.play1ids[0])
             else:
                 self.canvas2.itemconfig(self.play2ids[0], fill="")
                 del(self.play2ids[0])
-            """
             self.igra.poteza(prvopolje[0], prvopolje[1])
             if self.igra.mlin:
                 self.DEFCON = 3
@@ -372,14 +370,12 @@ class tkmlin():
         if id_2==False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
-            """
             if self.na_potezi.barva == self.barva1:
                 self.canvas1.itemconfig(self.play1ids[0], fill="")
                 del(self.play1ids[0])
             else:
                 self.canvas2.itemconfig(self.play2ids[0], fill="")
                 del(self.play2ids[0])
-            """
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
@@ -388,7 +384,7 @@ class tkmlin():
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
-        #self.postavi_stranske2(self.nasprotnik().barva)
+        self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
@@ -507,7 +503,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
-                    self.gui.vzami_zeton(id3)
+                    self.gui.plosca.after(300, self.gui.vzami_zeton(id3))
             else:
                 if self.algoritem.jemljem == ("PRAZNO", "PRAZNO"):
                     id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
@@ -518,7 +514,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id1, id2)
-                    self.gui.vzami_zeton(id3)
+                    self.gui.plosca.after(300, self.gui.vzami_zeton(id3))
 
             self.mislec = None
         else:
