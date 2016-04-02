@@ -87,7 +87,7 @@ class tkmlin():
         # generira gumbke na polju in jim da svoj id
         for i in range(7):
             for j in range(7):
-                if self.igra.plosca[j][i]==None:
+                if self.igra.plosca[i][j]==None:
                     x =self.plosca.create_oval((100*j+50)-25, (100*i+50)-25, (100*j+50)+25, (100*i+50)+25, outline="")
                     self.id_polje[x] = (i,j)
                     self.polje_id[(i,j)] = x
@@ -507,7 +507,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
-                    self.gui.plosca.after(500,  self.gui.vzami_zeton(id3))
+                    self.gui.vzami_zeton(id3)
             else:
                 if self.algoritem.jemljem == (False, False):
                     id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
@@ -518,6 +518,7 @@ class Racunalnik():
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     id3 = self.gui.polje_id[(self.algoritem.jemljem[0]), (self.algoritem.jemljem[1])]
                     self.gui.izvedi_posebno_potezo(id1, id2)
+                    self.gui.vzami_zeton(id3)
 
             self.mislec = None
         else:
