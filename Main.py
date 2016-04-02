@@ -499,8 +499,8 @@ class Racunalnik():
     def preveri_potezo(self):
         """Vsakih 100ms preveri ali je algoritem ze izracunal potezo, ter jo zapisal v spremenjlivko znotraj njegovega razreda"""
         if self.algoritem.poteza != None:
-            if self.algoritem.poteza[2] == False:
-                if self.algoritem.jemljem == (False, False):
+            if self.algoritem.poteza[2] == "PRAZNO":
+                if self.algoritem.jemljem == ("PRAZNO", "PRAZNO"):
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     self.gui.izvedi_potezo(id2)
                 else:
@@ -509,7 +509,7 @@ class Racunalnik():
                     self.gui.izvedi_posebno_potezo(id2)  #ista k navadna sam da na koncu ne menja poteze
                     self.gui.vzami_zeton(id3)
             else:
-                if self.algoritem.jemljem == (False, False):
+                if self.algoritem.jemljem == ("PRAZNO", "PRAZNO"):
                     id1 = self.gui.polje_id[(self.algoritem.poteza[2]), (self.algoritem.poteza[3])]
                     id2 = self.gui.polje_id[(self.algoritem.poteza[0]), (self.algoritem.poteza[1])]
                     self.gui.izvedi_potezo(id1, id2)
@@ -602,7 +602,7 @@ class Alpha_betta():
                                 self.igra.razveljavi()
                                 if vrednost > vrednost_najboljse:
                                     vrednost_najboljse = vrednost
-                                    najboljsa_poteza = p + (False,False,)
+                                    najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
                         else:
                             pass
                 else: #minimiziramo
@@ -625,7 +625,7 @@ class Alpha_betta():
                                 self.igra.razveljavi()
                                 if vrednost < vrednost_najboljse:
                                     vrednost_najboljse = vrednost
-                                    najboljsa_poteza = p + (False,False)
+                                    najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
                         else:
                             pass
 

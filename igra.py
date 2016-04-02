@@ -98,7 +98,7 @@ class Igra():
         i,j,a,b,c,d,kdonapotezi = self.zgodovina.pop(-1)
         #print(i,j,a,b,c,d,kdonapotezi)
         self.plosca[i][j] = None
-        if a == False and b == False:
+        if a == "PRAZNO" and b == "PRAZNO":
             self.postavljenih -= 1
             if self.postavljenih < 18:
                 self.faza = 0
@@ -107,7 +107,7 @@ class Igra():
             self.figurice[kdonapotezi] -= 1
         else:
             self.plosca[a][b] = kdonapotezi
-        if c == False and d == False:
+        if c == "PRAZNO" and d == "PRAZNO":
             pass
         else:
             self.plosca[c][d] = nasprotnik(kdonapotezi)
@@ -117,15 +117,15 @@ class Igra():
     def razveljavi_jemanje(self):
         c = self.zgodovina[-1][4]
         d = self.zgodovina[-1][5]
-        if c == False and d == False:
+        if c == "PRAZNO" and d == "PRAZNO":
             pass
         else:
             igralec = self.zgodovina[-1][6]
             self.plosca[c][d] = nasprotnik(igralec)
             self.figurice[nasprotnik(igralec)] += 1
             self.mlin = True
-            self.zgodovina[-1][4] = False
-            self.zgodovina[-1][5] = False
+            self.zgodovina[-1][4] = "PRAZNO"
+            self.zgodovina[-1][5] = "PRAZNO"
             self.na_potezi = nasprotnik(self.na_potezi)
     
     def kopiraj_plosco(self):
@@ -139,18 +139,21 @@ class Igra():
         for vrstica in self.plosca:
             print(vrstica)
 
-    def je_veljavna(self, i, j, a = False, b = False):
+    def je_veljavna(self, i, j, a = "PRAZNO", b = "PRAZNO"):
         """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
-        if self.faza == 0:
-            return self.plosca[i][j] == None
-        else:
-            if self.plosca[i][j] == None and self.plosca[a][b] == self.na_potezi:
-                if self.figurice[self.na_potezi] == 3:
-                    return True
-                else:
-                    return (i,j) in self.sosedi[(a,b)]
+        try:
+            if self.faza == 0:
+                return self.plosca[i][j] == None
             else:
-                return False
+                if self.plosca[i][j] == None and self.plosca[a][b] == self.na_potezi:
+                    if self.figurice[self.na_potezi] == 3:
+                        return True
+                    else:
+                        return (i,j) in self.sosedi[(a,b)]
+                else:
+                    return False
+        except:
+            return False
 
     def postavljen_mlin(self, poteza): #pomni doloci ali potezo namisljeno igramo ali ne
         """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False."""
@@ -189,8 +192,8 @@ class Igra():
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
-                    if self.je_veljavna(i,j, False, False):
-                        mozne_poteze.append((i,j,False,False))
+                    if self.je_veljavna(i,j, "PRAZNO", "PRAZNO"):
+                        mozne_poteze.append((i,j,"PRAZNO","PRAZNO"))
             return mozne_poteze
         elif self.faza == 1 and self.figurice[self.na_potezi] > 3:
             mozne_poteze = []
@@ -240,7 +243,7 @@ class Igra():
         """Funkcija pove, ali izbrani zeton lahko pojemo."""
         return (i, j) in self.veljavna_jemanja()
 
-    def poteza(self, i, j, a=False, b=False):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
+    def poteza(self, i, j, a="PRAZNO", b="PRAZNO"):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
         """Izvede potezo. kam (i,j) od kje (a,b). """
         if self.faza == 0:
             if self.je_veljavna(i,j):
@@ -249,7 +252,7 @@ class Igra():
                 if self.postavljenih >= 18: #V primeru, da je konec faze postavljanja
                     self.faza = 1
                 self.plosca[i][j] = self.na_potezi
-                self.zgodovina.append([i, j, False, False, False, False, self.na_potezi])
+                self.zgodovina.append([i, j, "PRAZNO", "PRAZNO", "PRAZNO", "PRAZNO", self.na_potezi])
                 if self.postavljen_mlin((i,j)):
                     self.mlin = True
                 else:
@@ -268,7 +271,7 @@ class Igra():
                     # je mozno prestaviti figurico le na sosednja polja
                     self.plosca[a][b] = None
                     self.plosca[i][j] = self.na_potezi
-                    self.zgodovina.append([i,j,a, b, False, False, self.na_potezi])
+                    self.zgodovina.append([i,j,a, b, "PRAZNO", "PRAZNO", self.na_potezi])
                     if self.postavljen_mlin((i,j)):
                         self.mlin = True
                     else:
