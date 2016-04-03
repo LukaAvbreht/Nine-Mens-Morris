@@ -9,7 +9,7 @@ Hiter pregled igre lahko najdete na strani Wikipedie: [Nine-Mens-Morris] (https:
 Mlin je igra za dva igralca in se igra na takšni [igralni plošči] (https://upload.wikimedia.org/wikipedia/commons/7/7d/Nine_Men's_Morris_board.svg).
 
 Vsak igralec začne igro z 9 figuricami enake barve. Igro začne naključno izbrani igralec in postavi svojo figurico na eno
-izmed črnih pik na polju. Nadaljuje drugi igralec in tako izmenično dalje, dokler ni vsak od igralcev postavil vseh svojih
+izmed presečišč linij na igralni plošči. Nadaljuje drugi igralec in tako izmenično dalje, dokler ni vsak od igralcev postavil vseh svojih
 9 figuric. Cilj igre je postaviti "mlin" in sicer to pomeni, da imaš 3 svoje figurice postavljene zaporedno vodoravno ali zaporedno navpično.
 Vsakič ko na novo postaviš mlin lahko nasprotniku odstraniš eno njegovo figurico. 
 
