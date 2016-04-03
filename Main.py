@@ -609,9 +609,84 @@ class Alpha_betta():
         self.poteza = poteza[:4]
         self.jemljem = poteza[4:]
 
+    def ocena_igralec(self, igralec): #self.igra.na_potezi ali nasprotnik(self.igra.na_potezi)
+        stfiguric = self.igra.figurice[igralec] #Število figuric
+        stmlinov = 0 #Število mlinov
+        blokirani = 0 #Število blokiranih nasprotnikovih žetonov
+        odprtimlini = 0 #Odprt mlin
+        dvojnimlini = 0 #Dvojni mlin
+        zmag_konf = 0 #Zmagovalna konfiguracija
+
+        #izključno samo v fazi 1 in 3
+        zet_2_konf = 0 #2- zetona konfiguracija
+        zet_3_konf = 0 #3- zetoni konfiguracija (2krat pretimo narediti mlin)
+
+        for trojka in self.igra.kombinacije:
+            glej = [self.igra.plosca[el[0]][el[1]] for el in trojka]
+            if glej == [igralec,igralec,igralec]:
+                stmlinov += 1
+            elif glej == [None, igralec, igralec]:
+                naspr = False #preverila bo ali je nasprotnik v blizini
+                if self.igra.faza == 0:
+                    zet_2_konf += 1
+                for polje in self.igra.sosedi[trojka[0]]:
+                    if self.igra.plosca[polje[0]][polje[1]] == igralec:
+                        odprtimlini += 1
+                    elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
+                        naspr = True #nasprotnik nas lahko blokira
+                    else:
+                        pass
+                if nasprotnik == False:
+                    zmag_konf = 1
+            elif glej == [igralec, None, igralec]:
+                naspr = False #preverila bo ali je nasprotnik v blizini
+                if self.igra.faza == 0:
+                    zet_2_konf += 1
+                for polje in self.igra.sosedi[trojka[1]]:
+                    if self.igra.plosca[polje[0]][polje[1]] == igralec:
+                        odprtimlini += 1
+                    elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
+                        naspr = True #nasprotnik nas lahko blokira
+                    else:
+                        pass
+                if nasprotnik == False:
+                    zmag_konf = 1
+            elif glej == [igralec, igralec, None]:
+                naspr = False #preverila bo ali je nasprotnik v blizini
+                if self.igra.faza == 0:
+                    zet_2_konf += 1
+                for polje in self.igra.sosedi[trojka[2]]:
+                    if self.igra.plosca[polje[0]][polje[1]] == igralec:
+                        odprtimlini += 1
+                    elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
+                        naspr = True #nasprotnik nas lahko blokira
+                    else:
+                        pass
+                if naspr == False:
+                    zmag_konf = 1
+            else:
+                pass
+
+        for i in range(7):
+            for j in range(7):
+                if self.igra.plosca[i][j] == nasprotnik(igralec):
+                    blokiran = True
+                    for sosednja in self.igra.sosedi[(i,j)]:
+                        if self.igra.plosca[sosednja[0]][sosednja[1]] == None:
+                            blokiran = False
+                    if blokiran:
+                        blokirani += 1
+        #KOEFICIENTI KOLIKO JE KAJ VREDNO IN VRACAMO VREDNOSTI
+        if self.igra.faza == 0:
+            return 26*stmlinov + 1*blokirani + 6*stfiguric + 12*zet_2_konf
+        elif self.igra.faza == 1:
+            return 43*stmlinov + 10*blokirani + 1*stfiguric + 30*odprtimlini + 958*zmag_konf
+        else:
+            pass
+
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije."""
-        return self.igra.figurice[self.igra.na_potezi] - self.igra.figurice[nasprotnik(self.igra.na_potezi)]
+        return self.ocena_igralec(self.igra.na_potezi) - self.ocena_igralec(nasprotnik(self.igra.na_potezi))
 
     def alfabeta(self, globina, alfa, beta, maksimiziramo):
         (stanje, kdo) = self.igra.stanje
