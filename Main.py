@@ -58,16 +58,18 @@ class tkmlin():
 
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
-        menu_igra.add_command(label="PvP", command=self.newgame)
-        menu_igra.add_command(label="PvAi", command=self.newgamerac)
         menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
-        menu_igra.add_command(label="About", command=self.about_okno)
+        #menu_igra.add_command(label="PvP", command=self.newgame)
+        #menu_igra.add_command(label="PvAi", command=self.newgamerac)
 
 
         menu_test = Menu(menu)
-        menu.add_cascade(label="Test", menu=menu_test)
-        menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
-        menu_test.add_command(label="Izpisi_plosco", command = self.izpisi)
+        menu.add_cascade(label="O programu", menu=menu_test)
+        menu_test.add_command(label="About", command=self.about_okno)
+        menu_test.add_command(label="Help", command=self.help_okno)
+
+        #menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
+        #menu_test.add_command(label="Izpisi_plosco", command = self.izpisi)
 
 
         #Igralnaself.plosca
@@ -274,6 +276,47 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 """
         besedilo2.set(message2)
 
+    def help_okno(self):
+        """Napravi help okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
+        def unici():
+            """Zapre pomozno okno za pomoč"""
+            self.help.destroy()
+            self.help = None
+
+        self.DEFCON = 4
+        if self.help != None:
+            self.help.lift()
+            return
+        self.help = Toplevel()
+        self.help.title("Help")
+        self.help.resizable(width=False, height=False)
+        self.help.protocol("WM_DELETE_WINDOW", unici)
+
+        self.help.grid_columnconfigure(0, minsize=1000)
+        besedilo = StringVar(self.help)
+        Label(self.help, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
+        message = "Pomoč/pravila igre"
+        besedilo.set(message)
+        besedilo2 = StringVar(self.help)
+        Label(self.help, textvariable=besedilo2, font=("Helvetica", 12)).grid(row=1, column=0)
+        message2 = """
+        Vsak igralec začne igro z 9 figuricami enake barve. Igro začne naključno izbrani igralec in postavi svojo
+        figurico na eno izmed presečišč linij na igralni plošči. Nadaljuje drugi igralec in tako izmenično dalje,
+        dokler ni vsak od igralcev postavil vseh svojih 9 figuric. Cilj igre je postaviti "mlin" in sicer to pomeni,
+        da imaš 3 svoje figurice postavljene zaporedno vodoravno ali zaporedno navpično. Vsakič ko na novo postaviš
+        mlin lahko nasprotniku odstraniš eno njegovo figurico.
+
+        Po fazi postavljanja igralec, ki je igro začel, začne z drugo fazo igre, ki je premikanje figuric.
+        Premikaš lahko le figurice svoje barve. Figurico lahko premakneš iz nekega polja do sosednjega prostega polja.
+        Če s svojo potezo postaviš mlin, lahko nasprotniku vzameš figurico s plošče. Nato je na vrsti naslednji igralec
+        in tako izmenično dalje dokler nima nek igralec le še treh figuric na polju. V primeru, ko ima igralec le še
+        3 figurice zanj veljajo drugačna pravila premikanja in sicer lahko sedaj igralec premakne svojo figurico
+        na poljubno prosto polje na plošči in ne več nujno na sosednje prosto polje.
+
+        Igro zmaga tisti igralec ki prvi nasprotniku onemogoči postavitev mlina tj. ko ima nasprotnik le še 2 figurici na
+        plošči. V posebnem primeru ko igralec ne more več narediti nobene veljavne poteze, je ta igralec igro izgubil.
+        """
+        besedilo2.set(message2)
 
 
     def newgamerac(self):
@@ -299,8 +342,6 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
         self.ponastavi()
         self.strime1.set(self.ime_igralec1)
         self.strime2.set(self.ime_igralec2)
-        self.play1ids = []
-        self.play2ids = []
         self.postavi_stranske()
         self.zamenjaj_na_potezi()
 
@@ -384,6 +425,10 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
             self.plosca.itemconfig(i, fill="")
         self.canvas1.delete(ALL)
         self.canvas2.delete(ALL)
+        self.play1mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
+        self.play1mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
+        self.play1ids = []
+        self.play2ids = []
         self.strime1.set('')
         self.strime2.set('')
         self.na_potezi = self.igralec1
