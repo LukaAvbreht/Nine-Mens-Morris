@@ -362,7 +362,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
             if igralec2_clovek.get():
                 igralec2 = Igralec(self, self.barva2, self.ime_igralec2)
             else:
-                igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(var.get()))
+                igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(var2.get()))
             self.nova_igra(igralec1,igralec2)
             nov_game.destroy()
 
@@ -429,7 +429,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
         self.canvas1.delete(ALL)
         self.canvas2.delete(ALL)
         self.play1mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
-        self.play1mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
+        self.play2mrtvi = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
         self.play1ids = []
         self.play2ids = []
         self.strime1.set('')
