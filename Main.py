@@ -602,8 +602,8 @@ class Alpha_betta():
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
-        (poteza, vrednost) = self.alfabeta(2, -10001, 10001, True)
-        #(poteza, vrednost) = self.minimax(2, True)
+        (poteza, vrednost) = self.alfabeta(self.globina, -10001, 10001, True)
+        #(poteza, vrednost) = self.minimax(self.globina, True)
         self.igra = None
         self.jaz = None
         self.poteza = poteza[:4]
@@ -678,9 +678,9 @@ class Alpha_betta():
                         blokirani += 1
         #KOEFICIENTI KOLIKO JE KAJ VREDNO IN VRACAMO VREDNOSTI
         if self.igra.faza == 0:
-            return 26*stmlinov + 1*blokirani + 6*stfiguric + 12*zet_2_konf
+            return 26*stmlinov + 1*blokirani + 25*stfiguric + 12*zet_2_konf
         elif self.igra.faza == 1:
-            return 43*stmlinov + 10*blokirani + 1*stfiguric + 30*odprtimlini + 958*zmag_konf
+            return 43*stmlinov + 10*blokirani + 15*stfiguric + 21*odprtimlini + 958*zmag_konf
         else:
             pass
 
@@ -769,7 +769,7 @@ class Alpha_betta():
                                 break
                         else:
                             pass
-                assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
+                assert (najboljsa_poteza is not None), "alfabeta: izračunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
 
     def minimax(self, globina, maksimiziramo):
