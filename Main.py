@@ -602,8 +602,8 @@ class Alpha_betta():
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
-        (poteza, vrednost) = self.alfabeta(4, -10001, 10001, True)
-        #(poteza, vrednost) = self.minimax(4, True)
+        (poteza, vrednost) = self.alfabeta(2, -10001, 10001, True)
+        #(poteza, vrednost) = self.minimax(2, True)
         self.igra = None
         self.jaz = None
         self.poteza = poteza[:4]
