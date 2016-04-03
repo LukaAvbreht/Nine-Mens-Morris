@@ -283,7 +283,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
         """moznosti izbire igre proti racunalniku"""
         self.igra = Igra()
         igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
-        igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(1))
+        igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(2))
         self.nova_igra(igralec1, igralec2)
 
     def newgame(self):
@@ -401,14 +401,12 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
             drugopolje = self.id_polje[id_2]
         if id_1 != False and id_2 == False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
-            """
             if self.na_potezi.barva == self.barva1:
                 self.canvas1.itemconfig(self.play1ids[0], fill="")
                 del(self.play1ids[0])
             else:
                 self.canvas2.itemconfig(self.play2ids[0], fill="")
                 del(self.play2ids[0])
-            """
             self.igra.poteza(prvopolje[0], prvopolje[1])
             if self.igra.mlin:
                 self.DEFCON = 3
@@ -438,14 +436,12 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
         if id_2==False:
             self.plosca.itemconfig(id_1, fill=self.na_potezi.barva)
             self.igra.poteza(prvopolje[0], prvopolje[1])
-            """
             if self.na_potezi.barva == self.barva1:
                 self.canvas1.itemconfig(self.play1ids[0], fill="")
                 del(self.play1ids[0])
             else:
                 self.canvas2.itemconfig(self.play2ids[0], fill="")
                 del(self.play2ids[0])
-            """
         else:
             self.plosca.itemconfig(id_1, fill="")
             self.plosca.itemconfig(id_2, fill=self.na_potezi.barva)
@@ -454,7 +450,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
     def vzami_zeton(self, id_1):
         """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
-        #self.postavi_stranske2(self.nasprotnik().barva)
+        self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
         self.DEFCON = 1
         if self.igra.faza != 0: #PREVERI, ČE SMO ŠTEVILO ŽETONOV IGRALCA SPRAVILI POD 3
@@ -593,7 +589,7 @@ class Racunalnik():
 class Alpha_betta():
     """Vrne tri argumente (kam, od kje),(kaj jemljemo),vrednost poteze v obliki poteze"""
     def __init__(self,globina):
-        self.globina = globina
+        self.globina = int(globina)
         self.igra = None
         self.jaz = None
         self.poteza = None  #sem algoritem shrani potezo ko jo naredi
@@ -606,34 +602,100 @@ class Alpha_betta():
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
-        (poteza, vrednost) = self.minimax(2, True)
+        (poteza, vrednost) = self.alfabeta(4, -10001, 10001, True)
+        #(poteza, vrednost) = self.minimax(4, True)
         self.igra = None
         self.jaz = None
         self.poteza = poteza[:4]
         self.jemljem = poteza[4:]
 
     def vrednost_pozicije(self):
-        """Vrne oceno vrednosti pozicije"""
+        """Vrne oceno vrednosti pozicije."""
         return self.igra.figurice[self.igra.na_potezi] - self.igra.figurice[nasprotnik(self.igra.na_potezi)]
 
-    """
-    def alpha_betta(self, globina, a, b, maksimiziramo):
-        mozne = self.igra.veljavne_poteze()[:]
-        random.shuffle(mozne)
-        poteza = mozne[0]
-        vrednost = 5
-        if poteza[2] == False:
-            if self.igra.postavljen_mlin((poteza[0], poteza[1]), True):
-                jemljem = self.igra.veljavna_jemanja()[0]
+    def alfabeta(self, globina, alfa, beta, maksimiziramo):
+        (stanje, kdo) = self.igra.stanje
+        if stanje == "ZMAGA":
+            if kdo == self.jaz:
+                return (None, self.ZMAGA)
+            elif kdo == nasprotnik(self.jaz):
+                return (None, - self.ZMAGA)
             else:
-                jemljem = None
-        else:
-            if self.igra.postavljen_mlin((poteza[0], poteza[1]), True, poteza[2], poteza[3]):
-                jemljem = self.igra.veljavna_jemanja()[0]
+                pass
+        elif stanje == "V TEKU":
+            if globina == 0:
+                return (None, self.vrednost_pozicije())
             else:
-                jemljem = None
-        return (poteza, jemljem, vrednost)
-    """
+                if maksimiziramo:
+                    najboljsa_poteza = None #(i,j,a,b,c,d)
+                    vrednost_najboljse = - Alpha_betta.NESKONCNO
+                    for p in self.igra.veljavne_poteze():
+                        FLAG = False
+                        if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
+                            self.igra.poteza(p[0],p[1],p[2],p[3])
+                            if self.igra.mlin == True:
+                                for q in self.igra.veljavna_jemanja():
+                                    self.igra.odstrani_figurico(q[0],q[1])
+                                    vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                    self.igra.razveljavi_jemanje()
+                                    if vrednost > vrednost_najboljse:
+                                        vrednost_najboljse = vrednost
+                                        najboljsa_poteza = p + q #sestevanje tuplov
+                                        alfa = max(alfa,vrednost_najboljse)
+                                        if alfa >= beta:
+                                            FLAG = True
+                                            break
+                                self.igra.mlin = False
+                                self.igra.razveljavi()
+                            else:
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                self.igra.razveljavi()
+                                if vrednost > vrednost_najboljse:
+                                    vrednost_najboljse = vrednost
+                                    najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
+                                    alfa = max(alfa,vrednost_najboljse)
+                                    if alfa >= beta:
+                                        break
+                            if FLAG:
+                                break
+                        else:
+                            pass
+                else: #minimiziramo
+                    najboljsa_poteza = None
+                    vrednost_najboljse = Alpha_betta.NESKONCNO
+                    for p in self.igra.veljavne_poteze():
+                        FLAG = False
+                        if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
+                            self.igra.poteza(p[0],p[1],p[2],p[3])
+                            if self.igra.mlin == True:
+                                for q in self.igra.veljavna_jemanja():
+                                    self.igra.odstrani_figurico(q[0],q[1])
+                                    vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                    self.igra.razveljavi_jemanje()
+                                    if vrednost < vrednost_najboljse:
+                                        vrednost_najboljse = vrednost
+                                        najboljsa_poteza = p + q
+                                        beta = min(beta,vrednost_najboljse)
+                                        if beta <= alfa:
+                                            FLAG = True
+                                            break
+                                self.igra.mlin = False
+                                self.igra.razveljavi()
+                            else:
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                self.igra.razveljavi()
+                                if vrednost < vrednost_najboljse:
+                                    vrednost_najboljse = vrednost
+                                    najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
+                                    beta = min(beta,vrednost_najboljse)
+                                    if beta <= alfa:
+                                        break
+                            if FLAG:
+                                break
+                        else:
+                            pass
+                assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
+                return (najboljsa_poteza, vrednost_najboljse)
 
     def minimax(self, globina, maksimiziramo):
         (stanje, kdo) = self.igra.stanje
