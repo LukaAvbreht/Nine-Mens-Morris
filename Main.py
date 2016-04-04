@@ -250,7 +250,7 @@ class tkmlin():
         self.about.resizable(width=False, height=False)
         self.about.protocol("WM_DELETE_WINDOW", unici)
 
-        self.about.grid_columnconfigure(0, minsize=400)
+        self.about.grid_columnconfigure(0, minsize=900)
         besedilo = StringVar(self.about)
         Label(self.about, textvariable=besedilo, font=("Helvetica", 20)).grid(row=0, column=0)
         message = "Projekt pri predmetu programiranje 2"
@@ -641,7 +641,7 @@ class Alpha_betta():
         self.jaz = None
         self.poteza = None  #sem algoritem shrani potezo ko jo naredi
         self.jemljem = None
-    ZMAGA = 100000  # Mora biti vsaj 10^5
+    ZMAGA = 1000000  # Mora biti vsaj 10^5
     NESKONCNO = ZMAGA + 1  # Več kot zmaga
 
     def izracunaj_potezo(self, igra):
@@ -649,7 +649,7 @@ class Alpha_betta():
         self.jaz = self.igra.na_potezi
         self.poteza = None
         self.jemljem = None
-        (poteza, vrednost) = self.alfabeta(self.globina, -10001, 10001, True)
+        (poteza, vrednost) = self.alfabeta(self.globina, -100001, 100001, True)
         #(poteza, vrednost) = self.minimax(self.globina, True)
         self.igra = None
         self.jaz = None
