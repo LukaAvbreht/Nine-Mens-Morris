@@ -1,5 +1,4 @@
 __author__ = 'LukaAvbreht, SamoKralj'
-import logging
 
 IGRALEC_ENA = "B"
 IGRALEC_DVA = "C"
@@ -293,5 +292,3 @@ class Igra():
                         self.stanje = ("ZMAGA", IGRALEC_DVA)
                     else:
                         self.stanje = ("ZMAGA", IGRALEC_ENA)
-
-

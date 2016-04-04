@@ -3,7 +3,8 @@ from tkinter import *
 from igra import *
 from PIL import ImageTk,Image
 import threading
-
+import time
+import random
 
 class tkmlin():
     def __init__(self,master):
@@ -351,6 +352,7 @@ class tkmlin():
                 igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(var2.get()))
             self.nova_igra(igralec1,igralec2)
             nov_game.destroy()
+            print(time.clock())
 
         #ustvari novo okno
         nov_game = Toplevel()
@@ -424,6 +426,7 @@ class tkmlin():
 
     def izvedi_potezo(self, id_1=False, id_2=False):
         """Funcija ki izvede potezo ter premakne igralne figure iz polja id_1 na polje id_2"""
+        print(time.clock())
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -458,6 +461,7 @@ class tkmlin():
         """Funkcija, ki jo uporabi računalniški igralec v primeru da mora po koncani potezi jemati zeton.
         Drugace enaka kot funkcija izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
         funkcijo vzami zeton. """
+        print(time.clock())
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -691,7 +695,7 @@ class Alpha_betta():
         if self.igra.faza == 0:
             return 26*stmlinov + 1*blokirani + 25*stfiguric + 12*zet_2_konf
         elif self.igra.faza == 1 and self.igra.figurice[igralec] != 3:
-            return 43*stmlinov + 10*blokirani + 16*stfiguric + 21*odprtimlini + 958*zmag_konf
+            return 43*stmlinov + 10*blokirani + 14*stfiguric + 28*odprtimlini + 958*zmag_konf
         else:
             return 30*stfiguric + 21*odprtimlini + 20*stmlinov
 
@@ -715,7 +719,9 @@ class Alpha_betta():
                 if maksimiziramo:
                     najboljsa_poteza = None #(i,j,a,b,c,d)
                     vrednost_najboljse = - Alpha_betta.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    poteze = self.igra.veljavne_poteze()
+                    random.shuffle(poteze)
+                    for p in poteze:
                         FLAG = False
                         if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
                             self.igra.poteza(p[0],p[1],p[2],p[3])
@@ -749,7 +755,9 @@ class Alpha_betta():
                 else: #minimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = Alpha_betta.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    poteze = self.igra.veljavne_poteze()
+                    random.shuffle(poteze)
+                    for p in poteze:
                         FLAG = False
                         if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
                             self.igra.poteza(p[0],p[1],p[2],p[3])
@@ -799,7 +807,9 @@ class Alpha_betta():
                 if maksimiziramo:
                     najboljsa_poteza = None #(i,j,a,b,c,d)
                     vrednost_najboljse = - Alpha_betta.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    poteze = self.igra.veljavne_poteze()
+                    random.shuffle(poteze)
+                    for p in poteze:
                         if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
                             self.igra.poteza(p[0],p[1],p[2],p[3])
                             if self.igra.mlin == True:
@@ -823,7 +833,9 @@ class Alpha_betta():
                 else: #minimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = Alpha_betta.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    poteze = self.igra.veljavne_poteze()
+                    random.shuffle(poteze)
+                    for p in poteze:
                         if self.igra.je_veljavna(p[0],p[1],p[2],p[3]):
                             self.igra.poteza(p[0],p[1],p[2],p[3])
                             if self.igra.mlin == True:
