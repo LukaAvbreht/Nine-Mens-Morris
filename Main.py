@@ -375,8 +375,8 @@ class tkmlin():
         igralec1_clovek.set(True)
         igralec2_clovek = BooleanVar()
         igralec2_clovek.set(True)
-        igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik1", False, igralec1_clovek, 4, 1),
-                   ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik1", False, igralec2_clovek, 4, 3),]
+        igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik", False, igralec1_clovek, 4, 1),
+                   ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik", False, igralec2_clovek, 4, 3)]
 
         var = StringVar(nov_game)
         var.set(3)
@@ -403,10 +403,8 @@ class tkmlin():
         ime2.grid(row=7, column=3)
         ime2.insert(0, self.ime_igralec2)
 
-        Button(nov_game, text="Prekliči", width=20, height=2,
-                  command=lambda: nov_game.destroy()).grid(row=8, column=0, columnspan=2, sticky=N+W+E+S)
-        Button(nov_game, text="Zacni igro", width=20, height=2,
-                  command=lambda: creategame()).grid(row=8, column=2, columnspan=2, sticky=N+W+E+S)
+        Button(nov_game, text="Prekliči", width=20, height=2, command=lambda: nov_game.destroy()).grid(row=8, column=0, columnspan=2, sticky=N+W+E+S)
+        Button(nov_game, text="Zacni igro", width=20, height=2, command=lambda: creategame()).grid(row=8, column=2, columnspan=2, sticky=N+W+E+S)
 
     def ponastavi(self):
         """pripravi polje za novo igro"""
