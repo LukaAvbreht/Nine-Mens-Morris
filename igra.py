@@ -11,7 +11,7 @@ def nasprotnik(igralec):
     elif igralec == IGRALEC_DVA:
         return IGRALEC_ENA
     else:
-        1/0
+        1/0 #Sesuje igro, saj ni druge možne situacije.
 
 
 class Igra():
@@ -31,8 +31,7 @@ class Igra():
         self.na_potezi = IGRALEC_ENA
 
         self.figurice = {IGRALEC_ENA: 0 , IGRALEC_DVA: 0}
-        #bi sproti spremljali koliko ima kdo figuric in v primeru, da je vrednost 2, 3 naredimo svoje
-        #nam ni treba po vsaki potezi steti koliko ima kdo figuric
+        #Sproti spremljajo žetone
 
         self.faza = 0
 
@@ -42,10 +41,7 @@ class Igra():
         # self.faza = 1  --> Faza premikanja figuric
         
         self.zgodovina = []
-        #(kam, od kje, jemanje?, kdonapotezi)
-        #Predlagam obliko: (pozicija, zadnja poteza, True - False, Pobrana figurica)
-        #kjer True, False pove ali je bil vzpostavljen mlin in nato katera figurica je bil vzeta
-        #bi po vsaki potezi belega in črnega shranili pozicijo?
+        #(kam, od kje, jemanje?, kdonapotezi), Tupli dolžine 7
 
         self.stanje = ("V TEKU", None)
         #moznosti tega stanja so : ni konec, zmaga
@@ -103,6 +99,7 @@ class Igra():
             [(4,3),(5,3),(6,3)]]
 
     def kopija(self):
+        """ Naredi novo kopijo igre z vsemi pomembnimi podatki. """
         copy = Igra()
         copy.plosca = [self.plosca[i][:] for i in range(7)]
         copy.na_potezi = self.na_potezi
@@ -113,8 +110,8 @@ class Igra():
 
         
     def razveljavi(self):
+        """ Razveljavi zadnjo potezo. """
         i,j,a,b,c,d,kdonapotezi = self.zgodovina.pop(-1)
-        #print(i,j,a,b,c,d,kdonapotezi)
         self.plosca[i][j] = None
         if a == "PRAZNO" and b == "PRAZNO":
             self.postavljenih -= 1
@@ -133,6 +130,7 @@ class Igra():
         self.na_potezi = kdonapotezi
 
     def razveljavi_jemanje(self):
+        """ Razveljavi zadnje jemanje. """
         c = self.zgodovina[-1][4]
         d = self.zgodovina[-1][5]
         if c == "PRAZNO" and d == "PRAZNO":
@@ -146,19 +144,13 @@ class Igra():
             self.zgodovina[-1][5] = "PRAZNO"
             self.na_potezi = nasprotnik(self.na_potezi)
     
-    def kopiraj_plosco(self):
-        novaplosca = []
-        for vrstica in self.plosca:
-            novaplosca.append(vrstica[:])
-        return novaplosca
-
     def izpisi_plosco(self):  #to je funkcija namenjena programerju
         """ Izpise trenutno ploščo na lep način. Vsako vrstico posebej."""
         for vrstica in self.plosca:
             print(vrstica)
 
     def je_veljavna(self, i, j, a = "PRAZNO", b = "PRAZNO"):
-        """Preveri, če je poteza veljavna.poteza na (i,j) iz (a,b)"""
+        """Preveri, če je poteza veljavna. Poteza na (i,j) iz (a,b). """
         try:
             if self.faza == 0:
                 return self.plosca[i][j] == None
@@ -173,7 +165,7 @@ class Igra():
         except:
             return False
 
-    def postavljen_mlin(self, poteza): #pomni doloci ali potezo namisljeno igramo ali ne
+    def postavljen_mlin(self, poteza):
         """Glede na zadnjo potezo ugotovi ali je bil to potezo postavljen mlin. Vrne True ali False."""
         for trojka in self.kombinacije: #poteza oblike (i,j)
             if poteza in trojka:
@@ -186,8 +178,7 @@ class Igra():
 
     def veljavne_poteze(self):
         """ Glede na trenutno fazo vrne mogoče možne poteze. """
-        if self.faza == 0:  #trenba preverit ce si naredu mlin in smiselno dodati to v potezo
-                            # Za potezo bi preverila le ce je mogoca, ce jemljes bi to stela kot svojo potezo
+        if self.faza == 0:
             mozne_poteze = []
             for i in range(7):
                 for j in range(7):
@@ -238,11 +229,11 @@ class Igra():
         else: #drugače vrnemo vse, ki jih lahko jemljemo!
             return lahko_vzamemo
                                             
-    def lahko_jemljem(self, i, j):
+    def lahko_jemljem(self, i, j): #to bomo popravili na hitrejši način
         """Funkcija pove, ali izbrani zeton lahko pojemo."""
         return (i, j) in self.veljavna_jemanja()
 
-    def poteza(self, i, j, a="PRAZNO", b="PRAZNO"):  #poteza od kod kam + nekaksen sistem da lahko postaviva nov kamen (za prvih 18 potez)
+    def poteza(self, i, j, a="PRAZNO", b="PRAZNO"): 
         """Izvede potezo. kam (i,j) od kje (a,b). """
         if self.faza == 0:
             if self.je_veljavna(i,j):
@@ -303,12 +294,4 @@ class Igra():
                     else:
                         self.stanje = ("ZMAGA", IGRALEC_ENA)
 
-test = Igra()
-test.poteza(0,3)
-test.poteza(0,0)
-test.poteza(3,6)
-test.poteza(6,6)
-test.poteza(6,0)
-test.poteza(1,3)
-test.poteza(3,0)
 
