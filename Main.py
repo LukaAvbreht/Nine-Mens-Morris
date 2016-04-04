@@ -672,11 +672,17 @@ class Alpha_betta():
             glej = [self.igra.plosca[el[0]][el[1]] for el in trojka]
             if glej == [igralec,igralec,igralec]:
                 stmlinov += 1
-            elif glej == [None, igralec, igralec]:
+            elif glej.count(None) == 1 and glej.count(igralec) == 2:
+                if trojka[0] == None:
+                    praznopolje = 0
+                elif trojka[1] == None:
+                    praznopolje = 1
+                else:
+                    praznopolje = 2
                 naspr = False #preverila bo ali je nasprotnik v blizini
                 if self.igra.faza == 0:
                     zet_2_konf += 1
-                for polje in self.igra.sosedi[trojka[0]]:
+                for polje in self.igra.sosedi[trojka[praznopolje]]:
                     if self.igra.plosca[polje[0]][polje[1]] == igralec:
                         odprtimlini += 1
                     elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
@@ -684,32 +690,6 @@ class Alpha_betta():
                     else:
                         pass
                 if nasprotnik == False:
-                    zmag_konf = 1
-            elif glej == [igralec, None, igralec]:
-                naspr = False #preverila bo ali je nasprotnik v blizini
-                if self.igra.faza == 0:
-                    zet_2_konf += 1
-                for polje in self.igra.sosedi[trojka[1]]:
-                    if self.igra.plosca[polje[0]][polje[1]] == igralec:
-                        odprtimlini += 1
-                    elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
-                        naspr = True #nasprotnik nas lahko blokira
-                    else:
-                        pass
-                if nasprotnik == False:
-                    zmag_konf = 1
-            elif glej == [igralec, igralec, None]:
-                naspr = False #preverila bo ali je nasprotnik v blizini
-                if self.igra.faza == 0:
-                    zet_2_konf += 1
-                for polje in self.igra.sosedi[trojka[2]]:
-                    if self.igra.plosca[polje[0]][polje[1]] == igralec:
-                        odprtimlini += 1
-                    elif self.igra.plosca[polje[0]][polje[1]] == nasprotnik(igralec):
-                        naspr = True #nasprotnik nas lahko blokira
-                    else:
-                        pass
-                if naspr == False:
                     zmag_konf = 1
             else:
                 pass
@@ -726,10 +706,10 @@ class Alpha_betta():
         #KOEFICIENTI KOLIKO JE KAJ VREDNO IN VRACAMO VREDNOSTI
         if self.igra.faza == 0:
             return 26*stmlinov + 1*blokirani + 25*stfiguric + 12*zet_2_konf
-        elif self.igra.faza == 1:
-            return 43*stmlinov + 10*blokirani + 15*stfiguric + 21*odprtimlini + 958*zmag_konf
+        elif self.igra.faza == 1 and self.igra.figurice[igralec] != 3:
+            return 43*stmlinov + 10*blokirani + 16*stfiguric + 21*odprtimlini + 958*zmag_konf
         else:
-            pass
+            return 30*stfiguric + 21*odprtimlini + 20*stmlinov
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije."""
