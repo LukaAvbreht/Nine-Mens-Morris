@@ -20,13 +20,13 @@ class tkmlin():
 
         self.igra = Igra()
 
-        #tuki si bos lahko zbiru kako barva tvoja polja
+        #tukaj si bos lahko izbiral kakšne barve bojo tvoji žetoni
         self.barva1 = 'forest green'
         self.barva1hover = 'yellow green'
         self.barva2 = 'chocolate1'
         self.barva2hover = 'tan1'
 
-        #igralca ki igrata igro
+        #igralca, ki igrata igro
         self.ime_igralec1 = 'Zeleni'
         self.ime_igralec2 = 'Oranžni'
 
@@ -49,8 +49,8 @@ class tkmlin():
         self.strime2 = StringVar(self.master, value=self.ime_igralec2)
         Label(self.master, textvariable=self.strime2, font=("Helvetica", 20)).grid(row=1, column=9, columnspan=2)
 
-        #kdo je na potezi
-        self.na_potezi = None  #to je treba narest da je sam enkrat kdo je na potezi in to je self.igra.na_potezi
+        #kdo je na potezi, sinhronizirano z logiko igre
+        self.na_potezi = None
 
         #meni za gumbe
         menu = Menu(master)
@@ -59,24 +59,17 @@ class tkmlin():
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Nova igra", command=self.izbira_nove_igre)
-        #menu_igra.add_command(label="PvP", command=self.newgame)
-        #menu_igra.add_command(label="PvAi", command=self.newgamerac)
-
 
         menu_test = Menu(menu)
         menu.add_cascade(label="O programu", menu=menu_test)
         menu_test.add_command(label="About", command=self.about_okno)
         menu_test.add_command(label="Help", command=self.help_okno)
 
-        #menu_test.add_command(label="Zmaga", command=self.zmagovalno_okno)
-        #menu_test.add_command(label="Izpisi_plosco", command = self.izpisi)
-
-
-        #Igralnaself.plosca
+        #Igralna self.plosca
         self.plosca = Canvas(master, width=700, height=700, bg=self.bg, borderwidth=10, relief=SUNKEN)  #SUNKEN,RAISED
         self.plosca.grid(row=1, column=2, rowspan=7, columnspan=7, sticky=N+S+E+W)
 
-        #Slovar ki ima za kljuce id gumbov in jih poveze z poljem v igri ter obraten slovar
+        #Slovar, ki ima za kljuce id gumbov in jih poveze z poljem v igri ter obraten slovar
         self.id_polje = dict()
         self.polje_id = dict()
 
@@ -90,7 +83,7 @@ class tkmlin():
         self.plosca.create_line(50, 350, 250, 350)
         self.plosca.create_line(450, 350, 650, 350)
 
-        # generira gumbke na polju in jim da svoj id
+        #generira gumbke na polju in jim da svoj id
         for i in range(7):
             for j in range(7):
                 if self.igra.plosca[i][j]==None:
@@ -112,7 +105,7 @@ class tkmlin():
         #DEFCON 4 : Igre je konec, polje je zablokirano,
 
     def postavi_stranske(self):
-        """Na stranska polja postavi figure, ki jih mora igralec postaviti na ploskev"""
+        """Na stranska polja postavi figure, ki jih mora igralec postaviti na ploskev."""
         slovarzanastran = [(85, 85), (153, 85), (221, 85), (85, 153), (153, 153), (221, 153), (85, 221), (153, 221), (221, 221)]
         for j in slovarzanastran:
             x = self.canvas1.create_oval(j[0]-25, j[1]-25, j[0]+25, j[1]+25, outline="", fill=self.barva1)
@@ -122,7 +115,7 @@ class tkmlin():
             self.play2ids.append(x)
 
     def postavi_stranske2(self,playerbarva):
-        """Funkcija ki postavi na polje ob straneh figuro, ko je ta odstranjena iz igre"""
+        """Funkcija ki postavi na polje ob straneh figuro, ko je ta odstranjena iz igre."""
         if playerbarva == self.barva1:
             self.canvas1.create_oval(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
             self.canvas1.create_line(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, width=4)
@@ -138,28 +131,29 @@ class tkmlin():
         """Namenjeno porogramerju"""
         self.igra.izpisi_plosco()
 
-    def nasprotnik(self):  #to ko popravma bo vrjent neuporabno
+    def nasprotnik(self):
         """Vrne nasprornika."""
         if self.na_potezi == self.igralec1:
             return self.igralec2
         else:
             return self.igralec1
 
-    def zamenjaj_na_potezi(self):  #to se mora zgodit v igri
+    def zamenjaj_na_potezi(self):
+        """Poženemo vsakič, ko bi se lahko zamenjal igralec, ki je na potezi. Skladno s tem nadaljuje igro."""
         if self.igra.na_potezi == IGRALEC_ENA:
             self.na_potezi = self.igralec1
         else:
             self.na_potezi = self.igralec2
         if len(self.igra.veljavne_poteze()) == 0:
                 return self.zmagovalno_okno(self.nasprotnik())
-        self.textbox.set("Na potezi je {0}".format(self.na_potezi.ime))
+        self.textbox.set("Na potezi je {0}!".format(self.na_potezi.ime))
         if type(self.na_potezi) == Igralec:
             self.na_potezi.ponastavi()
-        elif type(self.na_potezi) == Racunalnik:
+        elif type(self.na_potezi) == Racunalnik: #Če je na potezi računalnik mu povemo, da naj odigra potezo.
             self.na_potezi.igraj_potezo()
 
     def klik(self,event):
-        """Funkcija ki vrne id polja, na katerega je pritisnil uporabnik"""
+        """Funkcija, ki vrne id polja na katerega je pritisnil uporabnik."""
         x = event.x
         y = event.y
         kam = self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
@@ -168,7 +162,7 @@ class tkmlin():
             if id in self.id_polje:
                 znacka = True #nam pove, da smo zadeli nekaj
                 if self.DEFCON == 0:
-                    self.textbox.set("Klikni gumb NOVA IGRA")
+                    self.textbox.set("Igre je konec. Za novo igro izberi meni Igra in Nova igra!")
                 elif self.DEFCON == 1:
                     self.na_potezi.prvi_klik = id
                     self.na_potezi.uporabnikova_poteza()
@@ -179,7 +173,7 @@ class tkmlin():
                     self.na_potezi.tretji_klik = id
                     self.na_potezi.jemljem()
                 elif self.DEFCON == 4:
-                    self.textbox.set("Igre je konec. Za novo igro pritisni gumb NOVA IGRA.")
+                    self.textbox.set("Igre je konec. Za novo igro izberi meni Igra in Nova igra!")
                     znacka = True #Ker so vsi kliki ignorirani!
                 else:
                     pass
@@ -235,13 +229,12 @@ class tkmlin():
         label.grid(row=1, column=0)
 
     def about_okno(self):
-        """Napravi about okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
+        """Napravi about okno, ko uporabnik pritisne na gumb namenjen temu oknu. """
         def unici():
-            """Zapre pomozno okno z podatki o projektu"""
+            """Zapre pomozno okno z podatki o projektu. """
             self.about.destroy()
             self.about = None
 
-        self.DEFCON = 4
         if self.about != None:
             self.about.lift()
             return
@@ -282,13 +275,12 @@ class tkmlin():
         besedilo2.set(message2)
 
     def help_okno(self):
-        """Napravi help okno, ko uporabnik pritisne na gumb namenjen temu oknu"""
+        """Napravi help okno, ko uporabnik pritisne na gumb namenjen temu oknu."""
         def unici():
-            """Zapre pomozno okno za pomoč"""
+            """Zapre pomozno okno za pomoč."""
             self.help.destroy()
             self.help = None
 
-        self.DEFCON = 4
         if self.help != None:
             self.help.lift()
             return
@@ -329,14 +321,6 @@ class tkmlin():
         self.igra = Igra()
         igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
         igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(2))
-        self.nova_igra(igralec1, igralec2)
-
-    def newgame(self):
-        """ Nastavi novo igro. """
-        self.igra = Igra()
-        #igralca
-        igralec1 = Igralec(self, self.barva1,self.ime_igralec1)
-        igralec2 = Igralec(self, self.barva2,self.ime_igralec2)
         self.nova_igra(igralec1, igralec2)
 
     def nova_igra(self, igralec1, igralec2):
@@ -437,7 +421,7 @@ class tkmlin():
         self.strime1.set('')
         self.strime2.set('')
         self.na_potezi = self.igralec1
-        self.textbox.set('Na potezi je {}.'.format(self.ime_igralec1))
+        self.textbox.set('Na potezi je {}!'.format(self.ime_igralec1))
         self.DEFCON = 1
 
     def izvedi_potezo(self, id_1=False, id_2=False):
@@ -457,7 +441,7 @@ class tkmlin():
             self.igra.poteza(prvopolje[0], prvopolje[1])
             if self.igra.mlin:
                 self.DEFCON = 3
-                self.textbox.set("Izberi zeton, ki ga bos pobral")
+                self.textbox.set("Izberi žeton, ki ga boš pobral!")
             else:
                 self.zamenjaj_na_potezi()
         else:
@@ -473,9 +457,9 @@ class tkmlin():
                 self.zamenjaj_na_potezi()
 
     def izvedi_posebno_potezo(self,id_1,id_2=False):
-        """Funkcija ki jo uporabi računalniški igralec v primeru da mora, po koncani potezi jemati zeton
+        """Funkcija, ki jo uporabi računalniški igralec v primeru da mora po koncani potezi jemati zeton.
         Drugace enaka kot funkcija izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
-        funkcijo vzami zeton"""
+        funkcijo vzami zeton. """
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -507,9 +491,9 @@ class tkmlin():
         self.zamenjaj_na_potezi()
 
 class Igralec():
-    """cloveski igralec. primer uporabe znotraj nase igre: self.igralec1 = Igralec(self, 'Black', 'Marjan')"""
+    """Človeski igralec. Primer uporabe znotraj nase igre: self.igralec1 = Igralec(self, 'Black', 'Marjan')"""
     def __init__(self, tkmlin, barva, ime):
-        """Shrani klike igralca in doloci igralno polje kjer igralec igra igro"""
+        """Shrani klike igralca in doloci igralno polje kjer igralec igra igro."""
         self.gui = tkmlin
         self.prvi_klik = None
         self.drugi_klik = None
@@ -518,7 +502,7 @@ class Igralec():
         self.ime = ime
 
     def ponastavi(self):
-        """resetira igrelcevo potezo na nevtralno pozicijo"""
+        """Resetira igralčevo potezo na nevtralno pozicijo. """
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
@@ -553,7 +537,7 @@ class Igralec():
                     self.gui.DEFCON = 1
                     self.gui.plosca.itemconfig(self.prvi_klik, fill=self.gui.na_potezi.barva)
                     self.ponastavi()
-                    self.gui.textbox.set("{0}: Izberi svoj žeton".format(self.ime))
+                    self.gui.textbox.set("{0}: Izberi svoj žeton!".format(self.ime))
                     
             else:
                 #preveri ali je izbran zeton sploh nas
@@ -562,7 +546,7 @@ class Igralec():
                 if self.gui.igra.plosca[koord_1][koord_2] == self.gui.igra.na_potezi:
                     self.gui.DEFCON = 2
                     id_1 = self.gui.polje_id[(koord_1,koord_2)]
-                    self.gui.textbox.set("{0}, izberi kam želiš ta žeton premakniti".format(self.ime))
+                    self.gui.textbox.set("{0}, izberi kam želiš ta žeton premakniti!".format(self.ime))
                     if self.gui.na_potezi.barva == self.gui.barva1:
                         self.gui.plosca.itemconfig(id_1, fill=self.gui.barva1hover)
                     elif self.gui.na_potezi.barva == self.gui.barva2:
@@ -570,7 +554,7 @@ class Igralec():
                 else:
                     self.ponastavi()
                     self.gui.DEFCON = 1
-                    self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}".format(self.ime))
+                    self.gui.textbox.set("Nisi izbral svojega žetona. Izberi svoj žeton {0}!".format(self.ime))
 
 class Racunalnik():
     """Racunalniski igralec, ki izracuna potezo ter jo odigra"""
@@ -587,6 +571,8 @@ class Racunalnik():
         self.mislec = None
 
     def ponastavi(self):
+        """ Ponastavi klike. """
+        #Ker je to računalnik bi lahko funkcija naredila le pass
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
@@ -641,7 +627,7 @@ class Alpha_betta():
         self.jaz = None
         self.poteza = None  #sem algoritem shrani potezo ko jo naredi
         self.jemljem = None
-    ZMAGA = 1000000  # Mora biti vsaj 10^5
+    ZMAGA = 1000000  # Mora biti vsaj 10^6
     NESKONCNO = ZMAGA + 1  # Več kot zmaga
 
     def izracunaj_potezo(self, igra):
@@ -871,5 +857,5 @@ if __name__ == "__main__":
     root.wm_title('Nine Men\'s Morris')
     root.resizable(width=FALSE, height=FALSE)
     okno = tkmlin(root)
-    okno.newgame()  #zane igro
+    okno.newgamerac()  #Avtomatsko začne igro z računalnikom, ko program odpremo.
     root.mainloop()
