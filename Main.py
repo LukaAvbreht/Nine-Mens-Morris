@@ -731,7 +731,7 @@ class Alpha_betta():
 
     def vrednost_pozicije(self):
         """Vrne oceno vrednosti pozicije."""
-        return self.ocena_igralec(self.igra.na_potezi) - self.ocena_igralec(nasprotnik(self.igra.na_potezi))
+        return self.ocena_igralec(self.jaz) - self.ocena_igralec(nasprotnik(self.jaz))
 
     def alfabeta(self, globina, alfa, beta, maksimiziramo):
         (stanje, kdo) = self.igra.stanje
