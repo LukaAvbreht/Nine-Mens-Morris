@@ -116,7 +116,7 @@ class tkmlin():
             self.play2ids.append(x)
 
     def postavi_stranske2(self,playerbarva):
-        """Funkcija ki postavi na polje ob straneh figuro, ko je ta odstranjena iz igre."""
+        """Metoda ki postavi na polje ob straneh figuro, ko je ta odstranjena iz igre."""
         if playerbarva == self.barva1:
             self.canvas1.create_oval(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, outline="", fill=self.barva1)
             self.canvas1.create_line(self.play1mrtvi[0][0]-25, self.play1mrtvi[0][1]+300-25, self.play1mrtvi[0][0]+25, self.play1mrtvi[0][1]+300+25, width=4)
@@ -154,7 +154,7 @@ class tkmlin():
             self.na_potezi.igraj_potezo()
 
     def klik(self,event):
-        """Funkcija, ki vrne id polja na katerega je pritisnil uporabnik."""
+        """Metoda, ki vrne id polja na katerega je pritisnil uporabnik."""
         x = event.x
         y = event.y
         kam = self.plosca.find_overlapping(x-25, y-25, x+25, y+25)
@@ -463,8 +463,8 @@ class tkmlin():
                 self.zamenjaj_na_potezi()
 
     def izvedi_posebno_potezo(self,id_1,id_2=False):
-        """Funkcija, ki jo uporabi računalniški igralec v primeru da mora po koncani potezi jemati zeton.
-        Drugace enaka kot funkcija izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
+        """Metoda, ki jo uporabi računalniški igralec v primeru da mora po koncani potezi jemati zeton.
+        Drugace enaka kot metoda izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
         funkcijo vzami zeton. """
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
@@ -485,7 +485,7 @@ class tkmlin():
             self.igra.poteza(drugopolje[0], drugopolje[1], prvopolje[0], prvopolje[1])
 
     def vzami_zeton(self, id_1):
-        """Funkcija ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
+        """Metoda ki se poklice ko igralec doseze mlin. Odstrani figurico iz racunalniskega umesnika in pa iz logike igre"""
         self.plosca.itemconfig(id_1, fill="")
         self.postavi_stranske2(self.nasprotnik().barva)
         self.igra.odstrani_figurico(self.id_polje[id_1][0],self.id_polje[id_1][1])
@@ -578,7 +578,7 @@ class Racunalnik():
 
     def ponastavi(self):
         """ Ponastavi klike. """
-        #Ker je to računalnik bi lahko funkcija naredila le pass
+        #Ker je to računalnik bi lahko metoda naredila le pass
         self.prvi_klik = None
         self.drugi_klik = None
         self.tretji_klik = None
