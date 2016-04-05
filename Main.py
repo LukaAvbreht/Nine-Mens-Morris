@@ -387,12 +387,12 @@ class tkmlin():
                    ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik", False, igralec2_clovek, 4, 3)]
 
         var = StringVar(nov_game)
-        var.set(3)
+        var.set(4)
         option = OptionMenu(nov_game, var, 1, 2, 3, 4, 5)
         option.grid(row=5, column=1)
 
         var2 = StringVar(nov_game)
-        var2.set(3)
+        var2.set(4)
         option2 = OptionMenu(nov_game, var2, 1, 2, 3, 4, 5)
         option2.grid(row=5, column=3)
 
@@ -701,7 +701,9 @@ class Alpha_betta():
         if self.igra.faza == 0:
             return 26*stmlinov + 1*blokirani + 25*stfiguric + 12*zet_2_konf
         elif self.igra.faza == 1 and self.igra.figurice[igralec] != 3:
-            return 43*stmlinov + 10*blokirani + 14*stfiguric + 28*odprtimlini + 958*zmag_konf
+            return 43*stmlinov + 10*blokirani + 20*stfiguric + 32*odprtimlini + 958*zmag_konf
+        elif self.igra.faza == 1 and self.igra.figurice[nasprotnik(igralec)] == 4:
+            return 35*stmlinov + 25*blokirani + 8*stfiguric + 35*odprtimlini + 958*zmag_konf
         else:
             return 30*stfiguric + 21*odprtimlini + 20*stmlinov
 
