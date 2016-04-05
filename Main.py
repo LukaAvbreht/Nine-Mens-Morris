@@ -218,6 +218,8 @@ class tkmlin():
         if zmagovalec != False:
             if type(zmagovalec) == Igralec:
                 message = str("Bravo! Zmagal je igralec " + str(zmagovalec.ime) + "!")
+            elif type(self.igralec1) == type(self.igralec2) == Racunalnik:
+                message = str("Zmagal je {0}!".format(zmagovalec.ime))
             else:
                 message = str("Računalnik je ponovno pokazal svojo superiornost napram tebi! Več sreče prihodnjič!")
         else:
@@ -318,7 +320,7 @@ class tkmlin():
 
 
     def newgamerac(self):
-        """moznosti izbire igre proti racunalniku"""
+        """moznosti izbire igre proti racunalniku z globino 2. """
         self.igra = Igra()
         igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
         igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(2))
@@ -593,10 +595,10 @@ class Racunalnik():
         """Racunalnik izvede potezo ki jo pridobi s pomocjo algoritma"""
         self.mislec = threading.Thread(target= lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
         self.mislec.start()
-        self.gui.plosca.after(100, self.preveri_potezo)
+        self.gui.plosca.after(500, self.preveri_potezo)
 
     def preveri_potezo(self):
-        if self.mislec is None:
+        if self.mislec is None or self.gui.DEFCON == 4:
             return
         """Vsakih 100ms preveri ali je algoritem ze izracunal potezo, ter jo zapisal v spremenjlivko znotraj njegovega razreda"""
         if self.algoritem.poteza != None:
