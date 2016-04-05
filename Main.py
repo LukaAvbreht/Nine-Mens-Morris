@@ -382,7 +382,7 @@ class tkmlin():
         igralec1_clovek = BooleanVar()
         igralec1_clovek.set(True)
         igralec2_clovek = BooleanVar()
-        igralec2_clovek.set(True)
+        igralec2_clovek.set(False)
         igralci = [("Človek", True, igralec1_clovek, 3, 1), ("Računalnik", False, igralec1_clovek, 4, 1),
                    ("Človek", True, igralec2_clovek, 3, 3), ("Računalnik", False, igralec2_clovek, 4, 3)]
 
