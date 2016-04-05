@@ -323,7 +323,7 @@ class tkmlin():
         """moznosti izbire igre proti racunalniku z globino 2. """
         self.igra = Igra()
         igralec1 = Igralec(self, self.barva1, self.ime_igralec1)
-        igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(2))
+        igralec2 = Racunalnik(self, self.barva2,self.ime_igralec2,Alpha_betta(4))
         self.nova_igra(igralec1, igralec2)
 
     def nova_igra(self, igralec1, igralec2):
@@ -388,12 +388,12 @@ class tkmlin():
 
         var = StringVar(nov_game)
         var.set(3)
-        option = OptionMenu(nov_game, var, 1, 2, 3, 4)
+        option = OptionMenu(nov_game, var, 1, 2, 3, 4, 5)
         option.grid(row=5, column=1)
 
         var2 = StringVar(nov_game)
         var2.set(3)
-        option2 = OptionMenu(nov_game, var2, 1, 2, 3, 4)
+        option2 = OptionMenu(nov_game, var2, 1, 2, 3, 4, 5)
         option2.grid(row=5, column=3)
 
         for besedilo, vrednost, spremenljivka, vrstica, stolpec in igralci:
