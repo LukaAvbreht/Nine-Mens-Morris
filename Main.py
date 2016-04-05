@@ -327,6 +327,10 @@ class tkmlin():
     def nova_igra(self, igralec1, igralec2):
         """zacne novo igro z dvema igralcema, ki mu jih nastavimo"""
         self.igra = Igra()
+        if self.igralec1 is not None:
+            self.igralec1.mislec = None
+        if self.igralec2 is not None:
+            self.igralec2.mislec = None
         self.igralec1 = igralec1
         self.igralec2 = igralec2
         self.ponastavi()
@@ -352,7 +356,7 @@ class tkmlin():
                 igralec2 = Racunalnik(self, self.barva2, self.ime_igralec2, Alpha_betta(var2.get()))
             self.nova_igra(igralec1,igralec2)
             nov_game.destroy()
-            print(time.clock())
+
 
         #ustvari novo okno
         nov_game = Toplevel()
@@ -426,7 +430,6 @@ class tkmlin():
 
     def izvedi_potezo(self, id_1=False, id_2=False):
         """Funcija ki izvede potezo ter premakne igralne figure iz polja id_1 na polje id_2"""
-        print(time.clock())
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -461,7 +464,6 @@ class tkmlin():
         """Funkcija, ki jo uporabi računalniški igralec v primeru da mora po koncani potezi jemati zeton.
         Drugace enaka kot funkcija izvedi_potezo, le da na koncu ne zamnejamo poteze ampak cakamo da racunalnik poklice se
         funkcijo vzami zeton. """
-        print(time.clock())
         if id_1 != False:
             prvopolje = self.id_polje[id_1]
         if id_2 != False:
@@ -594,6 +596,8 @@ class Racunalnik():
         self.gui.plosca.after(100, self.preveri_potezo)
 
     def preveri_potezo(self):
+        if self.mislec is None:
+            return
         """Vsakih 100ms preveri ali je algoritem ze izracunal potezo, ter jo zapisal v spremenjlivko znotraj njegovega razreda"""
         if self.algoritem.poteza != None:
             if self.algoritem.poteza[2] == "PRAZNO":
@@ -859,8 +863,6 @@ class Alpha_betta():
 
                 assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
-                        
-                                
 
 if __name__ == "__main__":
     root = Tk()
