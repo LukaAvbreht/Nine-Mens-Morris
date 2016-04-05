@@ -710,6 +710,8 @@ class Alpha_betta():
         return self.ocena_igralec(self.jaz) - self.ocena_igralec(nasprotnik(self.jaz))
 
     def alfabeta(self, globina, alfa, beta, maksimiziramo):
+        novaalfa = alfa
+        novabeta = beta
         (stanje, kdo) = self.igra.stanje
         if stanje == "ZMAGA":
             if kdo == self.jaz:
@@ -734,25 +736,25 @@ class Alpha_betta():
                             if self.igra.mlin == True:
                                 for q in self.igra.veljavna_jemanja():
                                     self.igra.odstrani_figurico(q[0],q[1])
-                                    vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                    vrednost = self.alfabeta(globina-1, novaalfa, novabeta, not maksimiziramo)[1]
                                     self.igra.razveljavi_jemanje()
                                     if vrednost > vrednost_najboljse:
                                         vrednost_najboljse = vrednost
                                         najboljsa_poteza = p + q #sestevanje tuplov
-                                        alfa = max(alfa,vrednost_najboljse)
-                                        if alfa >= beta:
+                                        novaalfa = max(novaalfa,vrednost_najboljse)
+                                        if novaalfa >= novabeta:
                                             FLAG = True
                                             break
                                 self.igra.mlin = False
                                 self.igra.razveljavi()
                             else:
-                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                vrednost = self.alfabeta(globina-1, novaalfa, novabeta, not maksimiziramo)[1]
                                 self.igra.razveljavi()
                                 if vrednost > vrednost_najboljse:
                                     vrednost_najboljse = vrednost
                                     najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
-                                    alfa = max(alfa,vrednost_najboljse)
-                                    if alfa >= beta:
+                                    novaalfa = max(novaalfa,vrednost_najboljse)
+                                    if novaalfa >= novabeta:
                                         break
                             if FLAG:
                                 break
@@ -770,25 +772,25 @@ class Alpha_betta():
                             if self.igra.mlin == True:
                                 for q in self.igra.veljavna_jemanja():
                                     self.igra.odstrani_figurico(q[0],q[1])
-                                    vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                    vrednost = self.alfabeta(globina-1, novaalfa, novabeta, not maksimiziramo)[1]
                                     self.igra.razveljavi_jemanje()
                                     if vrednost < vrednost_najboljse:
                                         vrednost_najboljse = vrednost
                                         najboljsa_poteza = p + q
-                                        beta = min(beta,vrednost_najboljse)
-                                        if beta <= alfa:
+                                        novabeta = min(novabeta,vrednost_najboljse)
+                                        if novabeta <= novaalfa:
                                             FLAG = True
                                             break
                                 self.igra.mlin = False
                                 self.igra.razveljavi()
                             else:
-                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                                vrednost = self.alfabeta(globina-1, novaalfa, novabeta, not maksimiziramo)[1]
                                 self.igra.razveljavi()
                                 if vrednost < vrednost_najboljse:
                                     vrednost_najboljse = vrednost
                                     najboljsa_poteza = p + ("PRAZNO", "PRAZNO")
-                                    beta = min(beta,vrednost_najboljse)
-                                    if beta <= alfa:
+                                    novabeta = min(novabeta,vrednost_najboljse)
+                                    if novabeta <= novaalfa:
                                         break
                             if FLAG:
                                 break
