@@ -3,7 +3,7 @@
 ## O programu
 
 Program ob zagonu požene igralno ploščo z privzetimi nastavitvami za igranje človeka proti računalniku.
-V primeru da uporabnik želi igro igrati kako drugače, si le to lahko izbere v meniju o igri s klikom na opcijo `Nova igra`, kjer si izbrene želene nastavitve med ponujenimi.
+V primeru da uporabnik želi igro igrati kako drugače, si le to lahko izbere v meniju o igri s klikom na opcijo `Nova igra`, kjer si izbere želene nastavitve med ponujenimi.
 
 ## Struktura kode
 
